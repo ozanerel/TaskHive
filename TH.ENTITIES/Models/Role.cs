@@ -12,10 +12,8 @@ namespace TH.ENTITIES.Models
         public string Description { get; set; }
 
         public int UserId { get; set; }
-        public int ProjectId { get; set; }
 
         //Relational Properties
-        public virtual User User { get; set; }
-        public virtual Project Project { get; set; }
+        public virtual ICollection<User> User { get; set; }
     }
 }
