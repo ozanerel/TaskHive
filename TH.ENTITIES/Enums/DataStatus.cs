@@ -21,5 +21,13 @@ namespace TH.ENTITIES.Enums
         Failed = 4
     }
 
+    public enum PriorityLevel
+    {
+        Low = 1,
+        Medium = 2,
+        High = 3,
+        Critical = 4
+    }
+
 
 }

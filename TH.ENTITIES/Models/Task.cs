@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TH.ENTITIES.Enums;
 
 namespace TH.ENTITIES.Models
 {
@@ -10,11 +11,13 @@ namespace TH.ENTITIES.Models
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool Priorty { get; set; }
+        public PriorityLevel Priorty { get; set; }
 
         public int UserId { get; set; }
 
+
         //Relational Properties
         public virtual User User { get; set; }
+        public virtual ICollection<TaskComment> TaskComments { get; set; }
     }
 }

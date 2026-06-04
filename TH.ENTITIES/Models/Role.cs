@@ -14,6 +14,6 @@ namespace TH.ENTITIES.Models
         public int UserId { get; set; }
 
         //Relational Properties
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
