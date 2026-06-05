@@ -19,6 +19,12 @@ namespace TH.CONF.Options
             builder.Property(t => t.Description)
                    .IsRequired()
                    .HasMaxLength(250);
+            builder.HasOne(t => t.User)
+                   .WithMany(u => u.Tasks)
+                   .HasForeignKey(t => t.UserId);
+            builder.HasOne(t => t.Project)
+                   .WithMany(p => p.Tasks)
+                   .HasForeignKey(t => t.ProjectId);
         }
     }
 }

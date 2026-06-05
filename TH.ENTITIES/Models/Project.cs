@@ -15,5 +15,6 @@ namespace TH.ENTITIES.Models
         //Relational Properties
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

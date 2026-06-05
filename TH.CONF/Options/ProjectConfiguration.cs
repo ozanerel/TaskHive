@@ -19,6 +19,8 @@ namespace TH.CONF.Options
             builder.Property(p => p.Description)
                 .IsRequired()
                 .HasMaxLength(250);
+            builder.HasMany(p => p.Users)
+                   .WithMany(u => u.Projects); //Many-to-Many ilişki
         }
     }
 }

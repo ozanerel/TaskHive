@@ -9,7 +9,7 @@ using TH.ENTITIES.Interfaces;
 
 namespace TH.CONF.Options
 {
-    public class BaseConfiguration<T>: IEntityTypeConfiguration<T> where T : class
+    public abstract class BaseConfiguration<T>: IEntityTypeConfiguration<T> where T : class
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {

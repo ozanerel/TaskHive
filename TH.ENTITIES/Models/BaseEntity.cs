@@ -8,7 +8,7 @@ using TH.ENTITIES.Interfaces;
 
 namespace TH.ENTITIES.Models
 {
-    public class BaseEntity:IEntity
+    public abstract class BaseEntity:IEntity
     {
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
