@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TH.ENTITIES.Models;
+
+namespace TH.DAL.Repositories.Abstracts
+{
+    public interface IUserRepository:IRepository<User>
+    {
+        Task<User> GetUserWithTasksAsync(int id);
+    }
+}
