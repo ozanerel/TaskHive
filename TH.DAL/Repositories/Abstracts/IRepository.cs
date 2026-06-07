@@ -16,7 +16,7 @@ namespace TH.DAL.Repositories.Abstracts
         */
         //Commands
         Task CraeteAsync(T entity);
-        void UpdateAsync(T entity);
+        void UpdateAsync(T originalEntity,T newEntity);
         void DeleteAsync(T entity);
     }
 }
