@@ -12,7 +12,7 @@ namespace TH.BLL.DependencyResolvers
 {
     public static class DbContextResolver
     {
-        public static void AddDbContextResolvers(this IServiceCollection services,IConfiguration configuration)
+        public static void AddDbContextService(this IServiceCollection services,IConfiguration configuration)
         {
            services.AddDbContext<MyContext>(x=> x.UseSqlServer(configuration.GetConnectionString("MyConnection")).UseLazyLoadingProxies());
         }

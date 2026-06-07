@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace TH.CONF.Options
                    .HasForeignKey(tc => tc.TaskId);
             builder.HasOne(tc => tc.User)
                    .WithMany(u => u.TaskComments)
-                   .HasForeignKey(tc => tc.UserId);
+                   .HasForeignKey(tc => tc.UserId)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

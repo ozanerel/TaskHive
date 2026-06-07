@@ -1,7 +1,14 @@
+using TH.BLL.DependencyResolvers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContextService(builder.Configuration);
+
+
+
 
 var app = builder.Build();
 
