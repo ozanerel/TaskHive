@@ -9,10 +9,10 @@ namespace TH.ENTITIES.Interfaces
 {
     public interface IEntity
     {
-        int Id { get; set; }
-        DateTime CreatedDate { get; set; }
-        DateTime? UpdatedDate { get; set; }
-        DateTime? DeletedDate { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
 
         public DataStatus Status { get; set; }
     }
