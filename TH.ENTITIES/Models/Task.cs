@@ -12,6 +12,7 @@ namespace TH.ENTITIES.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public PriorityLevel Priority { get; set; }
+        public bool IsCompleted { get; set; }
 
         public int UserId { get; set; }
         public int ProjectId { get; set; }
