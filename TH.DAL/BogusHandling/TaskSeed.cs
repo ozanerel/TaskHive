@@ -20,7 +20,6 @@ namespace TH.DAL.BogusHandling
                 Title = "Create Login Page",
                 Description = "Develop login screen",
                 Priority = PriorityLevel.Critical,
-                IsCompleted = false,
                 UserId = 2,
                 ProjectId = 1
             };
@@ -31,7 +30,6 @@ namespace TH.DAL.BogusHandling
                 Title = "Implement JWT",
                 Description = "Develop authentication infrastructure",
                 Priority = PriorityLevel.High,
-                IsCompleted = false,
                 UserId = 1,
                 ProjectId = 1
             };
@@ -42,7 +40,6 @@ namespace TH.DAL.BogusHandling
                 Title = "Prepare Test Cases",
                 Description = "Write test scenarios",
                 Priority = PriorityLevel.Medium,
-                IsCompleted = true,
                 UserId = 3,
                 ProjectId = 1
             };
