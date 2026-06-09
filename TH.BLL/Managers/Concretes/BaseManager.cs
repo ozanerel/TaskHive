@@ -47,7 +47,7 @@ namespace TH.BLL.Managers.Concretes
 
         public List<T> GetActives()
         {
-            return _repository.Where(x => x.Status != DataStatus.Inserted || x.Status == DataStatus.Updated).ToList();
+            return _repository.Where(x => x.Status == DataStatus.Inserted || x.Status == DataStatus.Updated).ToList();
         }
 
         public async Task<List<T>> GetAllAsync()
@@ -90,7 +90,8 @@ namespace TH.BLL.Managers.Concretes
             var original = await _repository.GetByIdAsync(entity.Id);
             if (original == null) return;
 
-            original.DeletedDate = DateTime.Now;
+            //original.DeletedDate = DateTime.Now;
+            original.DeletedDate = null;
             original.Status = DataStatus.Updated;
             await _repository.UpdateAsync(original, original);
         }
@@ -107,7 +108,7 @@ namespace TH.BLL.Managers.Concretes
 
         public List<T> Where(Expression<Func<T, bool>> exp)
         {
-            throw new NotImplementedException();
+            return _repository.Where(exp).ToList();
         }
     }
 }
