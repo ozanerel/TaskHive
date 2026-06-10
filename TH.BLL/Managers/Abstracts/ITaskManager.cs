@@ -13,9 +13,9 @@ namespace TH.BLL.Managers.Abstracts
 
         Task ChangePriorityAsync(int taskId, PriorityLevel priority);
 
-        Task<List<Task>> GetTasksByUserAsync(int userId);
+        Task<List<TH.ENTITIES.Models.Task>> GetTasksByUserAsync(int userId);
 
-        Task<List<Task>> GetTasksByProjectAsync(int projectId);
+        Task<List<TH.ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId);
 
         Task CompleteTaskAsync(int taskId);
     }
