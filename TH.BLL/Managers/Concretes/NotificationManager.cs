@@ -11,9 +11,9 @@ namespace TH.BLL.Managers.Concretes
 {
     public class NotificationManager : BaseManager<Notification>, INotificationManager
     {
-        private readonly IRepository<Notification> _repository;
+        private readonly INotificationRepository _repository;
 
-        public NotificationManager(IRepository<Notification> repository)
+        public NotificationManager(INotificationRepository repository)
             : base(repository)
         {
             _repository = repository;

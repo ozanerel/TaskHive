@@ -11,9 +11,9 @@ namespace TH.BLL.Managers.Concretes
 {
     public class RoleManager:BaseManager<Role>, IRoleManager
     {
-        private readonly IRepository<Role> _repository;
+        private readonly IRoleRepository _repository;
 
-        public RoleManager(IRepository<Role> repository)
+        public RoleManager(IRoleRepository repository)
             : base(repository)
         {
             _repository = repository;

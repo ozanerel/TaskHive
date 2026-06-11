@@ -11,9 +11,9 @@ namespace TH.BLL.Managers.Concretes
 {
     public class TaskCommentManager : BaseManager<TaskComment>, ITaskCommentManager
     {
-        private readonly IRepository<TaskComment> _repository;
+        private readonly ITaskCommentRepository _repository;
 
-        public TaskCommentManager(IRepository<TaskComment> repository)
+        public TaskCommentManager(ITaskCommentRepository repository)
             : base(repository)
         {
             _repository = repository;
