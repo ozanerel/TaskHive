@@ -1,0 +1,35 @@
+﻿@model TH.ENTITIES.Models.Task
+
+<h2>Task Detail</h2>
+
+<div class="card">
+    <div class="card-body">
+
+        <h4>@Model.Title</h4>
+
+        <p>
+            @Model.Description
+        </p>
+
+        <p>
+            Priority:
+            @Model.Priority
+        </p>
+
+        <p>
+            Status:
+            @(Model.IsCompleted ? "Completed" : "Pending")
+        </p>
+
+        <p>
+            Assigned User:
+            @Model.User?.FirstName
+        </p>
+
+        <p>
+            Project:
+            @Model.Project?.ProjectName
+        </p>
+
+    </div>
+</div>
