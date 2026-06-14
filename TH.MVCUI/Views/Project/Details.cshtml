@@ -1,0 +1,90 @@
+﻿@model TH.ENTITIES.Models.Project
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>@Model.ProjectName</h2>
+        </div>
+
+        <div class="card-body">
+
+            <h5>Description</h5>
+
+            <p>
+                @Model.Description
+            </p>
+
+            <hr />
+
+            <h5>Project Members</h5>
+
+            <ul>
+
+                @if (Model.Users != null)
+                {
+                    foreach (var user in Model.Users)
+                    {
+                        <li>
+                            @user.FirstName @user.LastName
+                        </li>
+                    }
+                }
+
+            </ul>
+
+            <hr />
+
+            <h5>Tasks</h5>
+
+            <table class="table table-striped">
+
+                <thead>
+
+                    <tr>
+                        <th>Task</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Tasks != null)
+                    {
+                        foreach (var task in Model.Tasks)
+                        {
+                            <tr>
+
+                                <td>@task.Title</td>
+
+                                <td>@task.Priority</td>
+
+                                <td>
+                                    @(task.IsCompleted
+                                        ? "Completed"
+                                        : "In Progress")
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <br />
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Back
+    </a>
+
+</div>

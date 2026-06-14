@@ -1,0 +1,42 @@
+﻿@model TH.ENTITIES.Models.Project
+
+<div class="container mt-4">
+
+    <h2>Edit Project</h2>
+
+    <form asp-action="Update" method="post">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+
+            <label asp-for="ProjectName"></label>
+
+            <input asp-for="ProjectName"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Description"></label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="4"></textarea>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Update
+        </button>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back
+        </a>
+
+    </form>
+
+</div>

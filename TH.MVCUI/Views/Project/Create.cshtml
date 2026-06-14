@@ -1,0 +1,46 @@
+﻿@model TH.ENTITIES.Models.Project
+
+<div class="container mt-4">
+
+    <h2>Create Project</h2>
+
+    <form asp-action="Create" method="post">
+
+        <div class="mb-3">
+
+            <label asp-for="ProjectName"></label>
+
+            <input asp-for="ProjectName"
+                   class="form-control" />
+
+            <span asp-validation-for="ProjectName"
+                  class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Description"></label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="4"></textarea>
+
+            <span asp-validation-for="Description"
+                  class="text-danger"></span>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+            Save
+        </button>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back
+        </a>
+
+    </form>
+
+</div>
