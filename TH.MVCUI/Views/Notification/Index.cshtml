@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TH.ENTITIES.Models.Notification>
+
+<h2>Notifications</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+
+                <td>@item.NotificationDate</td>
+
+                <td>
+                    @(item.IsRead ? "Read" : "Unread")
+                </td>
+
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@item.Id"
+                       class="btn btn-info">
+                        Details
+                    </a>
+
+                    <a asp-action="MarkAsRead"
+                       asp-route-id="@item.Id"
+                       class="btn btn-success">
+                        Read
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

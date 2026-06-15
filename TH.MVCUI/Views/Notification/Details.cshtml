@@ -1,0 +1,19 @@
+﻿@model TH.ENTITIES.Models.Notification
+
+<h2>@Model.Title</h2>
+
+<hr />
+
+<p>
+    @Model.Message
+</p>
+
+<p>
+    <strong>Date:</strong>
+    @Model.NotificationDate
+</p>
+
+<p>
+    <strong>Status:</strong>
+    @(Model.IsRead ? "Read" : "Unread")
+</p>
