@@ -1,0 +1,13 @@
+﻿@model TH.ENTITIES.Models.User
+
+<h2>User Details</h2>
+
+<p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+
+<p><strong>Email:</strong> @Model.Email</p>
+
+<p><strong>Role:</strong> @Model.RoleId</p>
+
+<p><strong>Task Count:</strong> @Model.Tasks?.Count</p>
+
+<p><strong>Project Count:</strong> @Model.Projects?.Count</p>
