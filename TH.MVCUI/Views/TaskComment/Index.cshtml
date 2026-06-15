@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TH.ENTITIES.Models.TaskComment>
+
+<h2>Task Comments</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">
+    New Comment
+</a>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Task Id</th>
+            <th>User Id</th>
+            <th>Read</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Message</td>
+                <td>@item.TaskId</td>
+                <td>@item.UserId</td>
+                <td>@item.IsRead</td>
+
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">
+                        Details
+                    </a>
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">
+                        Edit
+                    </a>
+
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                        Delete
+                    </a>
+
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

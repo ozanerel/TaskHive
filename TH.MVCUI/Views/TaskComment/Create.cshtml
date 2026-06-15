@@ -1,0 +1,26 @@
+﻿@model TH.ENTITIES.Models.TaskComment
+
+<h2>Create Comment</h2>
+
+<form asp-action="Create">
+
+    <div class="mb-3">
+        <label>Message</label>
+        <textarea asp-for="Message" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Task Id</label>
+        <input asp-for="TaskId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>User Id</label>
+        <input asp-for="UserId" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
+</form>

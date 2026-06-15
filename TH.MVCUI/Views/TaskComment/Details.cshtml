@@ -1,0 +1,27 @@
+﻿@model TH.ENTITIES.Models.TaskComment
+
+<h2>Comment Detail</h2>
+
+<p>
+    <strong>Message:</strong>
+    @Model.Message
+</p>
+
+<p>
+    <strong>Task Id:</strong>
+    @Model.TaskId
+</p>
+
+<p>
+    <strong>User Id:</strong>
+    @Model.UserId
+</p>
+
+<p>
+    <strong>Read:</strong>
+    @Model.IsRead
+</p>
+
+<a asp-action="Index" class="btn btn-secondary">
+    Back
+</a>
