@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
-using TH.MVCUI.Models.ViewModels;
+using TH.MVCUI.Models.ViewModels.PageVMs;
 
 namespace TH.MVCUI.Controllers
 {
