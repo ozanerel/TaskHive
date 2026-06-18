@@ -1,6 +1,6 @@
 ﻿using TH.ENTITIES.Models;
 
-namespace TH.MVCUI.Models.ViewModels.PageVMs
+namespace TH.MVCUI.Areas.Member.Models.PageVMs
 {
     public class TaskCommentPageVm
     {
@@ -8,7 +8,7 @@ namespace TH.MVCUI.Models.ViewModels.PageVMs
 
         public List<TaskComment> TaskComments { get; set; }
 
-        public List<TH.ENTITIES.Models.Task> Tasks { get; set; }
+        public List<ENTITIES.Models.Task> Tasks { get; set; }
 
         public List<User> Users { get; set; }
     }

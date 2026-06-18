@@ -1,6 +1,6 @@
 ﻿using TH.ENTITIES.Models;
 
-namespace TH.MVCUI.Models.ViewModels.PageVMs
+namespace TH.MVCUI.Areas.Admin.Models.PageVMs
 {
     public class UserPageVm
     {
@@ -12,6 +12,6 @@ namespace TH.MVCUI.Models.ViewModels.PageVMs
 
         public List<Project> Projects { get; set; }
 
-        public List<TH.ENTITIES.Models.Task> Tasks { get; set; }
+        public List<ENTITIES.Models.Task> Tasks { get; set; }
     }
 }

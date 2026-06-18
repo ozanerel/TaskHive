@@ -2,7 +2,7 @@
 using TH.BLL.Managers.Abstracts;
 using TH.ENTITIES.Models;
 
-namespace TH.MVCUI.Controllers
+namespace TH.MVCUI.Areas.Member.Controllers
 {
     public class TaskCommentController : Controller
     {

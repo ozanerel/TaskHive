@@ -1,6 +1,6 @@
 ﻿using TH.ENTITIES.Models;
 
-namespace TH.MVCUI.Models.ViewModels.PageVMs
+namespace TH.MVCUI.Areas.Admin.Models.PageVMs
 {
     public class NotificationPageVm
     {

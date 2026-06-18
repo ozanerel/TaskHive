@@ -2,7 +2,7 @@
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Managers.Concretes;
 
-namespace TH.MVCUI.Controllers
+namespace TH.MVCUI.Areas.Admin.Controllers
 {
     public class TaskController : Controller
     {
@@ -35,7 +35,7 @@ namespace TH.MVCUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TH.ENTITIES.Models.Task task)
+        public async Task<IActionResult> Create(ENTITIES.Models.Task task)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace TH.MVCUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TH.ENTITIES.Models.Task task)
+        public async Task<IActionResult> Edit(ENTITIES.Models.Task task)
         {
             if (ModelState.IsValid)
             {

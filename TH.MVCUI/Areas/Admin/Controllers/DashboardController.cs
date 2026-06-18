@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
-using TH.MVCUI.Models.ViewModels.PageVMs;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
-namespace TH.MVCUI.Controllers
+namespace TH.MVCUI.Areas.Admin.Controllers
 {
     public class DashboardController : Controller
     {
@@ -28,7 +28,7 @@ namespace TH.MVCUI.Controllers
             var tasks = await _taskManager.GetAllAsync();
             var users = await _userManager.GetAllAsync();
 
-            DashboardVM vm = new DashboardVM()
+            DashboardVm vm = new DashboardVm()
             {
                 TotalProjects = projects.Count,
                 TotalTasks = tasks.Count,

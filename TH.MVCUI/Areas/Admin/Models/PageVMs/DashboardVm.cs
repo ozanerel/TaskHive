@@ -1,6 +1,6 @@
 ﻿using TH.ENTITIES.Models;
 
-namespace TH.MVCUI.Models.ViewModels.PageVMs
+namespace TH.MVCUI.Areas.Admin.Models.PageVMs
 {
     public class DashboardVm
     {
@@ -10,7 +10,7 @@ namespace TH.MVCUI.Models.ViewModels.PageVMs
         public int CompletedTasks { get; set; }
         public int TotalUsers { get; set; }
         public List<Project> RecentProjects { get; set; }
-        public List<TH.ENTITIES.Models.Task> RecentTasks { get; set; }
+        public List<ENTITIES.Models.Task> RecentTasks { get; set; }
 
     }
 }
