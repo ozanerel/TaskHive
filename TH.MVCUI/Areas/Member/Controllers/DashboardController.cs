@@ -2,9 +2,9 @@
 using TH.BLL.Managers.Abstracts;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
-namespace TH.MVCUI.Areas.Admin.Controllers
+namespace TH.MVCUI.Areas.Member.Controllers
 {
-    [Area("Admin")]
+    [Area("Member")]
     public class DashboardController : Controller
     {
         private readonly IProjectManager _projectManager;
