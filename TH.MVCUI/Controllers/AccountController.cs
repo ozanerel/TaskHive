@@ -19,7 +19,6 @@ namespace TH.MVCUI.Controllers
         public IActionResult Login() => View();
 
         [HttpPost]
-        //TODO:there is an error
         public async Task<IActionResult> Login(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
@@ -41,6 +40,15 @@ namespace TH.MVCUI.Controllers
                 ViewBag.Error = "Giriş başarısız.";
                 return View();
             }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("Admin"))
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
+            else if (roles.Contains("Member"))
+                return RedirectToAction("Index", "Home", new { area = "Member" });
+            else
+                return RedirectToAction("AccessDenied", "Account");
         }
 
 

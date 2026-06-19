@@ -9,5 +9,7 @@ namespace TH.DAL.Repositories.Abstracts
 {
     public interface IAppUserRepository: IRepository<AppUser>
     {
+        Task<AppUser> GetByUserNameAsync(string userName);
+        Task<List<AppUser>> GetUserByRoleAsync(string roleName);
     }
 }

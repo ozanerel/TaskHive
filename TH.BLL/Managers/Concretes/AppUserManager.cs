@@ -15,20 +15,27 @@ namespace TH.BLL.Managers.Concretes
     {
         private readonly IAppUserRepository _repository;
         private readonly UserManager<AppUser> _userManager;
-        public AppUserManager(IAppUserRepository repository,UserManager<AppUser> userManager):base(repository)
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        public AppUserManager(IAppUserRepository repository,UserManager<AppUser> userManager, RoleManager<IdentityRole<int>> roleManager) : base(repository)
         {
             _repository = repository;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
         public async System.Threading.Tasks.Task ChangeUserRoleAsync(int userId, string newRole)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null) 
-            {
+            if (user == null)
                 throw new Exception("Kullanıcı bulunamadı.");
-            }
 
-            
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            if (!await _roleManager.RoleExistsAsync(newRole))
+                await _roleManager.CreateAsync(new IdentityRole<int>(newRole));
+
+            await _userManager.AddToRoleAsync(user, newRole);
+
         }
 
         public async Task<AppUser> CreateUserWithRoleAsync(string username, string email, string password, string rolename)
@@ -64,6 +71,13 @@ namespace TH.BLL.Managers.Concretes
                 throw new Exception("Kullanıcı oluşturulamadı: " + errors);
             }
 
+            //Rol yoksa oluştur
+            if (!await _roleManager.RoleExistsAsync(rolename))
+                await _roleManager.CreateAsync(new IdentityRole<int>(rolename));
+
+            // Role ekle
+            await _userManager.AddToRoleAsync(newUser, rolename);
+
             return newUser;
 
 
@@ -81,9 +95,9 @@ namespace TH.BLL.Managers.Concretes
             await _userManager.UpdateAsync(user);
         }
 
-        public Task<List<AppUser>> GetUsersByRoleAsync(string roleName)
+        public async Task<List<AppUser>> GetUsersByRoleAsync(string roleName)
         {
-            throw new NotImplementedException();
+            return await _repository.GetUserByRoleAsync(roleName);
         }
     }
 }
