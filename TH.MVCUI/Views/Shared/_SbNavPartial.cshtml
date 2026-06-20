@@ -37,7 +37,25 @@
                     </nav>
                 </div>
 
-                <div class="sb-sidenav-menu-heading">Sayfalar</div>
+                @* Admin Menüsü *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                }
+
+                @* Member Menüsü *@
+                @if (User.IsInRole("Member"))
+                {
+                    <a class="nav-link" asp-area="Member" asp-controller="Dashboard" asp-action="Index">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    
+                }
                 
             </div>
         </div>
