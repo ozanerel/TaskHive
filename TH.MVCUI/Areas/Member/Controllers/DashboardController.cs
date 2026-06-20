@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
+    [Authorize(Roles = "Member")]
     public class DashboardController : Controller
     {
         private readonly IProjectManager _projectManager;
