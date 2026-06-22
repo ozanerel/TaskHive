@@ -1,27 +1,96 @@
-﻿@model TH.ENTITIES.Models.TaskComment
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM.TaskCommentDetailsVm
 
-<h2>Comment Detail</h2>
+<div class="container mt-4">
 
-<p>
-    <strong>Message:</strong>
-    @Model.Message
-</p>
+    <div class="card">
 
-<p>
-    <strong>Task Id:</strong>
-    @Model.TaskId
-</p>
+        <div class="card-header bg-info text-white">
 
-<p>
-    <strong>User Id:</strong>
-    @Model.UserId
-</p>
+            <h3>Comment Detail</h3>
 
-<p>
-    <strong>Read:</strong>
-    @Model.IsRead
-</p>
+        </div>
 
-<a asp-action="Index" class="btn btn-secondary">
-    Back
-</a>
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="col-3">
+                    Id
+                </dt>
+
+                <dd class="col-9">
+                    @Model.Comment.Id
+                </dd>
+
+                <dt class="col-3">
+                    Message
+                </dt>
+
+                <dd class="col-9">
+                    @Model.Comment.Message
+                </dd>
+
+                <dt class="col-3">
+                    Task
+                </dt>
+
+                <dd class="col-9">
+                    @Model.Comment.Task?.Title
+                </dd>
+
+                <dt class="col-3">
+                    User
+                </dt>
+
+                <dd class="col-9">
+                    @Model.Comment.User?.FirstName
+                    @Model.Comment.User?.LastName
+                </dd>
+
+                <dt class="col-3">
+                    Status
+                </dt>
+
+                <dd class="col-9">
+
+                    @if (Model.Comment.IsRead)
+                    {
+                        <span class="badge bg-success">
+                            Read
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">
+                            Unread
+                        </span>
+                    }
+
+                </dd>
+
+            </dl>
+
+        </div>
+
+        <div class="card-footer">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Comment.Id"
+               class="btn btn-warning">
+
+                Edit
+
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

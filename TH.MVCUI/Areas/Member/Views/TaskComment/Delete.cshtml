@@ -1,15 +1,54 @@
 ﻿@model TH.ENTITIES.Models.TaskComment
 
-<h2>Delete Comment</h2>
+<div class="container mt-4">
 
-<p>Are you sure?</p>
+    <div class="card">
 
-<form asp-action="Delete">
+        <div class="card-header bg-danger text-white">
 
-    <input type="hidden" asp-for="Id" />
+            <h3>Delete Comment</h3>
 
-    <button class="btn btn-danger">
-        Delete
-    </button>
+        </div>
 
-</form>
+        <div class="card-body">
+
+            <h5>
+
+                Are you sure you want to delete this comment?
+
+            </h5>
+
+            <hr />
+
+            <p>
+
+                <strong>Comment :</strong>
+
+                @Model.Message
+
+            </p>
+
+            <form asp-action="Delete">
+
+                <input asp-for="Id" hidden />
+
+                <button class="btn btn-danger">
+
+                    Delete
+
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

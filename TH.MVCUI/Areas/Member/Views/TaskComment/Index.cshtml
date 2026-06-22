@@ -1,51 +1,98 @@
-﻿@model IEnumerable<TH.ENTITIES.Models.TaskComment>
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM.TaskCommentIndexVm
 
-<h2>Task Comments</h2>
+@{
+    ViewData["Title"] = "Task Comments";
+}
 
-<a asp-action="Create" class="btn btn-success mb-3">
-    New Comment
-</a>
+<div class="container mt-4">
 
-<table class="table table-bordered">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Task Comments</h2>
 
-    <thead>
-        <tr>
-            <th>Message</th>
-            <th>Task Id</th>
-            <th>User Id</th>
-            <th>Read</th>
-            <th></th>
-        </tr>
-    </thead>
+        <a asp-action="Create" class="btn btn-success">
+            New Comment
+        </a>
+    </div>
 
-    <tbody>
+    <table class="table table-bordered table-hover">
 
-        @foreach (var item in Model)
-        {
+        <thead class="table-dark">
+
             <tr>
-                <td>@item.Message</td>
-                <td>@item.TaskId</td>
-                <td>@item.UserId</td>
-                <td>@item.IsRead</td>
-
-                <td>
-
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">
-                        Details
-                    </a>
-
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">
-                        Edit
-                    </a>
-
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
-                        Delete
-                    </a>
-
-                </td>
+                <th>Id</th>
+                <th>Message</th>
+                <th>Task</th>
+                <th>User</th>
+                <th>Read</th>
+                <th width="240"></th>
             </tr>
-        }
 
-    </tbody>
+        </thead>
 
-</table>
+        <tbody>
+
+            @foreach (var item in Model.Comments)
+            {
+                <tr>
+
+                    <td>@item.Id</td>
+
+                    <td>@item.Message</td>
+
+                    <td>@item.Task?.Title</td>
+
+                    <td>@item.User?.FirstName @item.User?.LastName</td>
+
+                    <td>
+
+                        @if (item.IsRead)
+                        {
+                            <span class="badge bg-success">
+                                Read
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">
+                                Unread
+                            </span>
+                        }
+
+                    </td>
+
+                    <td>
+
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           class="btn btn-info btn-sm">
+
+                            Details
+
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="btn btn-warning btn-sm">
+
+                            Edit
+
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           class="btn btn-danger btn-sm">
+
+                            Delete
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

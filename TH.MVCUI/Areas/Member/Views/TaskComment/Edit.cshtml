@@ -1,28 +1,92 @@
-﻿@model TH.ENTITIES.Models.TaskComment
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM.TaskCommentUpdateVm
 
-<h2>Edit Comment</h2>
+@using Microsoft.AspNetCore.Mvc.Rendering
 
-<form asp-action="Edit">
+<div class="container mt-4">
 
-    <input type="hidden" asp-for="Id" />
+    <div class="card">
 
-    <div class="mb-3">
-        <label>Message</label>
-        <textarea asp-for="Message" class="form-control"></textarea>
+        <div class="card-header bg-warning">
+
+            <h3>Edit Comment</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit">
+
+                <input asp-for="Id" hidden />
+
+                <div class="mb-3">
+
+                    <label asp-for="Message"></label>
+
+                    <textarea asp-for="Message"
+                              class="form-control"
+                              rows="5"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Task</label>
+
+                    <select asp-for="TaskId"
+                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
+                            class="form-control"></select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>User</label>
+
+                    <select asp-for="UserId"
+                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
+                            class="form-control"></select>
+
+                </div>
+
+                <div class="form-check mb-3">
+
+                    <input asp-for="IsRead"
+                           class="form-check-input" />
+
+                    <label asp-for="IsRead"
+                           class="form-check-label">
+
+                        Mark As Read
+
+                    </label>
+
+                </div>
+
+                <button class="btn btn-primary">
+
+                    Save
+
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label>Task Id</label>
-        <input asp-for="TaskId" class="form-control" />
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label>User Id</label>
-        <input asp-for="UserId" class="form-control" />
-    </div>
+@section Scripts {
 
-    <button class="btn btn-primary">
-        Save
-    </button>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-</form>
+}

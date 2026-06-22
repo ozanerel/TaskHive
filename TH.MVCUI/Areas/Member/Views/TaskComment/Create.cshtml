@@ -1,26 +1,94 @@
-﻿@model TH.ENTITIES.Models.TaskComment
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM.TaskCommentCreateVm
 
-<h2>Create Comment</h2>
+@using Microsoft.AspNetCore.Mvc.Rendering
 
-<form asp-action="Create">
+@{
+    ViewData["Title"] = "Create Comment";
+}
 
-    <div class="mb-3">
-        <label>Message</label>
-        <textarea asp-for="Message" class="form-control"></textarea>
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-header bg-success text-white">
+
+            <h3>Create Task Comment</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger"></div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Message"></label>
+
+                    <textarea asp-for="Message"
+                              class="form-control"
+                              rows="5"></textarea>
+
+                    <span asp-validation-for="Message"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Task</label>
+
+                    <select asp-for="TaskId"
+                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
+                            class="form-control">
+
+                        <option value="">Choose Task</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>User</label>
+
+                    <select asp-for="UserId"
+                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
+                            class="form-control">
+
+                        <option value="">Choose User</option>
+
+                    </select>
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    Save
+
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label>Task Id</label>
-        <input asp-for="TaskId" class="form-control" />
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label>User Id</label>
-        <input asp-for="UserId" class="form-control" />
-    </div>
+@section Scripts {
 
-    <button class="btn btn-success">
-        Save
-    </button>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-</form>
+}
