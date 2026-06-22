@@ -20,16 +20,16 @@ namespace TH.DAL.BogusHandling
                 IsRead = false,
                 UserId = 1
             };
-            Notification notification2 = new()
-            {
-                Id = 2,
-                Title = "Task Updated",
-                Message = "Login page task updated",
-                IsRead = false,
-                UserId = 2
-            };
+            //Notification notification2 = new()
+            //{
+            //    Id = 2,
+            //    Title = "Task Updated",
+            //    Message = "Login page task updated",
+            //    IsRead = false,
+            //    UserId = 2
+            //};
          
-            modelBuilder.Entity<Notification>().HasData(notification1, notification2);
+            modelBuilder.Entity<Notification>().HasData(notification1);
         }
     }
 }

@@ -33,6 +33,7 @@ namespace TH.DAL.ContextClasses
             modelBuilder.ApplyConfiguration(new TaskConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
+            UserAndRoleSeed.SeedUsersAndRoles(modelBuilder);
             NotificationSeed.SeedNotifications(modelBuilder);
             ProjectSeed.SeedProjects(modelBuilder);
             RoleSeed.SeedRoles(modelBuilder);
@@ -42,7 +43,7 @@ namespace TH.DAL.ContextClasses
         }
 
         public DbSet<AppUser> AppUsers { get; set; }
-        public DbSet<AppUserProfile> appUserProfiles { get; set; }
+        public DbSet<AppUserProfile> AppUserProfiles { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Role> Roles { get; set; }

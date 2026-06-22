@@ -18,14 +18,14 @@ namespace TH.DAL.BogusHandling
                 ProjectName = "TaskHive",
                 Description = "Project Management System"
             };
-            Project project2 = new()
-            {
-                Id = 2,
-                ProjectName = "IKYS",
-                Description = "Human Resources Management System"
-            };
+            //Project project2 = new()
+            //{
+            //    Id = 2,
+            //    ProjectName = "IKYS",
+            //    Description = "Human Resources Management System"
+            //};
           
-            modelBuilder.Entity<Project>().HasData(project1, project2);
+            modelBuilder.Entity<Project>().HasData(project1);
         }
     }
 }

@@ -17,17 +17,17 @@ namespace TH.DAL.BogusHandling
                 Id = 1,
                 Message = "Login page completed",
                 TaskId = 1,
-                UserId = 2
-            };
-            TaskComment comment2 = new()
-            {
-                Id = 2,
-                Message = "JWT implementation started",
-                TaskId = 2,
                 UserId = 1
             };
+            //TaskComment comment2 = new()
+            //{
+            //    Id = 2,
+            //    Message = "JWT implementation started",
+            //    TaskId = 2,
+            //    UserId = 1
+            //};
            
-            modelBuilder.Entity<TaskComment>().HasData(comment1, comment2);
+            modelBuilder.Entity<TaskComment>().HasData(comment1);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TH.DAL.ContextClasses;
 
@@ -11,9 +12,11 @@ using TH.DAL.ContextClasses;
 namespace TH.DAL.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20260622000943_AddedUserAndRoleSeed2")]
+    partial class AddedUserAndRoleSeed2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,14 +61,14 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "8bfbb160-40f6-4053-aeb9-76d84ac58cca",
+                            ConcurrencyStamp = "3850b2b0-7937-4dc0-a869-5f92765f48e2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f64a02af-1585-4c28-895f-5c2b3e09a57d",
+                            ConcurrencyStamp = "4468e81e-82ca-4bd4-ad4a-8eaec5aa185d",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         });
@@ -291,16 +294,16 @@ namespace TH.DAL.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             ActivationCode = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ConcurrencyStamp = "8834d574-843b-44a5-bc49-6a04e0e7a837",
+                            ConcurrencyStamp = "067204ed-5c09-41c9-9430-5ab24ce7ccc2",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@th.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@TH.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMkB0xBYcgidvs0BsU6tNNFg2JuEwkG2TP+2J9EgnPHKRlHwwO3W7raThbPGP+9cvA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELmyJno97zmSwUwS96f5YFpFxJbhHnrNQIAcmGg1RX7QxVqPdxrA3zmL3ZSwdQdHSQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8c13a8bf-f4cc-46ec-a623-1e843465d82c",
+                            SecurityStamp = "67d09cce-2306-4129-9327-0234ffd79f1c",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "admin"
@@ -310,19 +313,19 @@ namespace TH.DAL.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             ActivationCode = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ConcurrencyStamp = "4779fc4e-e181-436c-93f0-c676c0db65fe",
+                            ConcurrencyStamp = "2fe7fd5c-a9ac-4051-a2ad-28b354579806",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "member@th.com",
+                            Email = "ozan@th.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedEmail = "MEMBER@TH.COM",
-                            NormalizedUserName = "MEMBER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIyp6gRRiPRwmOVnG0I4ZXxC42Kjl8ujsj9/pdMOk5HQGC7lpjfIOl/cbiu3K7u+5g==",
+                            NormalizedEmail = "OZAN@TH.COM",
+                            NormalizedUserName = "OZAN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGZ1WjtsgbDuqtVXarPEH43lSUveIMgDfr0ZhMx8TIz4oW/v7YNGCuwkQtQjyOKdsQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f3472f9d-6014-4476-b5fe-166016f03708",
+                            SecurityStamp = "e8738261-829b-4739-badb-2a2b1065b838",
                             Status = 0,
                             TwoFactorEnabled = false,
-                            UserName = "member"
+                            UserName = "ozan"
                         });
                 });
 
@@ -419,7 +422,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(8908),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 556, DateTimeKind.Utc).AddTicks(9802),
                             IsRead = false,
                             Message = "JWT task assigned to you",
                             NotificationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -467,7 +470,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9072),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(376),
                             Description = "Project Management System",
                             ProjectName = "TaskHive",
                             Status = 1
@@ -520,7 +523,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9144),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(549),
                             Description = "System Administrator",
                             Name = "Admin",
                             Status = 1,
@@ -529,7 +532,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9146),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(551),
                             Description = "Project Manager",
                             Name = "Project Manager",
                             Status = 1,
@@ -538,7 +541,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9148),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(560),
                             Description = "Backend Developer",
                             Name = "Backend Developer",
                             Status = 1,
@@ -547,7 +550,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9149),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(561),
                             Description = "Frontend Developer",
                             Name = "Frontend Developer",
                             Status = 1,
@@ -556,7 +559,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9150),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(563),
                             Description = "Quality Assurance",
                             Name = "Tester",
                             Status = 1,
@@ -618,7 +621,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9354),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(733),
                             Description = "Develop login screen",
                             IsCompleted = false,
                             Priority = 4,
@@ -675,7 +678,7 @@ namespace TH.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9267),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(669),
                             IsRead = false,
                             Message = "Login page completed",
                             Status = 1,
@@ -739,7 +742,7 @@ namespace TH.DAL.Migrations
                         {
                             Id = 1,
                             AppUserId = 2,
-                            CreatedDate = new DateTime(2026, 6, 22, 0, 14, 23, 817, DateTimeKind.Utc).AddTicks(9480),
+                            CreatedDate = new DateTime(2026, 6, 22, 0, 9, 41, 557, DateTimeKind.Utc).AddTicks(778),
                             Email = "ahmet@test.com",
                             FirstName = "Ahmet",
                             LastName = "Yilmaz",

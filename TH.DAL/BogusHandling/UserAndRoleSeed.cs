@@ -64,13 +64,13 @@ namespace TH.DAL.BogusHandling
             AppUser appUser2 = new()
             {
                 Id = 2,
-                UserName = "ozan",
-                Email = "ozan@th.com",
-                NormalizedEmail = "OZAN@TH.COM",
-                NormalizedUserName = "OZAN",
+                UserName = "member",
+                Email = "member@th.com",
+                NormalizedEmail = "MEMBER@TH.COM",
+                NormalizedUserName = "MEMBER",
                 EmailConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                PasswordHash = passwordHasher.HashPassword(null, "Ozan1234"),
+                PasswordHash = passwordHasher2.HashPassword(null, "Member1234"),
             };
 
             modelBuilder.Entity<AppUser>().HasData(appUser2);
