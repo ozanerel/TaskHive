@@ -13,6 +13,7 @@ namespace TH.ENTITIES.Models
         public string Email { get; set; }
 
         public int RoleId { get; set; }
+        public int AppUserId { get; set; }
 
         //Relational Properties
         //1 User can have many Projects,Tasks
@@ -21,5 +22,6 @@ namespace TH.ENTITIES.Models
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<TaskComment> TaskComments { get; set; }
         public virtual Role Role { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }

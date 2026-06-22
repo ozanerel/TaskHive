@@ -19,5 +19,6 @@ namespace TH.ENTITIES.Models
 
         //Relational Properties
         public virtual AppUserProfile AppUserProfile { get; set; }
+        public virtual User User { get; set; }
     }
 }

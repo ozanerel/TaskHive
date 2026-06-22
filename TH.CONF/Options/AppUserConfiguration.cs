@@ -13,13 +13,15 @@ namespace TH.CONF.Options
         public override void Configure(EntityTypeBuilder<AppUser> builder)
         {
             base.Configure(builder);
+            builder.Property(x => x.UserName).IsRequired().HasMaxLength(100);
+
+            builder.Property(x => x.Email).IsRequired().HasMaxLength(150);
+
+            builder.HasOne(x => x.AppUserProfile).WithOne(x => x.AppUser).HasForeignKey<AppUserProfile>(x => x.AppUserId);
+
+            builder.HasOne(x => x.User).WithOne(x => x.AppUser).HasForeignKey<User>(x => x.AppUserId);
 
 
-            builder.HasOne(u => u.AppUserProfile)
-                   .WithOne(p => p.AppUser)
-                   .HasForeignKey<AppUserProfile>(p => p.AppUserId);
-
-            
         }
     }
 }
