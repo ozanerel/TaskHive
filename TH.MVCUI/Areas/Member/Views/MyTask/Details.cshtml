@@ -1,0 +1,53 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM.TaskDetailPageVm
+
+<h2>Task Detail</h2>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <h3>@Model.Task.Title</h3>
+
+        <hr />
+
+        <p>
+
+            <strong>Description :</strong>
+
+            @Model.Task.Description
+
+        </p>
+
+        <p>
+
+            <strong>Priority :</strong>
+
+            @Model.Task.Priority
+
+        </p>
+
+        <p>
+
+            <strong>Project :</strong>
+
+            @Model.Task.Project?.ProjectName
+
+        </p>
+
+        <p>
+
+            <strong>Status :</strong>
+
+            @(Model.Task.IsCompleted ? "Completed" : "Waiting")
+
+        </p>
+
+    </div>
+
+</div>
+
+<br />
+
+<a asp-action="Index" class="btn btn-secondary">
+    Back
+</a>

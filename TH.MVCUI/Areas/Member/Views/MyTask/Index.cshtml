@@ -1,0 +1,84 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM.MyTaskPageVm
+
+<h2>My Tasks</h2>
+
+<table class="table table-bordered table-hover">
+
+    <thead>
+
+        <tr>
+
+            <th>Title</th>
+
+            <th>Priority</th>
+
+            <th>Status</th>
+
+            <th>Project</th>
+
+            <th>Operations</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model.Tasks)
+        {
+            <tr>
+
+                <td>@item.Title</td>
+
+                <td>@item.Priority</td>
+
+                <td>
+
+                    @if (item.IsCompleted)
+                    {
+                        <span class="badge bg-success">
+                            Completed
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">
+                            Waiting
+                        </span>
+                    }
+
+                </td>
+
+                <td>@item.Project?.ProjectName</td>
+
+                <td>
+
+                    <a asp-action="Details"
+                       asp-route-id="@item.Id"
+                       class="btn btn-info btn-sm">
+                        Details
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@item.Id"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    @if (!item.IsCompleted)
+                    {
+                        <a asp-action="Complete"
+                           asp-route-id="@item.Id"
+                           class="btn btn-success btn-sm">
+                            Complete
+                        </a>
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

@@ -1,0 +1,61 @@
+﻿@model TH.ENTITIES.Models.Task
+
+<h2>Edit Task</h2>
+
+<form asp-action="Edit">
+
+    <input asp-for="Id" type="hidden" />
+
+    <input asp-for="UserId" type="hidden" />
+
+    <input asp-for="ProjectId" type="hidden" />
+
+    <input asp-for="IsCompleted" type="hidden" />
+
+    <div class="mb-3">
+
+        <label asp-for="Title"></label>
+
+        <input asp-for="Title" class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="Description"></label>
+
+        <textarea asp-for="Description" class="form-control"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="Priority"></label>
+
+        <select asp-for="Priority" class="form-select">
+
+            <option value="0">Low</option>
+
+            <option value="1">Medium</option>
+
+            <option value="2">High</option>
+
+            <option value="3">Critical</option>
+
+        </select>
+
+    </div>
+
+    <button class="btn btn-primary">
+
+        Save
+
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+
+        Cancel
+
+    </a>
+
+</form>
