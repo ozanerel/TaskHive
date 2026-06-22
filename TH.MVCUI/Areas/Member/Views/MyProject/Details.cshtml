@@ -1,0 +1,147 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.MyProjectVM.MyProjectDetailsVm
+
+@{
+	ViewData["Title"] = "Project Details";
+}
+
+<div class="container mt-4">
+
+	<div class="card shadow">
+
+		<div class="card-header bg-success text-white">
+
+			<h3>@Model.ProjectName</h3>
+
+		</div>
+
+		<div class="card-body">
+
+			<div class="mb-4">
+
+				<h5>Description</h5>
+
+				<p>
+
+					@Model.Description
+
+				</p>
+
+			</div>
+
+			<hr />
+
+			<h4>Project Members</h4>
+
+			<table class="table table-striped">
+
+				<thead>
+
+					<tr>
+
+						<th>Name</th>
+
+						<th>Email</th>
+
+					</tr>
+
+				</thead>
+
+				<tbody>
+
+					@foreach (var item in Model.Users)
+					{
+						<tr>
+
+							<td>
+
+								@item.FirstName @item.LastName
+
+							</td>
+
+							<td>
+
+								@item.Email
+
+							</td>
+
+						</tr>
+					}
+
+				</tbody>
+
+			</table>
+
+			<hr />
+
+			<h4>Tasks</h4>
+
+			<table class="table table-bordered">
+
+				<thead>
+
+					<tr>
+
+						<th>Title</th>
+
+						<th>Priority</th>
+
+						<th>Status</th>
+
+					</tr>
+
+				</thead>
+
+				<tbody>
+
+					@foreach (var task in Model.Tasks)
+					{
+						<tr>
+
+							<td>
+
+								@task.Title
+
+							</td>
+
+							<td>
+
+								@task.Priority
+
+							</td>
+
+							<td>
+
+								@if (task.IsCompleted)
+								{
+									<span class="badge bg-success">
+										Completed
+									</span>
+								}
+								else
+								{
+									<span class="badge bg-warning">
+										Pending
+									</span>
+								}
+
+							</td>
+
+						</tr>
+					}
+
+				</tbody>
+
+			</table>
+
+			<a asp-action="Index"
+			   class="btn btn-secondary">
+
+				Back
+
+			</a>
+
+		</div>
+
+	</div>
+
+</div>
