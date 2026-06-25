@@ -1,0 +1,189 @@
+﻿@import url("variables.css");
+
+/*=========================================================
+    BASE BUTTON
+=========================================================*/
+
+.th-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    padding: 0 22px;
+    height: 48px;
+    font-size: 15px;
+    user-select: none;
+}
+
+/*=========================================================
+    PRIMARY
+=========================================================*/
+
+.th-btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+    .th-btn-primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+/*=========================================================
+    SECONDARY
+=========================================================*/
+
+.th-btn-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+    .th-btn-secondary:hover {
+        background: var(--secondary-hover);
+    }
+
+/*=========================================================
+    SUCCESS
+=========================================================*/
+
+.th-btn-success {
+    background: var(--success);
+    color: white;
+}
+
+    .th-btn-success:hover {
+        transform: translateY(-2px);
+    }
+
+/*=========================================================
+    DANGER
+=========================================================*/
+
+.th-btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+    .th-btn-danger:hover {
+        transform: translateY(-2px);
+    }
+
+/*=========================================================
+    WARNING
+=========================================================*/
+
+.th-btn-warning {
+    background: var(--warning);
+    color: white;
+}
+
+    .th-btn-warning:hover {
+        transform: translateY(-2px);
+    }
+
+/*=========================================================
+    OUTLINE
+=========================================================*/
+
+.th-btn-outline {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+    .th-btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+/*=========================================================
+    ICON BUTTON
+=========================================================*/
+
+.th-btn-icon {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border-radius: 50%;
+}
+
+/*=========================================================
+    SMALL
+=========================================================*/
+
+.th-btn-sm {
+    height: 38px;
+    padding: 0 18px;
+    font-size: 13px;
+}
+
+/*=========================================================
+    LARGE
+=========================================================*/
+
+.th-btn-lg {
+    height: 58px;
+    padding: 0 34px;
+    font-size: 17px;
+}
+
+/*=========================================================
+    BLOCK
+=========================================================*/
+
+.th-btn-block {
+    width: 100%;
+}
+
+/*=========================================================
+    DISABLED
+=========================================================*/
+
+.th-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/*=========================================================
+    FLOATING
+=========================================================*/
+
+.th-floating-btn {
+    position: fixed;
+    right: 35px;
+    bottom: 35px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: var(--shadow-lg);
+    transition: .3s;
+    z-index: 100;
+}
+
+    .th-floating-btn:hover {
+        transform: scale(1.08);
+    }
+
+/*=========================================================
+    BUTTON GROUP
+=========================================================*/
+
+.th-btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}

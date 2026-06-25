@@ -1,0 +1,290 @@
+﻿@import url("variables.css");
+
+/*=========================================================
+    FORM WRAPPER
+=========================================================*/
+
+.th-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.th-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/*=========================================================
+    LABEL
+=========================================================*/
+
+.th-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/*=========================================================
+    INPUT
+=========================================================*/
+
+.th-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    color: var(--text);
+    font-size: 15px;
+    transition: var(--transition);
+}
+
+    .th-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(21,21,125,.12);
+    }
+
+/*=========================================================
+    TEXTAREA
+=========================================================*/
+
+.th-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 16px;
+    resize: vertical;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    transition: var(--transition);
+}
+
+    .th-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(21,21,125,.12);
+    }
+
+/*=========================================================
+    SELECT
+=========================================================*/
+
+.th-select {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+    .th-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(21,21,125,.12);
+    }
+
+/*=========================================================
+    CHECKBOX
+=========================================================*/
+
+.th-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+}
+
+/*=========================================================
+    RADIO
+=========================================================*/
+
+.th-radio {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+}
+
+/*=========================================================
+    SWITCH
+=========================================================*/
+
+.th-switch {
+    width: 48px;
+    height: 24px;
+    accent-color: var(--primary);
+}
+
+/*=========================================================
+    HELP TEXT
+=========================================================*/
+
+.th-help {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+/*=========================================================
+    VALIDATION
+=========================================================*/
+
+.th-validation {
+    color: var(--danger);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.input-validation-error {
+    border-color: var(--danger) !important;
+}
+
+.field-validation-error {
+    color: var(--danger);
+    font-size: 13px;
+}
+
+.validation-summary-errors {
+    background: #fff4f4;
+    border: 1px solid #ffc9c9;
+    color: var(--danger);
+    padding: 16px;
+    border-radius: var(--radius-md);
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+/*=========================================================
+    SEARCH BOX
+=========================================================*/
+
+.th-search {
+    position: relative;
+}
+
+    .th-search input {
+        width: 100%;
+        height: 48px;
+        padding-left: 46px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+    }
+
+    .th-search i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-light);
+    }
+
+/*=========================================================
+    LOGIN FORM
+=========================================================*/
+
+.th-login-form {
+    width: 100%;
+    max-width: 430px;
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.th-login-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.th-login-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+    .th-login-logo img {
+        width: 70px;
+    }
+
+/*=========================================================
+    INPUT WITH ICON
+=========================================================*/
+
+.th-input-icon {
+    position: relative;
+}
+
+    .th-input-icon i {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        color: var(--text-light);
+    }
+
+    .th-input-icon input {
+        padding-left: 46px;
+    }
+
+/*=========================================================
+    PASSWORD TOGGLE
+=========================================================*/
+
+.th-password {
+    position: relative;
+}
+
+    .th-password button {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: var(--text-light);
+    }
+
+/*=========================================================
+    INLINE FORM
+=========================================================*/
+
+.th-inline-form {
+    display: flex;
+    gap: 16px;
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+/*=========================================================
+    FILTER BAR
+=========================================================*/
+
+.th-filter-bar {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+/*=========================================================
+    READONLY
+=========================================================*/
+
+.th-input:disabled,
+.th-select:disabled,
+.th-textarea:disabled {
+    background: #f5f7fb;
+    cursor: not-allowed;
+    opacity: .8;
+}
