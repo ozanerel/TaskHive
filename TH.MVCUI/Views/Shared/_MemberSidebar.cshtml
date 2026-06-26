@@ -1,0 +1,155 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TH.ENTITIES.Models
+@inject UserManager<AppUser> UserManager
+
+<div class="th-sidebar">
+
+    <div>
+
+        <!-- Logo -->
+
+        <div class="th-sidebar-logo">
+
+            <img src="~/images/logo.png" alt="logo" />
+
+            <h2>TaskHive</h2>
+
+        </div>
+
+        <!-- Menu -->
+
+        <div class="th-sidebar-menu">
+
+            <div class="th-sidebar-title">
+
+                MEMBER PANEL
+
+            </div>
+
+            <ul>
+
+                <li>
+
+                    <a asp-area="Member"
+                       asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="active">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <span>Dashboard</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Member"
+                       asp-controller="MyProject"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-diagram-project"></i>
+
+                        <span>My Projects</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Member"
+                       asp-controller="MyTask"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-list-check"></i>
+
+                        <span>My Tasks</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Member"
+                       asp-controller="Notification"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span>Notifications</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Member"
+                       asp-controller="TaskComment"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        <span>Comments</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Member"
+                       asp-controller="Profile"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <span>My Profile</span>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- User Card -->
+
+    <div class="th-sidebar-user">
+
+        <div class="th-sidebar-user-card">
+
+            <div class="th-sidebar-avatar">
+
+                @User.Identity.Name?.Substring(0, 1).ToUpper()
+
+            </div>
+
+            <div class="th-sidebar-user-info">
+
+                <h5>@User.Identity?.Name</h5>
+
+                <span>Member</span>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               asp-area=""
+               class="th-sidebar-logout">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

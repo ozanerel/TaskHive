@@ -1,0 +1,247 @@
+﻿/* ===========================
+   Dashboard Layout
+=========================== */
+
+.th-main {
+    margin-left: 280px;
+    margin-top: 90px;
+    padding: 35px;
+    min-height: 100vh;
+    background: var(--background);
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.dashboard-title h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.dashboard-title p {
+    color: #8f9bb3;
+    margin-top: 6px;
+    font-size: 15px;
+}
+
+/* ===========================
+   Statistic Cards
+=========================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 24px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: .25s;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.bg-blue {
+    background: var(--primary);
+}
+
+.bg-green {
+    background: #2ED47A;
+}
+
+.bg-orange {
+    background: #FFB648;
+}
+
+.bg-red {
+    background: #F7685B;
+}
+
+.stat-title {
+    color: #7E8299;
+    margin-top: 18px;
+}
+
+.stat-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 8px;
+}
+
+.stat-change {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.positive {
+    color: #2ED47A;
+}
+
+.negative {
+    color: #F7685B;
+}
+
+/* ===========================
+   Dashboard Content
+=========================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+}
+
+    .dashboard-card h3 {
+        font-size: 20px;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+
+/* ===========================
+   Project List
+=========================== */
+
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #ececec;
+}
+
+    .project-item:last-child {
+        border: none;
+    }
+
+.project-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.project-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #EEF3FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 22px;
+}
+
+.project-name {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.project-date {
+    color: #8F9BB3;
+    font-size: 14px;
+}
+
+/* ===========================
+   Activity
+=========================== */
+
+.activity {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.activity-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.activity-content h5 {
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.activity-content p {
+    color: #8F9BB3;
+    font-size: 13px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:1200px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:768px) {
+
+    .th-main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

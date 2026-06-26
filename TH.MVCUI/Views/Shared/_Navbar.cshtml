@@ -1,0 +1,147 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TH.ENTITIES.Models
+@inject UserManager<AppUser> UserManager
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+<header class="th-navbar">
+
+    <div class="th-navbar-left">
+
+        <button class="th-menu-btn" id="sidebarToggle">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div class="th-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   placeholder="Search project, task, user..." />
+
+        </div>
+
+    </div>
+
+    <div class="th-navbar-right">
+
+        <!-- Notification -->
+
+        <div class="th-navbar-icon">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span class="th-badge">3</span>
+
+        </div>
+
+        <!-- Message -->
+
+        <div class="th-navbar-icon">
+
+            <i class="fa-regular fa-envelope"></i>
+
+            <span class="th-badge">5</span>
+
+        </div>
+
+        <!-- User -->
+
+        <div class="dropdown">
+
+            <button class="th-user-button"
+                    data-bs-toggle="dropdown">
+
+                <div class="th-user-avatar">
+
+                    @User.Identity?.Name?.Substring(0, 1).ToUpper()
+
+                </div>
+
+                <div class="th-user-info">
+
+                    <h6>
+
+                        @User.Identity?.Name
+
+                    </h6>
+
+                    <span>
+
+                        @(User.IsInRole("Admin") ? "Administrator" : "Member")
+
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down"></i>
+
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <li>
+
+                        <a class="dropdown-item"
+                           asp-area="Admin"
+                           asp-controller="Dashboard"
+                           asp-action="Index">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+                }
+                else
+                {
+                    <li>
+
+                        <a class="dropdown-item"
+                           asp-area="Member"
+                           asp-controller="Profile"
+                           asp-action="Index">
+
+                            My Profile
+
+                        </a>
+
+                    </li>
+                }
+
+                <li>
+
+                    <hr class="dropdown-divider" />
+
+                </li>
+
+                <li>
+
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          asp-area=""
+                          method="post">
+
+                        <button class="dropdown-item">
+
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</header>
