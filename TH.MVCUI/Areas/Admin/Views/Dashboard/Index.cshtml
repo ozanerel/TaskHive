@@ -1,0 +1,20 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
+
+<div class="dashboard-container">
+
+    @await Html.PartialAsync("_StatisticCards", Model)
+
+    <div class="dashboard-grid">
+
+        @await Html.PartialAsync("_RecentProjects", Model)
+
+        @await Html.PartialAsync("_RecentTasks", Model)
+
+    </div>
+
+</div>

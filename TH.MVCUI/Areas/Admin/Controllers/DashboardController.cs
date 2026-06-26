@@ -13,7 +13,6 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         private readonly ITaskManager _taskManager;
         private readonly IUserManager _userManager;
 
-        
         public DashboardController
         (
             IProjectManager projectManager,
@@ -32,12 +31,22 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             var tasks = await _taskManager.GetAllAsync();
             var users = await _userManager.GetAllAsync();
 
-            DashboardVm vm = new DashboardVm()
+            DashboardVm vm = new DashboardVm
             {
                 TotalProjects = projects.Count,
                 TotalTasks = tasks.Count,
                 CompletedTasks = tasks.Count(x => x.IsCompleted),
-                TotalUsers = users.Count
+                TotalUsers = users.Count,
+
+                RecentProjects = projects
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(5)
+                    .ToList(),
+
+                RecentTasks = tasks
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(5)
+                    .ToList()
             };
 
             return View(vm);
