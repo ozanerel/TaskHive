@@ -1,0 +1,155 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TH.ENTITIES.Models
+@inject UserManager<AppUser> UserManager
+
+<div class="th-sidebar">
+
+    <div>
+
+        <!-- Logo -->
+
+        <div class="th-sidebar-logo">
+
+            <img src="~/images/logo.png" alt="logo" />
+
+            <h2>TaskHive</h2>
+
+        </div>
+
+        <!-- Menu -->
+
+        <div class="th-sidebar-menu">
+
+            <div class="th-sidebar-title">
+
+                MAIN MENU
+
+            </div>
+
+            <ul>
+
+                <li>
+
+                    <a asp-area="Admin"
+                       asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="active">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                        <span>Dashboard</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Admin"
+                       asp-controller="Project"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-diagram-project"></i>
+
+                        <span>Projects</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Admin"
+                       asp-controller="Task"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-list-check"></i>
+
+                        <span>Tasks</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <span>Users</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Admin"
+                       asp-controller="Role"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-user-shield"></i>
+
+                        <span>Roles</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a asp-area="Admin"
+                       asp-controller="Notification"
+                       asp-action="Index">
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span>Notifications</span>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- Bottom User -->
+
+    <div class="th-sidebar-user">
+
+        <div class="th-sidebar-user-card">
+
+            <div class="th-sidebar-avatar">
+
+                @User.Identity.Name?.Substring(0, 1).ToUpper()
+
+            </div>
+
+            <div class="th-sidebar-user-info">
+
+                <h5>@User.Identity.Name</h5>
+
+                <span>Administrator</span>
+
+            </div>
+
+            <a asp-area=""
+               asp-controller="Account"
+               asp-action="Logout"
+               class="th-sidebar-logout">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

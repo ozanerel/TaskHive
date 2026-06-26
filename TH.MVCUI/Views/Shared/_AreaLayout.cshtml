@@ -1,105 +1,62 @@
 ﻿@{
-	Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="tr">
+
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-	<meta name="description" content="" />
-	<meta name="author" content="" />
-	<title>Dashboard - SB Admin</title>
-	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-	<link href="~/area-template/css/styles.css" rel="stylesheet" />
-	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TaskHive</title>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" />
+
+    <link href="~/css/variables.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/buttons.css" rel="stylesheet" />
+    <link href="~/css/forms.css" rel="stylesheet" />
+    <link href="~/css/cards.css" rel="stylesheet" />
+    <link href="~/css/tables.css" rel="stylesheet" />
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <link href="~/css/navbar.css" rel="stylesheet" />
+    <link href="~/css/dashboard.css" rel="stylesheet" />
+
 </head>
 
-<body class="sb-nav-fixed">
+<body>
 
-	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    @if (User.IsInRole("Admin"))
+    {
+        @await Html.PartialAsync("_AdminSidebar")
+    }
+    else
+    {
+        @await Html.PartialAsync("_MemberSidebar")
+    }
 
-		<a class="navbar-brand ps-3" href="#">Start Bootstrap</a>
+    @await Html.PartialAsync("_Navbar")
 
-		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
-				id="sidebarToggle">
-			<i class="fas fa-bars"></i>
-		</button>
+    <main class="th-main">
 
-		<!-- Arama Alanı (FORM değil artık!) -->
-		<div class="input-group ms-auto me-3 d-none d-md-flex" style="max-width:250px;">
-			<input class="form-control" type="text" placeholder="Search..." />
-			<button class="btn btn-primary"><i class="fas fa-search"></i></button>
-		</div>
+        @RenderBody()
 
-		<!-- Kullanıcı Menü -->
-		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" data-bs-toggle="dropdown">
-					<i class="fas fa-user fa-fw"></i>
-				</a>
-				<ul class="dropdown-menu dropdown-menu-end">
-					<li>
-						<form asp-area="Member" asp-controller="Profile" asp-action="Index" method="post">
-							<button class="dropdown-item">Profile</button>
-						</form>
+    </main>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-					</li>
-					@* <li><a class="dropdown-item" href="#!">Settings</a></li> *@
-					<li><hr class="dropdown-divider" /></li>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-					<li>
-						<form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
-							<button class="dropdown-item">Çıkış</button>
-						</form>
-					</li>
+    <script src="~/js/site.js"></script>
 
-				</ul>
-			</li>
-		</ul>
-	</nav>
-
-
-
-
-	<div id="layoutSidenav">
-		@Html.Partial("_SbNavPartial")
-
-		<div id="layoutSidenav_content">
-
-			<main>
-				<div class="container-fluid px-4">
-					@RenderBody()
-				</div>
-			</main>
-
-			<footer class="py-4 bg-light mt-auto">
-				<div class="container-fluid px-4">
-					<div class="d-flex align-items-center justify-content-between small">
-						<div class="text-muted">Copyright © Your Website 2023</div>
-						<div>
-							<a href="#">Privacy Policy</a>
-							&middot;
-							<a href="#">Terms & Conditions</a>
-						</div>
-					</div>
-				</div>
-			</footer>
-
-		</div>
-	</div>
-
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/area-template/js/scripts.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-	<script src="~/area-template/assets/demo/chart-area-demo.js"></script>
-	<script src="~/area-template/assets/demo/chart-bar-demo.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
-	<script src="~/area-template/js/datatables-simple-demo.js"></script>
-
-	@RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 
 </body>
+
 </html>
