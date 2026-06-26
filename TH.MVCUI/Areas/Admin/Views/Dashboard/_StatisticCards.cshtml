@@ -1,0 +1,125 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+
+                    Total Projects
+
+                </div>
+
+                <div class="stat-value">
+
+                    @Model.TotalProjects
+
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-blue">
+
+                <i class="fa-solid fa-diagram-project"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+
+                    Total Tasks
+
+                </div>
+
+                <div class="stat-value">
+
+                    @Model.TotalTasks
+
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-green">
+
+                <i class="fa-solid fa-list-check"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+
+                    Completed
+
+                </div>
+
+                <div class="stat-value">
+
+                    @Model.CompletedTasks
+
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-orange">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+
+                    Users
+
+                </div>
+
+                <div class="stat-value">
+
+                    @Model.TotalUsers
+
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-red">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
