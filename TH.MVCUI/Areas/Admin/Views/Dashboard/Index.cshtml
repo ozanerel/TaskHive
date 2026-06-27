@@ -33,6 +33,14 @@
 
             @await Html.PartialAsync("_TeamMember",Model)
 
+            <br />
+
+            @await Html.PartialAsync("_Notifications", Model)
+
+            <br />
+
+            @await Html.PartialAsync("_QuickActions")
+
         </div>
 
     </div>

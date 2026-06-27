@@ -12,17 +12,20 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         private readonly IProjectManager _projectManager;
         private readonly ITaskManager _taskManager;
         private readonly IUserManager _userManager;
+        private readonly INotificationManager _notificationManager;
 
         public DashboardController
         (
             IProjectManager projectManager,
             ITaskManager taskManager,
-            IUserManager userManager
+            IUserManager userManager,
+            INotificationManager notificationManager
         )
         {
             _projectManager = projectManager;
             _taskManager = taskManager;
             _userManager = userManager;
+            _notificationManager = notificationManager;
         }
 
         public async Task<IActionResult> Index()
@@ -30,6 +33,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             var projects = await _projectManager.GetAllAsync();
             var tasks = await _taskManager.GetAllAsync();
             var users = await _userManager.GetAllAsync();
+            var notifications = await _notificationManager.GetAllAsync();
 
             DashboardVm vm = new DashboardVm
             {
@@ -44,6 +48,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     .ToList(),
 
                 RecentTasks = tasks
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(5)
+                    .ToList(),
+
+                RecentNotifications = notifications
                     .OrderByDescending(x => x.CreatedDate)
                     .Take(5)
                     .ToList()
