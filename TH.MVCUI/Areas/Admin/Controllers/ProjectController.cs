@@ -20,9 +20,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // Proje Listesi
         public async Task<IActionResult> Index()
         {
-            var projects = await _projectManager.GetAllAsync();
+            var projects = await _projectManager.GetProjectsWithTasksAsync();
 
-            ProjectPageVm vm = new ProjectPageVm
+            ProjectPageVm vm = new()
             {
                 Projects = projects
             };
