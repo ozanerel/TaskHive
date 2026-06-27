@@ -1,0 +1,116 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+
+<div class="project-grid">
+
+    @foreach (var project in Model.Projects)
+    {
+        var totalTask = project.Tasks?.Count ?? 0;
+
+        var completedTask = project.Tasks?.Count(x => x.IsCompleted) ?? 0;
+
+        var progress = totalTask == 0
+        ? 0
+        : (completedTask * 100) / totalTask;
+
+        <div class="project-card">
+
+            <div class="project-card-header">
+
+                <div>
+
+                    <h3>@project.ProjectName</h3>
+
+                    <span class="status-badge active">
+
+                        Active
+
+                    </span>
+
+                </div>
+
+                <div class="project-menu">
+
+                    <i class="fa-solid fa-ellipsis"></i>
+
+                </div>
+
+            </div>
+
+            <p class="project-description">
+
+                @project.Description
+
+            </p>
+
+            <div class="progress-section">
+
+                <div class="progress-info">
+
+                    <span>Progress</span>
+
+                    <span>@progress%</span>
+
+                </div>
+
+                <div class="progress">
+
+                    <div class="progress-bar"
+                         style="width:@progress%">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="project-stats">
+
+                <div>
+
+                    <i class="fa-solid fa-users"></i>
+
+                    @(project.Users?.Count ?? 0) Members
+
+                </div>
+
+                <div>
+
+                    <i class="fa-solid fa-list-check"></i>
+
+                    @totalTask Tasks
+
+                </div>
+
+            </div>
+
+            <div class="project-actions">
+
+                <a asp-action="Details"
+                   asp-route-id="@project.Id"
+                   class="btn-outline-custom">
+
+                    Details
+
+                </a>
+
+                <a asp-action="Update"
+                   asp-route-id="@project.Id"
+                   class="btn-outline-custom">
+
+                    Edit
+
+                </a>
+
+                <a asp-action="Delete"
+                   asp-route-id="@project.Id"
+                   class="btn-danger-custom">
+
+                    Delete
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+
+</div>
