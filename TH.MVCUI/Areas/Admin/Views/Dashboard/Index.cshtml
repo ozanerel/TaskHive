@@ -11,9 +11,29 @@
 
     <div class="dashboard-grid">
 
-        @await Html.PartialAsync("_RecentProjects", Model)
+        <div>
 
-        @await Html.PartialAsync("_RecentTasks", Model)
+            @await Html.PartialAsync("_RecentProjects", Model)
+
+            <br />
+
+            @await Html.PartialAsync("_ActivityTimeline", Model)
+
+        </div>
+
+        <div>
+
+            @await Html.PartialAsync("_RecentTasks", Model)
+
+            <br />
+
+            @await Html.PartialAsync("_ProjectProgress")
+
+            <br />
+
+            @await Html.PartialAsync("_TeamMember",Model)
+
+        </div>
 
     </div>
 
