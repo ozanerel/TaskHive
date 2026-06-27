@@ -1,0 +1,75 @@
+﻿<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3>Project Progress</h3>
+
+        <button class="btn btn-outline-primary btn-sm">
+
+            This Month
+
+        </button>
+
+    </div>
+
+    <canvas id="projectChart" height="260"></canvas>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const ctx=document.getElementById('projectChart');
+
+        new Chart(ctx,{
+
+        type:'doughnut',
+
+        data:{
+
+        labels:['Completed','Pending','In Progress'],
+
+        datasets:[{
+
+        data:[52,24,18],
+
+        backgroundColor:[
+
+        '#4EDBD2',
+
+        '#15157D',
+
+        '#FFC857'
+
+        ],
+
+        borderWidth:0
+
+        }]
+
+        },
+
+        options:{
+
+        plugins:{
+
+        legend:{
+
+        position:'bottom'
+
+        }
+
+        },
+
+        cutout:'75%'
+
+        }
+
+        });
+
+    </script>
+
+}

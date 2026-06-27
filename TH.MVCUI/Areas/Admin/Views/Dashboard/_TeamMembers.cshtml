@@ -1,0 +1,51 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3>Team Members</h3>
+
+        <a asp-area="Admin"
+           asp-controller="User"
+           asp-action="Index"
+           class="btn btn-outline-primary btn-sm">
+
+            View All
+
+        </a>
+
+    </div>
+
+    <div class="member-list">
+
+        @for (int i = 1; i <= Math.Min(Model.TotalUsers, 5); i++)
+        {
+            <div class="member-item">
+
+                <div class="member-avatar">
+
+                    U
+
+                </div>
+
+                <div class="member-info">
+
+                    <h5>User @i</h5>
+
+                    <span>TaskHive Member</span>
+
+                </div>
+
+                <span class="badge bg-success">
+
+                    Active
+
+                </span>
+
+            </div>
+        }
+
+    </div>
+
+</div>
