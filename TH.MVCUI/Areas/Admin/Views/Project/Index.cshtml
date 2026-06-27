@@ -1,4 +1,4 @@
-﻿@model List<TH.ENTITIES.Models.Project>
+﻿@model List<TH.MVCUI.Areas.Admin.Models.PageVMs>
 
 <div class="container mt-4">
 
@@ -28,9 +28,9 @@
             {
                 <tr>
 
-                    <td>@item.ProjectName</td>
+                    <td>@item.Project.ProjectName</td>
 
-                    <td>@item.Description</td>
+                    <td>@item.Project.Description</td>
 
                     <td>
                         @(item.Users?.Count ?? 0)
