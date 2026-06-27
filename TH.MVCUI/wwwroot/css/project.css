@@ -1,0 +1,186 @@
+﻿/*==================================
+Page Header
+==================================*/
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+
+.page-subtitle {
+    color: #7D8597;
+    font-size: 15px;
+}
+
+.page-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/*==================================
+Project Filters
+==================================*/
+
+.project-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.project-search {
+    width: 380px;
+    position: relative;
+}
+
+    .project-search input {
+        width: 100%;
+        border: 1px solid #E6E8EC;
+        border-radius: 14px;
+        padding: 13px 18px 13px 48px;
+        font-size: 15px;
+        transition: .25s;
+        background: #fff;
+    }
+
+        .project-search input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(21,21,125,.08);
+        }
+
+    .project-search i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #A0A7B4;
+    }
+
+.project-filter-group {
+    display: flex;
+    gap: 15px;
+}
+
+    .project-filter-group select {
+        min-width: 170px;
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+
+/*==================================
+Project Cards
+==================================*/
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(360px,1fr));
+    gap: 28px;
+}
+
+.project-card {
+    background: #fff;
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    transition: .30s;
+    border: 1px solid #EEF2F7;
+}
+
+    .project-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 45px rgba(0,0,0,.08);
+    }
+
+.project-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+    .project-card-header h3 {
+        font-size: 21px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--dark);
+    }
+
+.project-description {
+    color: #7D8597;
+    line-height: 1.7;
+    min-height: 55px;
+    margin-bottom: 22px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+    .status-badge.active {
+        background: #E8FFF2;
+        color: #18A957;
+    }
+
+.project-menu {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    background: #F8F9FC;
+    cursor: pointer;
+}
+
+.progress-section {
+    margin: 24px 0;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #7D8597;
+}
+
+.progress {
+    height: 9px;
+    border-radius: 30px;
+    background: #EEF2F7;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg,#15157D,#4EDBD2);
+    border-radius: 30px;
+}
+
+.project-stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 24px 0;
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.project-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
