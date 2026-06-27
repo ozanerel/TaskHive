@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using Microsoft.AspNetCore.Authorization;
 using TH.ENTITIES.Models;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProjectController : Controller
     {
         private readonly IProjectManager _projectManager;
@@ -18,7 +22,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         {
             var projects = await _projectManager.GetAllAsync();
 
-            return View(projects);
+            ProjectPageVm vm = new ProjectPageVm
+            {
+                Projects = projects
+            };
+
+            return View(vm);
         }
 
         // Proje Detayı
@@ -29,24 +38,31 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (project == null)
                 return NotFound();
 
-            return View(project);
+            ProjectPageVm vm = new ProjectPageVm
+            {
+                Project = project
+            };
+
+            return View(vm);
         }
 
         // GET
         public IActionResult Create()
         {
-            return View();
+            ProjectPageVm vm = new ProjectPageVm();
+
+            return View(vm);
         }
 
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Project project)
+        public async Task<IActionResult> Create(ProjectPageVm vm)
         {
             if (!ModelState.IsValid)
-                return View(project);
+                return View(vm);
 
-            await _projectManager.CreateAsync(project);
+            await _projectManager.CreateAsync(vm.Project);
 
             return RedirectToAction(nameof(Index));
         }
@@ -59,18 +75,23 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (project == null)
                 return NotFound();
 
-            return View(project);
+            ProjectPageVm vm = new ProjectPageVm
+            {
+                Project = project
+            };
+
+            return View(vm);
         }
 
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(Project project)
+        public async Task<IActionResult> Update(ProjectPageVm vm)
         {
             if (!ModelState.IsValid)
-                return View(project);
+                return View(vm);
 
-            await _projectManager.UpdateAsync(project);
+            await _projectManager.UpdateAsync(vm.Project);
 
             return RedirectToAction(nameof(Index));
         }
@@ -83,15 +104,20 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (project == null)
                 return NotFound();
 
-            return View(project);
+            ProjectPageVm vm = new ProjectPageVm
+            {
+                Project = project
+            };
+
+            return View(vm);
         }
 
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Project project)
+        public async Task<IActionResult> Delete(ProjectPageVm vm)
         {
-            await _projectManager.MakePassiveAsync(project);
+            await _projectManager.MakePassiveAsync(vm.Project);
 
             return RedirectToAction(nameof(Index));
         }
