@@ -1,0 +1,125 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+
+<div class="task-grid">
+
+    @foreach (var item in Model.Tasks)
+    {
+        <div class="task-card">
+
+            <div class="task-card-top">
+
+                @{
+                    string priorityClass = item.Priority.ToString().ToLower() switch
+                    {
+                        "low" => "priority-low",
+                        "medium" => "priority-medium",
+                        "high" => "priority-high",
+                        _ => "priority-critical"
+                    };
+                }
+
+                <span class="task-priority @priorityClass">
+                    @item.Priority
+                </span>
+
+                @if (item.IsCompleted)
+                {
+                    <span class="task-status status-completed"></span>
+                }
+                else
+                {
+                    <span class="task-status status-progress"></span>
+                }
+
+            </div>
+
+            <div class="task-title-card">
+
+                @item.Title
+
+            </div>
+
+            <div class="task-description">
+
+                @if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    @(item.Description.Length > 110
+                        ? item.Description.Substring(0, 110) + "..."
+                        : item.Description)
+                }
+                else
+                {
+                    <span>No description.</span>
+                }
+
+            </div>
+
+            <div class="task-bottom">
+
+                <div class="task-user">
+
+                    <div class="task-avatar">
+
+                        @(item.User?.FirstName?.Substring(0, 1).ToUpper() ?? "?")
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+
+                            @(item.User != null
+                                ? item.User.FirstName + " " + item.User.LastName
+                                : "Unassigned")
+
+                        </strong>
+
+                        <br />
+
+                        <small>
+
+                            @(item.Project?.ProjectName ?? "No Project")
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="task-actions">
+
+                    <a asp-action="Details"
+                       asp-route-id="@item.Id"
+                       class="action-detail"
+                       title="Details">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@item.Id"
+                       class="action-edit"
+                       title="Edit">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.Id"
+                       class="action-delete"
+                       title="Delete">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
