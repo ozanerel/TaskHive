@@ -1,90 +1,32 @@
-﻿@model TH.ENTITIES.Models.Project
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "Project Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-    <div class="card">
+@await Html.PartialAsync("_ProjectDetailsHeader", Model)
 
-        <div class="card-header">
-            <h2>@Model.ProjectName</h2>
-        </div>
+<div class="dashboard-grid">
 
-        <div class="card-body">
+    <div>
 
-            <h5>Description</h5>
+        @await Html.PartialAsync("_ProjectStatistics", Model)
 
-            <p>
-                @Model.Description
-            </p>
+        <br />
 
-            <hr />
+        @await Html.PartialAsync("_ProjectMembers", Model)
 
-            <h5>Project Members</h5>
+        <br />
 
-            <ul>
-
-                @if (Model.Users != null)
-                {
-                    foreach (var user in Model.Users)
-                    {
-                        <li>
-                            @user.FirstName @user.LastName
-                        </li>
-                    }
-                }
-
-            </ul>
-
-            <hr />
-
-            <h5>Tasks</h5>
-
-            <table class="table table-striped">
-
-                <thead>
-
-                    <tr>
-                        <th>Task</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    @if (Model.Tasks != null)
-                    {
-                        foreach (var task in Model.Tasks)
-                        {
-                            <tr>
-
-                                <td>@task.Title</td>
-
-                                <td>@task.Priority</td>
-
-                                <td>
-                                    @(task.IsCompleted
-                                        ? "Completed"
-                                        : "In Progress")
-                                </td>
-
-                            </tr>
-                        }
-                    }
-
-                </tbody>
-
-            </table>
-
-        </div>
+        @await Html.PartialAsync("_ProjectTasks", Model)
 
     </div>
 
-    <br />
+    <div>
 
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Back
-    </a>
+        @await Html.PartialAsync("_ProjectQuickActions", Model)
+
+    </div>
 
 </div>
