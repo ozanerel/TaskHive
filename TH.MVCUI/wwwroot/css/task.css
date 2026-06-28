@@ -1,0 +1,267 @@
+﻿/* ===========================================
+   Task Header
+=========================================== */
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.task-title h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.task-title p {
+    color: #8F9BB3;
+    margin-top: 6px;
+}
+
+/* ===========================================
+   Filter Area
+=========================================== */
+
+.task-filter-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.task-search {
+    position: relative;
+    width: 350px;
+}
+
+    .task-search input {
+        width: 100%;
+        height: 48px;
+        border: none;
+        border-radius: 14px;
+        background: white;
+        padding-left: 45px;
+        box-shadow: var(--shadow);
+    }
+
+    .task-search i {
+        position: absolute;
+        left: 18px;
+        top: 16px;
+        color: #8F9BB3;
+    }
+
+.task-filters {
+    display: flex;
+    gap: 15px;
+}
+
+    .task-filters select {
+        border: none;
+        background: white;
+        border-radius: 12px;
+        padding: 10px 16px;
+        box-shadow: var(--shadow);
+    }
+
+/* ===========================================
+   Task Grid
+=========================================== */
+
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(350px,1fr));
+    gap: 24px;
+}
+
+/* ===========================================
+   Task Card
+=========================================== */
+
+.task-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    transition: .25s;
+}
+
+    .task-card:hover {
+        transform: translateY(-6px);
+    }
+
+.task-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-priority {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.priority-low {
+    background: #EDF7ED;
+    color: #2ED47A;
+}
+
+.priority-medium {
+    background: #FFF5E5;
+    color: #F2994A;
+}
+
+.priority-high {
+    background: #FFEAEA;
+    color: #EB5757;
+}
+
+.priority-critical {
+    background: #F7685B;
+    color: white;
+}
+
+.task-status {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+.status-open {
+    background: #F2994A;
+}
+
+.status-progress {
+    background: #4EDBD2;
+}
+
+.status-completed {
+    background: #2ED47A;
+}
+
+.task-title-card {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.task-description {
+    margin-top: 12px;
+    color: #8F9BB3;
+    line-height: 1.6;
+}
+
+/* ===========================================
+   Bottom
+=========================================== */
+
+.task-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.task-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+    .task-actions a {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+        .task-actions a:hover {
+            transform: scale(1.08);
+        }
+
+.action-detail {
+    background: #EEF3FF;
+    color: var(--primary);
+}
+
+.action-edit {
+    background: #FFF7E6;
+    color: #F2994A;
+}
+
+.action-delete {
+    background: #FFEAEA;
+    color: #EB5757;
+}
+
+/* ===========================================
+   Responsive
+=========================================== */
+
+@media(max-width:768px) {
+
+    .task-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .task-filter-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .task-search {
+        width: 100%;
+    }
+
+    .task-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.task-user strong {
+    font-size: 15px;
+    color: var(--dark);
+}
+
+.task-user small {
+    color: #8F9BB3;
+    font-size: 13px;
+}
+
+.task-card {
+    min-height: 270px;
+}
+
+.task-description {
+    min-height: 72px;
+}
