@@ -1,0 +1,63 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Project Statistics
+
+    </h3>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-value">
+
+                @(Model.Project.Users?.Count ?? 0)
+
+            </div>
+
+            <div class="stat-title">
+
+                Members
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-value">
+
+                @(Model.Project.Tasks?.Count ?? 0)
+
+            </div>
+
+            <div class="stat-title">
+
+                Tasks
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-value">
+
+                @(Model.Project.Tasks?.Count(x => x.IsCompleted) ?? 0)
+
+            </div>
+
+            <div class="stat-title">
+
+                Completed
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

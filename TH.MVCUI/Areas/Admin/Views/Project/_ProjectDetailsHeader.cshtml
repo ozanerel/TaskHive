@@ -1,0 +1,56 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+
+@{
+    var totalTask = Model.Project.Tasks?.Count ?? 0;
+
+    var completedTask = Model.Project.Tasks?.Count(x => x.IsCompleted) ?? 0;
+
+    var progress = totalTask == 0
+        ? 0
+        : (completedTask * 100) / totalTask;
+}
+
+<div class="project-details-header">
+
+    <div>
+
+        <a asp-action="Index"
+           class="btn-outline-custom">
+
+            <i class="fa fa-arrow-left"></i>
+
+            Back
+
+        </a>
+
+        <h1>
+
+            @Model.Project.ProjectName
+
+        </h1>
+
+        <p>
+
+            @Model.Project.Description
+
+        </p>
+
+    </div>
+
+    <div>
+
+        <span class="status-badge active">
+
+            Active
+
+        </span>
+
+        <div class="project-progress-text">
+
+            @progress%
+
+        </div>
+
+    </div>
+
+</div>

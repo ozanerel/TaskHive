@@ -1,0 +1,42 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Team Members
+
+    </h3>
+
+    @foreach (var user in Model.Project.Users)
+    {
+
+        <div class="activity">
+
+            <div class="activity-avatar">
+
+                @user.FirstName.Substring(0, 1)
+
+            </div>
+
+            <div class="activity-content">
+
+                <h5>
+
+                    @user.FirstName @user.LastName
+
+                </h5>
+
+                <p>
+
+                    @user.Email
+
+                </p>
+
+            </div>
+
+        </div>
+
+    }
+
+</div>

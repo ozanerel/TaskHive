@@ -1,0 +1,35 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Quick Actions
+
+    </h3>
+
+    <div class="d-grid gap-3">
+
+        <a asp-action="Update"
+           asp-route-id="@Model.Project.Id"
+           class="btn-primary-custom">
+
+            <i class="fa fa-pen"></i>
+
+            Edit Project
+
+        </a>
+
+        <a asp-action="Delete"
+           asp-route-id="@Model.Project.Id"
+           class="btn-danger-custom">
+
+            <i class="fa fa-trash"></i>
+
+            Delete Project
+
+        </a>
+
+    </div>
+
+</div>

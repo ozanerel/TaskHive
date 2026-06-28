@@ -1,0 +1,63 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Recent Tasks
+
+    </h3>
+
+    @foreach (var task in Model.Project.Tasks)
+    {
+
+        <div class="project-item">
+
+            <div class="project-left">
+
+                <div class="project-icon">
+
+                    <i class="fa fa-list-check"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="project-name">
+
+                        @task.Title
+
+                    </div>
+
+                    <div class="project-date">
+
+                        @task.Priority
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @if (task.IsCompleted)
+            {
+                <span class="status-badge active">
+
+                    Completed
+
+                </span>
+            }
+            else
+            {
+                <span class="status-badge">
+
+                    Pending
+
+                </span>
+            }
+
+        </div>
+
+    }
+
+</div>
