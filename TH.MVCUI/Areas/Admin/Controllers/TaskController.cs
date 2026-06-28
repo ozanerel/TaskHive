@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Managers.Concretes;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class TaskController : Controller
     {
         private readonly ITaskManager _taskManager;
@@ -15,7 +19,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var tasks = await _taskManager.GetAllAsync();
-            return View(tasks);
+
+            TaskPageVm vm = new()
+            {
+                Tasks = tasks
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -25,25 +35,33 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (task == null)
                 return NotFound();
 
-            return View(task);
+            TaskPageVm vm = new()
+            {
+                Task = task
+            };
+
+            return View(vm);
         }
 
         public IActionResult Create()
         {
-            return View();
+            TaskPageVm vm = new();
+
+            vm.Task = new ENTITIES.Models.Task();
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ENTITIES.Models.Task task)
+        public async Task<IActionResult> Create(TaskPageVm vm)
         {
-            if (ModelState.IsValid)
-            {
-                await _taskManager.CreateAsync(task);
-                return RedirectToAction(nameof(Index));
-            }
+            if (!ModelState.IsValid)
+                return View(vm);
 
-            return View(task);
+            await _taskManager.CreateAsync(vm.Task);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -53,20 +71,24 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (task == null)
                 return NotFound();
 
-            return View(task);
+            TaskPageVm vm = new()
+            {
+                Task = task
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ENTITIES.Models.Task task)
+        public async Task<IActionResult> Edit(TaskPageVm vm)
         {
-            if (ModelState.IsValid)
-            {
-                await _taskManager.UpdateAsync(task);
-                return RedirectToAction(nameof(Index));
-            }
+            if (!ModelState.IsValid)
+                return View(vm);
 
-            return View(task);
+            await _taskManager.UpdateAsync(vm.Task);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -76,7 +98,19 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (task == null)
                 return NotFound();
 
-            await _taskManager.MakePassiveAsync(task);
+            TaskPageVm vm = new()
+            {
+                Task = task
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(TaskPageVm vm)
+        {
+            await _taskManager.MakePassiveAsync(vm.Task);
 
             return RedirectToAction(nameof(Index));
         }
