@@ -12,7 +12,9 @@
         ? 0
         : (completedTask * 100) / totalTask;
 
-        <div class="project-card">
+        <a asp-action="Details"
+           asp-route-id="@project.Id"
+           class="project-card">
 
             <div class="project-card-header">
 
@@ -110,7 +112,7 @@
 
             </div>
 
-        </div>
+        </a>
     }
 
 </div>

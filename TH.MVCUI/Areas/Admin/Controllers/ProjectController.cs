@@ -49,7 +49,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // GET
         public IActionResult Create()
         {
-            ProjectPageVm vm = new ProjectPageVm();
+            ProjectPageVm vm = new();
+            vm.Project = new Project(); // Initialize the Project property
 
             return View(vm);
         }
