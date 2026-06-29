@@ -1,0 +1,40 @@
+﻿/* ===========================
+   User Cards
+=========================== */
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-role {
+    display: inline-flex;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(21,21,125,.08);
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.user-stat {
+    text-align: center;
+}
+
+    .user-stat h4 {
+        margin-bottom: 4px;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+    .user-stat small {
+        color: #7E8299;
+    }
