@@ -1,0 +1,109 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.UserPageVm
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div class="stat-icon bg-blue">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+        </div>
+
+        <div class="stat-title">
+
+            Total Users
+
+        </div>
+
+        <div class="stat-value">
+
+            @Model.Users.Count
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div class="stat-icon bg-green">
+
+                <i class="fa-solid fa-user-check"></i>
+
+            </div>
+
+        </div>
+
+        <div class="stat-title">
+
+            Active Users
+
+        </div>
+
+        <div class="stat-value">
+
+            @Model.Users.Count(x => x.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div class="stat-icon bg-orange">
+
+                <i class="fa-solid fa-user-clock"></i>
+
+            </div>
+
+        </div>
+
+        <div class="stat-title">
+
+            Passive Users
+
+        </div>
+
+        <div class="stat-value">
+
+            @Model.Users.Count(x => x.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div class="stat-icon bg-red">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+        </div>
+
+        <div class="stat-title">
+
+            Roles
+
+        </div>
+
+        <div class="stat-value">
+
+            @Model.Users.Select(x => x.RoleId).Distinct().Count()
+
+        </div>
+
+    </div>
+
+</div>
