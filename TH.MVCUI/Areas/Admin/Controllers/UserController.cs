@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.ENTITIES.Models;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -15,8 +16,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.GetAllAsync();
-            return View(users);
+            UserPageVm vm = new UserPageVm()
+            {
+                Users = await _userManager.GetAllAsync()
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -26,7 +31,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
-            return View(user);
+            UserPageVm vm = new()
+            {
+                User = user
+            };
+
+            return View(vm);
         }
 
         public IActionResult Create()
@@ -52,16 +62,21 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
-            return View(user);
+            UserPageVm vm = new()
+            {
+                User = user
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(User user)
+        public async Task<IActionResult> Edit(UserPageVm vm)
         {
             if (!ModelState.IsValid)
-                return View(user);
+                return View(vm);
 
-            await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(vm.User);
 
             return RedirectToAction(nameof(Index));
         }
@@ -69,6 +84,23 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _userManager.GetByIdAsync(id);
+
+            if (user == null)
+                return NotFound();
+
+            UserPageVm vm = new()
+            {
+                User = user
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(UserPageVm vm)
+        {
+            var user = await _userManager.GetByIdAsync(vm.User.Id);
 
             if (user == null)
                 return NotFound();
