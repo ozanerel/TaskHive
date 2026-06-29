@@ -1,37 +1,35 @@
-﻿@model IEnumerable<TH.ENTITIES.Models.User>
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.UserPageVm
 
-<h2>Users</h2>
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<a asp-action="Create" class="btn btn-success mb-3">
-    New User
-</a>
+<div class="dashboard-header">
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>RoleId</th>
-            <th></th>
-        </tr>
-    </thead>
+    <div class="dashboard-title">
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.FirstName @item.LastName</td>
-                <td>@item.Email</td>
-                <td>@item.RoleId</td>
+        <h1>User Management</h1>
 
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+        <p>
+            Manage all users in TaskHive.
+        </p>
 
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+    </div>
 
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <a asp-action="Create"
+       class="btn-primary-custom">
+
+        <i class="fa-solid fa-plus"></i>
+
+        New User
+
+    </a>
+
+</div>
+
+@await Html.PartialAsync("_UserStatistics", Model)
+
+@await Html.PartialAsync("_UserFilters")
+
+@await Html.PartialAsync("_UserCards", Model)
