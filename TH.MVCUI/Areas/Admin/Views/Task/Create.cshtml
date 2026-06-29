@@ -1,40 +1,178 @@
-﻿@model TH.ENTITIES.Models.Task
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
 
-<h2>Create Task</h2>
+@{
+    ViewData["Title"] = "Create Task";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<form asp-action="Create">
+<div class="page-header">
 
-    <div class="mb-3">
-        <label>Title</label>
-        <input asp-for="Title" class="form-control" />
+    <div>
+
+        <h1 class="page-title">
+
+            Create Task
+
+        </h1>
+
+        <p class="page-subtitle">
+
+            Create a new task for your project.
+
+        </p>
+
     </div>
 
-    <div class="mb-3">
-        <label>Description</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label>Priority</label>
-        <select asp-for="Priority" class="form-control">
-            <option value="0">Low</option>
-            <option value="1">Medium</option>
-            <option value="2">High</option>
-        </select>
-    </div>
+<div class="form-card">
 
-    <div class="mb-3">
-        <label>User Id</label>
-        <input asp-for="UserId" class="form-control" />
-    </div>
+    <form asp-action="Create"
+          method="post">
 
-    <div class="mb-3">
-        <label>Project Id</label>
-        <input asp-for="ProjectId" class="form-control" />
-    </div>
+        <div class="row">
 
-    <button class="btn btn-primary">
-        Save
-    </button>
+            <div class="col-md-12 mb-4">
 
-</form>
+                <label class="form-label">
+
+                    Title
+
+                </label>
+
+                <input asp-for="Task.Title"
+                       class="form-control-custom" />
+
+                <span asp-validation-for="Task.Title"
+                      class="text-danger"></span>
+
+            </div>
+
+            <div class="col-md-12 mb-4">
+
+                <label class="form-label">
+
+                    Description
+
+                </label>
+
+                <textarea asp-for="Task.Description"
+                          rows="5"
+                          class="form-control-custom"></textarea>
+
+            </div>
+
+            <div class="col-md-6 mb-4">
+
+                <label class="form-label">
+
+                    Priority
+
+                </label>
+
+                <select asp-for="Task.Priority"
+                        class="form-control-custom">
+
+                    <option value="Low">Low</option>
+
+                    <option value="Medium">Medium</option>
+
+                    <option value="High">High</option>
+
+                    <option value="Critical">Critical</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-6 mb-4">
+
+                <label class="form-label">
+
+                    Assigned User
+
+                </label>
+
+                <select asp-for="Task.UserId"
+                        class="form-control-custom">
+
+                    <option value="">
+
+                        Select User
+
+                    </option>
+
+                    @foreach (var user in Model.Users)
+                    {
+                        <option value="@user.Id">
+
+                            @user.FirstName @user.LastName
+
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="col-md-12 mb-4">
+
+                <label class="form-label">
+
+                    Project
+
+                </label>
+
+                <select asp-for="Task.ProjectId"
+                        class="form-control-custom">
+
+                    <option value="">
+
+                        Select Project
+
+                    </option>
+
+                    @foreach (var project in Model.Projects)
+                    {
+                        <option value="@project.Id">
+
+                            @project.ProjectName
+
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="form-buttons">
+
+            <button class="btn-primary-custom"
+                    type="submit">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Create Task
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn-outline-custom">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

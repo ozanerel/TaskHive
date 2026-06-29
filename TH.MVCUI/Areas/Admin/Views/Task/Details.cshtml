@@ -1,35 +1,60 @@
-﻿@model TH.ENTITIES.Models.Task
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
 
-<h2>Task Detail</h2>
+@{
+    ViewData["Title"] = "Task Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<div class="card">
-    <div class="card-body">
+<div class="page-header">
 
-        <h4>@Model.Title</h4>
+    <div>
 
-        <p>
-            @Model.Description
-        </p>
+        <h1 class="page-title">
 
-        <p>
-            Priority:
-            @Model.Priority
-        </p>
+            Task Details
 
-        <p>
-            Status:
-            @(Model.IsCompleted ? "Completed" : "Pending")
-        </p>
+        </h1>
 
-        <p>
-            Assigned User:
-            @Model.User?.FirstName
-        </p>
+        <p class="page-subtitle">
 
-        <p>
-            Project:
-            @Model.Project?.ProjectName
+            Detailed information about the selected task.
+
         </p>
 
     </div>
+
+    <div>
+
+        <a asp-action="Edit"
+           asp-route-id="@Model.Task.Id"
+           class="btn-primary-custom">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Edit
+
+        </a>
+
+    </div>
+
+</div>
+
+<div class="task-detail-grid">
+
+    @await Html.PartialAsync("_TaskInfoCard", Model)
+
+    @await Html.PartialAsync("_TaskStatusCard", Model)
+
+</div>
+
+<div class="mt-4">
+
+    @await Html.PartialAsync("_TaskDescriptionCard", Model)
+
+</div>
+
+<div class="mt-4">
+
+    @await Html.PartialAsync("_TaskCommentsCard", Model)
+
 </div>
