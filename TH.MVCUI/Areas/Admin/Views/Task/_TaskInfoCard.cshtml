@@ -1,0 +1,57 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        General Information
+
+    </h3>
+
+    <table class="table">
+
+        <tr>
+
+            <th>Title</th>
+
+            <td>@Model.Task.Title</td>
+
+        </tr>
+
+        <tr>
+
+            <th>Project</th>
+
+            <td>
+
+                @(Model.Task.Project?.ProjectName ?? "-")
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <th>Assigned User</th>
+
+            <td>
+
+                @(Model.Task.User != null
+                    ? Model.Task.User.FirstName + " " + Model.Task.User.LastName
+                    : "-")
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <th>Priority</th>
+
+            <td>@Model.Task.Priority</td>
+
+        </tr>
+
+    </table>
+
+</div>

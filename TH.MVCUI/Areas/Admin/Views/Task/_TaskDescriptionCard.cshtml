@@ -1,0 +1,19 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Description
+
+    </h3>
+
+    <p>
+
+        @(string.IsNullOrWhiteSpace(Model.Task.Description)
+            ? "No description available."
+            : Model.Task.Description)
+
+    </p>
+
+</div>

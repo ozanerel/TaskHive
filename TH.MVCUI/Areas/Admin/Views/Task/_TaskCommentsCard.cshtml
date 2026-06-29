@@ -1,0 +1,66 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <h3>
+
+            Comments
+
+        </h3>
+
+        <a asp-controller="TaskComment"
+           asp-action="Index"
+           asp-route-taskId="@Model.Task.Id"
+           class="btn-outline-custom">
+
+            View All
+
+        </a>
+
+    </div>
+
+    @if (Model.Task.TaskComments != null &&
+    Model.Task.TaskComments.Any())
+    {
+        foreach (var comment in Model.Task.TaskComments.Take(3))
+        {
+            <div class="activity">
+
+                <div class="activity-avatar">
+
+                    @comment.User.FirstName.Substring(0, 1)
+
+                </div>
+
+                <div class="activity-content">
+
+                    <h5>
+
+                        @comment.User.FirstName
+                        @comment.User.LastName
+
+                    </h5>
+
+                    <p>
+
+                        @comment.Message
+
+                    </p>
+
+                </div>
+
+            </div>
+        }
+    }
+    else
+    {
+        <p>
+
+            No comments yet.
+
+        </p>
+    }
+
+</div>

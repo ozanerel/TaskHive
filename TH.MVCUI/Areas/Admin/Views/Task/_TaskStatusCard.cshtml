@@ -1,0 +1,28 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Status
+
+    </h3>
+
+    @if (Model.Task.IsCompleted)
+    {
+        <div class="status-badge completed">
+
+            Completed
+
+        </div>
+    }
+    else
+    {
+        <div class="status-badge pending">
+
+            In Progress
+
+        </div>
+    }
+
+</div>
