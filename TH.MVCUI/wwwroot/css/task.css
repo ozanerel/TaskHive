@@ -265,3 +265,126 @@
 .task-description {
     min-height: 72px;
 }
+
+/* ==========================
+   Task Details
+========================== */
+
+.task-detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: white;
+}
+
+    .status-badge.completed {
+        background: #2ED47A;
+    }
+
+    .status-badge.pending {
+        background: #FFB648;
+    }
+
+@media(max-width:992px) {
+
+    .task-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================
+   Delete Page
+========================== */
+
+.delete-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+.delete-card {
+    width: 650px;
+    background: white;
+    border-radius: 20px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.delete-icon {
+    width: 90px;
+    height: 90px;
+    margin: auto;
+    border-radius: 50%;
+    background: #FFE9E9;
+    color: #E5484D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    margin-bottom: 25px;
+}
+
+.delete-card h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.delete-card p {
+    color: #7E8299;
+    margin-bottom: 30px;
+}
+
+.delete-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 35px 0;
+}
+
+    .delete-info div {
+        background: #F7F8FC;
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+    .delete-info span {
+        display: block;
+        color: #7E8299;
+        font-size: 13px;
+    }
+
+    .delete-info strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 16px;
+        color: var(--dark);
+    }
+
+.delete-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.btn-danger-custom {
+    background: #E5484D;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    transition: .25s;
+}
+
+    .btn-danger-custom:hover {
+        background: #cc3d42;
+    }
