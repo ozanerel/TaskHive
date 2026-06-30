@@ -1,13 +1,147 @@
 ﻿@model TH.ENTITIES.Models.User
 
-<h2>User Details</h2>
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+<div class="dashboard-header">
 
-<p><strong>Email:</strong> @Model.Email</p>
+    <div class="dashboard-title">
 
-<p><strong>Role:</strong> @Model.RoleId</p>
+        <h1>User Details</h1>
 
-<p><strong>Task Count:</strong> @Model.Tasks?.Count</p>
+        <p>
+            View detailed information about this user.
+        </p>
 
-<p><strong>Project Count:</strong> @Model.Projects?.Count</p>
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+    <div class="row">
+
+        <!-- LEFT -->
+
+        <div class="col-lg-4">
+
+            <div class="text-center">
+
+                <div class="user-avatar mx-auto">
+
+                    @(Model.FirstName.Substring(0, 1).ToUpper())
+
+                </div>
+
+                <h3 class="mt-3">
+
+                    @Model.FirstName @Model.LastName
+
+                </h3>
+
+                <p class="text-muted">
+
+                    @Model.Email
+
+                </p>
+
+                <hr />
+
+                <span class="user-role">
+
+                    @(Model.Role != null
+                        ? Model.Role.Name
+                        : "No Role")
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-lg-8">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+                    <strong>Projects</strong>
+
+                    <h2>
+
+                        @(Model.Projects?.Count ?? 0)
+
+                    </h2>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <strong>Tasks</strong>
+
+                    <h2>
+
+                        @(Model.Tasks?.Count ?? 0)
+
+                    </h2>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <strong>Status</strong>
+
+                    <p>
+
+                        @Model.Status
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <strong>Created Date</strong>
+
+                    <p>
+
+                        @Model.CreatedDate.ToString("dd.MM.yyyy")
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="d-flex justify-content-end gap-3">
+
+        <a asp-action="Index"
+           class="btn-outline-custom">
+
+            Back
+
+        </a>
+
+        <a asp-action="Edit"
+           asp-route-id="@Model.Id"
+           class="btn-primary-custom">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Edit User
+
+        </a>
+
+    </div>
+
+</div>
