@@ -8,8 +8,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly IUserManager _userManager;
+        private readonly IRoleManager _roleManager;
 
-        public UserController(IUserManager userManager)
+        public UserController(IUserManager userManager,IRoleManager roleManager)
         {
             _userManager = userManager;
         }
@@ -39,8 +40,10 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             return View(vm);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Roles = await _roleManager.GetAllAsync();
+
             return View();
         }
 
@@ -48,7 +51,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         public async Task<IActionResult> Create(User user)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.Roles = await _roleManager.GetAllAsync();
+
                 return View(user);
+            }
 
             await _userManager.CreateAsync(user);
 
@@ -62,12 +69,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
-            UserPageVm vm = new()
-            {
-                User = user
-            };
+            ViewBag.Roles = await _roleManager.GetAllAsync();
 
-            return View(vm);
+            return View(user);
         }
 
         [HttpPost]
