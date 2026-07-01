@@ -1,0 +1,133 @@
+﻿@model TH.ENTITIES.Models.User
+
+@{
+    ViewData["Title"] = "Delete User";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
+
+<div class="dashboard-header">
+
+    <div class="dashboard-title">
+
+        <h1>Delete User</h1>
+
+        <p>
+
+            Are you sure you want to remove this user?
+
+        </p>
+
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+    <div class="text-center">
+
+        <div class="user-avatar mx-auto">
+
+            @(Model.FirstName.Substring(0, 1).ToUpper())
+
+        </div>
+
+        <h3 class="mt-4">
+
+            @Model.FirstName @Model.LastName
+
+        </h3>
+
+        <p class="text-muted">
+
+            @Model.Email
+
+        </p>
+
+        <span class="user-role">
+
+            @(Model.Role != null
+                ? Model.Role.Name
+                : "No Role")
+
+        </span>
+
+    </div>
+
+    <hr />
+
+    <div class="row text-center mt-4">
+
+        <div class="col-md-4">
+
+            <h5>Projects</h5>
+
+            <strong>
+
+                @(Model.Projects?.Count ?? 0)
+
+            </strong>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <h5>Tasks</h5>
+
+            <strong>
+
+                @(Model.Tasks?.Count ?? 0)
+
+            </strong>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <h5>Status</h5>
+
+            <strong>
+
+                @Model.Status
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    <div class="alert alert-danger mt-5">
+
+        <i class="fa-solid fa-triangle-exclamation"></i>
+
+        This action will mark the user as passive.
+
+    </div>
+
+    <form asp-action="Delete"
+          method="post">
+
+        <input asp-for="Id"
+               type="hidden" />
+
+        <div class="d-flex justify-content-end gap-3">
+
+            <a asp-action="Index"
+               class="btn-outline-custom">
+
+                Cancel
+
+            </a>
+
+            <button class="btn-danger">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Delete User
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

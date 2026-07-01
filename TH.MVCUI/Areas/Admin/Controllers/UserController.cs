@@ -92,23 +92,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
-            UserPageVm vm = new()
-            {
-                User = user
-            };
-
-            return View(vm);
+            return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(UserPageVm vm)
+        public async Task<IActionResult> Delete(User user)
         {
-            var user = await _userManager.GetByIdAsync(vm.User.Id);
-
-            if (user == null)
-                return NotFound();
-
             await _userManager.MakePassiveAsync(user);
 
             return RedirectToAction(nameof(Index));
