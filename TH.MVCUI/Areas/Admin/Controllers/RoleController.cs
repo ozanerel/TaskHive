@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.ENTITIES.Models;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -15,8 +16,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var roles = await _roleManager.GetAllAsync();
-            return View(roles);
+            var vm = new RolePageVm
+            {
+                Roles = await _roleManager.GetAllAsync()
+            };
+
+            return View(vm);
         }
 
         public IActionResult Create()
@@ -25,6 +30,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Role role)
         {
             if (!ModelState.IsValid)
@@ -56,6 +62,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Role role)
         {
             if (!ModelState.IsValid)
@@ -77,6 +84,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Role role)
         {
             await _roleManager.MakePassiveAsync(role);

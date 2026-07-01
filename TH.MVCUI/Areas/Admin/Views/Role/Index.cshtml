@@ -1,41 +1,33 @@
-﻿@model IEnumerable<TH.ENTITIES.Models.Role>
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RolePageVm
 
-<h2>Roles</h2>
+@{
+    ViewData["Title"] = "Role Management";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<a asp-action="Create" class="btn btn-success mb-3">
-    New Role
-</a>
+<div class="dashboard-header">
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th></th>
-        </tr>
-    </thead>
+    <div class="dashboard-title">
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Description</td>
+        <h1>Role Management</h1>
 
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">
-                        Details
-                    </a>
+        <p>
 
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">
-                        Edit
-                    </a>
+            Manage all application roles.
 
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
-                        Delete
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </p>
+
+    </div>
+
+    <a asp-action="Create"
+       class="btn-primary-custom">
+
+        <i class="fa-solid fa-plus"></i>
+
+        New Role
+
+    </a>
+
+</div>
+
+@await Html.PartialAsync("_RoleCards", Model)
