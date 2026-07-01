@@ -1,0 +1,32 @@
+﻿/* ===========================
+   Role Card
+=========================== */
+
+.role-card {
+    transition: .25s;
+}
+
+    .role-card:hover {
+        transform: translateY(-6px);
+    }
+
+.role-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    background: rgba(69,104,220,.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    font-size: 28px;
+}
+
+.status-badge {
+    padding: 8px 14px;
+    border-radius: 25px;
+    background: #EEF3FF;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+}
