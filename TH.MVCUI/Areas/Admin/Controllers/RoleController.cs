@@ -26,17 +26,22 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            RolePageVm vm = new RolePageVm()
+            {
+                Role = new Role()
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Role role)
+        public async Task<IActionResult> Create(RolePageVm vm)
         {
             if (!ModelState.IsValid)
-                return View(role);
+                return View(vm);
 
-            await _roleManager.CreateAsync(role);
+            await _roleManager.CreateAsync(vm.Role);
 
             return RedirectToAction(nameof(Index));
         }
@@ -48,7 +53,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (role == null)
                 return NotFound();
 
-            return View(role);
+            RolePageVm vm = new()
+            {
+                Role = role
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -58,17 +68,22 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (role == null)
                 return NotFound();
 
-            return View(role);
+            RolePageVm vm = new()
+            {
+                Role = role
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Role role)
+        public async Task<IActionResult> Edit(RolePageVm vm)
         {
             if (!ModelState.IsValid)
-                return View(role);
+                return View(vm);
 
-            await _roleManager.UpdateAsync(role);
+            await _roleManager.UpdateAsync(vm.Role);
 
             return RedirectToAction(nameof(Index));
         }
@@ -80,14 +95,19 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (role == null)
                 return NotFound();
 
-            return View(role);
+            RolePageVm vm = new()
+            {
+                Role = role
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Role role)
+        public async Task<IActionResult> Delete(RolePageVm vm)
         {
-            await _roleManager.MakePassiveAsync(role);
+            await _roleManager.MakePassiveAsync(vm.Role);
 
             return RedirectToAction(nameof(Index));
         }
