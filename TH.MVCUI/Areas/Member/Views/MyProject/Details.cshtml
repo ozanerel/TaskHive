@@ -1,147 +1,212 @@
 ﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.MyProjectVM.MyProjectDetailsVm
 
 @{
-	ViewData["Title"] = "Project Details";
+    ViewData["Title"] = "Project Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="dashboard-header">
 
-	<div class="card shadow">
+    <div class="dashboard-title">
 
-		<div class="card-header bg-success text-white">
+        <h1>@Model.ProjectName</h1>
 
-			<h3>@Model.ProjectName</h3>
+        <p>
 
-		</div>
+            View project information and assigned team members.
 
-		<div class="card-body">
+        </p>
 
-			<div class="mb-4">
+    </div>
 
-				<h5>Description</h5>
+    <a asp-action="Index"
+       class="btn-outline-custom">
 
-				<p>
+        <i class="fa-solid fa-arrow-left"></i>
 
-					@Model.Description
+        Back
 
-				</p>
+    </a>
 
-			</div>
+</div>
 
-			<hr />
+<div class="dashboard-grid">
 
-			<h4>Project Members</h4>
+    <div>
 
-			<table class="table table-striped">
+        <div class="dashboard-card">
 
-				<thead>
+            <h3>
 
-					<tr>
+                <i class="fa-solid fa-folder-open text-primary"></i>
 
-						<th>Name</th>
+                Project Information
 
-						<th>Email</th>
+            </h3>
 
-					</tr>
+            <hr />
 
-				</thead>
+            <h5>
 
-				<tbody>
+                Description
 
-					@foreach (var item in Model.Users)
-					{
-						<tr>
+            </h5>
 
-							<td>
+            <p class="text-muted">
 
-								@item.FirstName @item.LastName
+                @Model.Description
 
-							</td>
+            </p>
 
-							<td>
+        </div>
 
-								@item.Email
+        <br />
 
-							</td>
+        <div class="dashboard-card">
 
-						</tr>
-					}
+            <h3>
 
-				</tbody>
+                <i class="fa-solid fa-list-check text-success"></i>
 
-			</table>
+                Project Tasks
 
-			<hr />
+            </h3>
 
-			<h4>Tasks</h4>
+            <hr />
 
-			<table class="table table-bordered">
+            @if (Model.Tasks.Any())
+            {
+                foreach (var task in Model.Tasks)
+                {
+                    <div class="project-item">
 
-				<thead>
+                        <div class="project-left">
 
-					<tr>
+                            <div class="project-icon">
 
-						<th>Title</th>
+                                @if (task.IsCompleted)
+                                {
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-clock text-warning"></i>
+                                }
 
-						<th>Priority</th>
+                            </div>
 
-						<th>Status</th>
+                            <div>
 
-					</tr>
+                                <div class="project-name">
 
-				</thead>
+                                    @task.Title
 
-				<tbody>
+                                </div>
 
-					@foreach (var task in Model.Tasks)
-					{
-						<tr>
+                                <div class="project-date">
 
-							<td>
+                                    Priority :
+                                    @task.Priority
 
-								@task.Title
+                                </div>
 
-							</td>
+                            </div>
 
-							<td>
+                        </div>
 
-								@task.Priority
+                        <div>
 
-							</td>
+                            @if (task.IsCompleted)
+                            {
+                                <span class="status-badge completed">
 
-							<td>
+                                    Completed
 
-								@if (task.IsCompleted)
-								{
-									<span class="badge bg-success">
-										Completed
-									</span>
-								}
-								else
-								{
-									<span class="badge bg-warning">
-										Pending
-									</span>
-								}
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="status-badge pending">
 
-							</td>
+                                    Pending
 
-						</tr>
-					}
+                                </span>
+                            }
 
-				</tbody>
+                        </div>
 
-			</table>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">
 
-			<a asp-action="Index"
-			   class="btn btn-secondary">
+                    No task assigned.
 
-				Back
+                </p>
+            }
 
-			</a>
+        </div>
 
-		</div>
+    </div>
 
-	</div>
+    <div>
+
+        <div class="dashboard-card">
+
+            <h3>
+
+                <i class="fa-solid fa-users text-primary"></i>
+
+                Team Members
+
+            </h3>
+
+            <hr />
+
+            @if (Model.Users.Any())
+            {
+                foreach (var user in Model.Users)
+                {
+                    <div class="activity">
+
+                        <div class="activity-avatar">
+
+                            @user.FirstName.Substring(0, 1).ToUpper()
+
+                        </div>
+
+                        <div class="activity-content">
+
+                            <h5>
+
+                                @user.FirstName @user.LastName
+
+                            </h5>
+
+                            <p>
+
+                                @user.Email
+
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">
+
+                    No members assigned.
+
+                </p>
+            }
+
+        </div>
+
+    </div>
 
 </div>

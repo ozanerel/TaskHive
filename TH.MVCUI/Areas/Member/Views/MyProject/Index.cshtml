@@ -2,75 +2,23 @@
 
 @{
     ViewData["Title"] = "My Projects";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="dashboard-header">
 
-    <div class="card shadow">
+    <div class="dashboard-title">
 
-        <div class="card-header bg-primary text-white">
+        <h1>My Projects</h1>
 
-            <h3>My Projects</h3>
+        <p>
 
-        </div>
+            View all projects assigned to you.
 
-        <div class="card-body">
-
-            <table class="table table-hover table-bordered">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Project</th>
-
-                        <th>Description</th>
-
-                        <th>Users</th>
-
-                        <th>Tasks</th>
-
-                        <th></th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    @foreach (var item in Model)
-                    {
-                            <tr>
-
-                                <td>@item.ProjectName</td>
-
-                                <td>@item.Description</td>
-
-                                <td>@item.UserCount</td>
-
-                                <td>@item.TaskCount</td>
-
-                                <td>
-
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-info">
-
-                                        Details
-
-                                    </a>
-
-                                </td>
-
-                            </tr>
-                    }
-
-                </tbody>
-
-            </table>
-
-        </div>
+        </p>
 
     </div>
 
 </div>
+
+@await Html.PartialAsync("_ProjectCards", Model)
