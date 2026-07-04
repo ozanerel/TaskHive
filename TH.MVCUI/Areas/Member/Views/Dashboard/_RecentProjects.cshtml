@@ -1,0 +1,101 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3>
+
+            <i class="fa-solid fa-folder-open text-primary"></i>
+
+            My Recent Projects
+
+        </h3>
+
+        <a asp-area="Member"
+           asp-controller="Project"
+           asp-action="Index"
+           class="btn-outline-custom">
+
+            View All
+
+        </a>
+
+    </div>
+
+    @if (Model.RecentProjects != null && Model.RecentProjects.Any())
+    {
+        foreach (var project in Model.RecentProjects)
+        {
+            <div class="project-item">
+
+                <div class="project-left">
+
+                    <div class="project-icon">
+
+                        <i class="fa-solid fa-folder"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="project-name">
+
+                            @project.ProjectName
+
+                        </div>
+
+                        <div class="project-date">
+
+                            Created :
+                            @project.CreatedDate.ToString("dd MMM yyyy")
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="text-end">
+
+                    <span class="status-badge">
+
+                        Active
+
+                    </span>
+
+                    <br />
+
+                    <small class="text-muted">
+
+                        @(project.Tasks?.Count ?? 0) Tasks
+
+                    </small>
+
+                </div>
+
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+
+            <i class="fa-solid fa-folder-open fa-3x text-secondary mb-3"></i>
+
+            <h5>
+
+                No Project Found
+
+            </h5>
+
+            <p class="text-muted">
+
+                You haven't been assigned to any project yet.
+
+            </p>
+
+        </div>
+    }
+
+</div>
