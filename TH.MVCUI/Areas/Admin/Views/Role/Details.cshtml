@@ -1,11 +1,137 @@
-﻿@model TH.ENTITIES.Models.Role
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RolePageVm
 
-<h2>Role Detail</h2>
+@{
+    ViewData["Title"] = "Role Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<p><strong>Name:</strong> @Model.Name</p>
+<div class="dashboard-header">
 
-<p><strong>Description:</strong> @Model.Description</p>
+    <div class="dashboard-title">
 
-<a asp-action="Index" class="btn btn-secondary">
-    Back
-</a>
+        <h1>Role Details</h1>
+
+        <p>
+            View role information.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="mb-4">
+
+                <label class="form-label fw-bold">
+                    Role Name
+                </label>
+
+                <div class="form-control">
+
+                    @Model.Role.Name
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="mb-4">
+
+        <label class="form-label fw-bold">
+
+            Description
+
+        </label>
+
+        <div class="form-control" style="min-height:120px;">
+
+            @Model.Role.Description
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <label class="form-label fw-bold">
+
+                Users
+
+            </label>
+
+            <div class="form-control">
+
+                @(Model.Role.Users?.Count ?? 0)
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <label class="form-label fw-bold">
+
+                Status
+
+            </label>
+
+            <div class="form-control">
+
+                @Model.Role.Status
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <label class="form-label fw-bold">
+
+                Created Date
+
+            </label>
+
+            <div class="form-control">
+
+                @Model.Role.CreatedDate.ToString("dd.MM.yyyy")
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="d-flex justify-content-end gap-3">
+
+        <a asp-action="Index"
+           class="btn-outline-custom">
+
+            Back
+
+        </a>
+
+        <a asp-action="Edit"
+           asp-route-id="@Model.Role.Id"
+           class="btn-primary-custom">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Edit Role
+
+        </a>
+
+    </div>
+
+</div>
