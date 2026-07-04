@@ -1,0 +1,46 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.DashboardVm
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
+
+<div class="dashboard-header">
+
+    <div class="dashboard-title">
+
+        <h1>Member Dashboard</h1>
+
+        <p>
+
+            Welcome back! Here's an overview of your work.
+
+        </p>
+
+    </div>
+
+</div>
+
+@await Html.PartialAsync("_StatisticCards", Model)
+
+<br />
+
+<div class="dashboard-grid">
+
+    <div>
+
+        @await Html.PartialAsync("_RecentProjects", Model)
+
+        <br />
+
+        @await Html.PartialAsync("_ActivityTimeline", Model)
+
+    </div>
+
+    <div>
+
+        @await Html.PartialAsync("_RecentTasks", Model)
+
+    </div>
+
+</div>
