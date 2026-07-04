@@ -1,47 +1,24 @@
-﻿@model IEnumerable<TH.ENTITIES.Models.Notification>
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.NotificationPageVm
 
-<h2>Notifications</h2>
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<table class="table">
+<div class="dashboard-header">
 
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
+    <div class="dashboard-title">
 
-    <tbody>
+        <h1>Notifications</h1>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Title</td>
+        <p>
 
-                <td>@item.NotificationDate</td>
+            View all system notifications.
 
-                <td>
-                    @(item.IsRead ? "Read" : "Unread")
-                </td>
+        </p>
 
-                <td>
-                    <a asp-action="Details"
-                       asp-route-id="@item.Id"
-                       class="btn btn-info">
-                        Details
-                    </a>
+    </div>
 
-                    <a asp-action="MarkAsRead"
-                       asp-route-id="@item.Id"
-                       class="btn btn-success">
-                        Read
-                    </a>
-                </td>
-            </tr>
-        }
+</div>
 
-    </tbody>
-
-</table>
+@await Html.PartialAsync("_NotificationCards", Model)

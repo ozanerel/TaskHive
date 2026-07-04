@@ -1,19 +1,122 @@
-﻿@model TH.ENTITIES.Models.Notification
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.NotificationPageVm
 
-<h2>@Model.Title</h2>
+@{
+    ViewData["Title"] = "Notification Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<hr />
+<div class="dashboard-header">
 
-<p>
-    @Model.Message
-</p>
+    <div class="dashboard-title">
 
-<p>
-    <strong>Date:</strong>
-    @Model.NotificationDate
-</p>
+        <h1>Notification Details</h1>
 
-<p>
-    <strong>Status:</strong>
-    @(Model.IsRead ? "Read" : "Unread")
-</p>
+        <p>
+
+            View notification information.
+
+        </p>
+
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div>
+
+            <h2>
+
+                @Model.Notification.Title
+
+            </h2>
+
+            <p class="text-muted">
+
+                @Model.Notification.NotificationDate.ToString("dd.MM.yyyy HH:mm")
+
+            </p>
+
+        </div>
+
+        <span class="status-badge">
+
+            @(Model.Notification.IsRead ? "Read" : "Unread")
+
+        </span>
+
+    </div>
+
+    <hr />
+
+    <h5 class="mb-3">
+
+        Message
+
+    </h5>
+
+    <p class="text-muted">
+
+        @Model.Notification.Message
+
+    </p>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <strong>User</strong>
+
+            <p>
+
+                @(Model.Notification.User != null
+                    ? Model.Notification.User.FirstName + " " + Model.Notification.User.LastName
+                    : "-")
+
+            </p>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <strong>Status</strong>
+
+            <p>
+
+                @(Model.Notification.IsRead ? "Read" : "Unread")
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-end gap-3 mt-4">
+
+        <a asp-action="Index"
+           class="btn-outline-custom">
+
+            Back
+
+        </a>
+
+        @if (!Model.Notification.IsRead)
+        {
+            <a asp-action="MarkAsRead"
+               asp-route-id="@Model.Notification.Id"
+               class="btn-primary-custom">
+
+                <i class="fa-solid fa-check"></i>
+
+                Mark as Read
+
+            </a>
+        }
+
+    </div>
+
+</div>
