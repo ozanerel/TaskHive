@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -14,7 +15,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _notificationManager.GetAllAsync());
+            NotificationPageVm vm = new()
+            {
+                Notifications = await _notificationManager.GetAllAsync()
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -24,7 +30,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (notification == null)
                 return NotFound();
 
-            return View(notification);
+            NotificationPageVm vm = new()
+            {
+                Notification = notification
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> MarkAsRead(int id)
