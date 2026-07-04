@@ -1,0 +1,103 @@
+﻿/* ===========================
+   Notification Cards
+=========================== */
+
+.notification-card {
+    transition: .25s;
+    border-radius: 18px;
+}
+
+    .notification-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* ===========================
+   Notification Icon
+=========================== */
+
+.notification-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #EEF3FF;
+    color: var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+}
+
+/* ===========================
+   Status Badge
+=========================== */
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #EEF3FF;
+    color: var(--primary);
+}
+
+/* ===========================
+   Notification Message
+=========================== */
+
+.notification-card p {
+    line-height: 1.7;
+}
+
+/* ===========================
+   Detail Page
+=========================== */
+
+.notification-detail-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.notification-detail-message {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #7E8299;
+}
+
+.notification-info {
+    background: #F8FAFD;
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 25px;
+}
+
+    .notification-info strong {
+        color: var(--dark);
+    }
+
+/* ===========================
+   Buttons
+=========================== */
+
+.notification-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:992px) {
+
+    .notification-actions {
+        flex-direction: column;
+    }
+
+        .notification-actions a,
+        .notification-actions button {
+            width: 100%;
+        }
+}
