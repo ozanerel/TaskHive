@@ -441,3 +441,25 @@ Quick Actions
         gap: 15px;
     }
 }
+
+/* ===========================
+   Task Status
+=========================== */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+    .status-badge.completed {
+        background: rgba(46,212,122,.15);
+        color: #2ED47A;
+    }
+
+    .status-badge.pending {
+        background: rgba(255,182,72,.18);
+        color: #FF9F1A;
+    }
