@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
-using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.MVCUI.Areas.Member.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Member.Controllers
 {
@@ -13,13 +13,10 @@ namespace TH.MVCUI.Areas.Member.Controllers
         private readonly ITaskManager _taskManager;
         private readonly IUserManager _userManager;
 
-        
-        public DashboardController
-        (
+        public DashboardController(
             IProjectManager projectManager,
             ITaskManager taskManager,
-            IUserManager userManager
-        )
+            IUserManager userManager)
         {
             _projectManager = projectManager;
             _taskManager = taskManager;
@@ -37,7 +34,17 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 TotalProjects = projects.Count,
                 TotalTasks = tasks.Count,
                 CompletedTasks = tasks.Count(x => x.IsCompleted),
-                TotalUsers = users.Count
+                TotalUsers = users.Count,
+
+                RecentProjects = projects
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(5)
+                    .ToList(),
+
+                RecentTasks = tasks
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(5)
+                    .ToList()
             };
 
             return View(vm);
