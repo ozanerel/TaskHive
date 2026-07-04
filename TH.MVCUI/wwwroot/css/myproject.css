@@ -1,0 +1,54 @@
+﻿/* ===========================
+   Project Cards
+=========================== */
+
+.project-card {
+    transition: .25s;
+}
+
+    .project-card:hover {
+        transform: translateY(-6px);
+    }
+
+.project-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #EEF4FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    font-size: 26px;
+}
+
+.project-card h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.project-card p {
+    min-height: 48px;
+}
+
+/* ===========================
+   Project Details
+=========================== */
+
+.project-card h5 {
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.dashboard-card hr {
+    margin: 20px 0;
+}
+
+.dashboard-card .activity {
+    margin-bottom: 18px;
+}
+
+    .dashboard-card .activity:last-child {
+        margin-bottom: 0;
+    }
