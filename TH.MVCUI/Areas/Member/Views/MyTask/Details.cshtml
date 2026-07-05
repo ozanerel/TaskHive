@@ -1,44 +1,19 @@
 ﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM.TaskDetailPageVm
 
-<h2>Task Detail</h2>
+@{
+    ViewData["Title"] = "Task Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<div class="card">
+<div class="dashboard-header">
 
-    <div class="card-body">
+    <div class="dashboard-title">
 
-        <h3>@Model.Task.Title</h3>
-
-        <hr />
-
-        <p>
-
-            <strong>Description :</strong>
-
-            @Model.Task.Description
-
-        </p>
+        <h1>Task Details</h1>
 
         <p>
 
-            <strong>Priority :</strong>
-
-            @Model.Task.Priority
-
-        </p>
-
-        <p>
-
-            <strong>Project :</strong>
-
-            @Model.Task.Project?.ProjectName
-
-        </p>
-
-        <p>
-
-            <strong>Status :</strong>
-
-            @(Model.Task.IsCompleted ? "Completed" : "Waiting")
+            View task information.
 
         </p>
 
@@ -46,8 +21,100 @@
 
 </div>
 
-<br />
+<div class="dashboard-card">
 
-<a asp-action="Index" class="btn btn-secondary">
-    Back
-</a>
+    <h3>
+
+        @Model.Task.Title
+
+    </h3>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <p>
+
+                <strong>Description</strong>
+
+            </p>
+
+            <p>
+
+                @Model.Task.Description
+
+            </p>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <p>
+
+                <strong>Priority</strong>
+
+            </p>
+
+            <span class="status-badge">
+
+                @Model.Task.Priority
+
+            </span>
+
+            <br /><br />
+
+            <p>
+
+                <strong>Status</strong>
+
+            </p>
+
+            @if (Model.Task.IsCompleted)
+            {
+                <span class="badge bg-success">
+
+                    Completed
+
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-warning">
+
+                    Waiting
+
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <p>
+
+        <strong>Project</strong>
+
+    </p>
+
+    <p>
+
+        @Model.Task.Project?.ProjectName
+
+    </p>
+
+    <div class="text-end">
+
+        <a asp-action="Index"
+           class="btn-outline-custom">
+
+            Back
+
+        </a>
+
+    </div>
+
+</div>

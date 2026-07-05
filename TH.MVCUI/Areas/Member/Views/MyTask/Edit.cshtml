@@ -1,61 +1,94 @@
 ﻿@model TH.ENTITIES.Models.Task
 
-<h2>Edit Task</h2>
+@{
+    ViewData["Title"] = "Edit Task";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<form asp-action="Edit">
+<div class="dashboard-header">
 
-    <input asp-for="Id" type="hidden" />
-
-    <input asp-for="UserId" type="hidden" />
-
-    <input asp-for="ProjectId" type="hidden" />
-
-    <input asp-for="IsCompleted" type="hidden" />
-
-    <div class="mb-3">
-
-        <label asp-for="Title"></label>
-
-        <input asp-for="Title" class="form-control" />
-
+    <div class="dashboard-title">
+        <h1>Edit Task</h1>
+        <p>Update your assigned task.</p>
     </div>
 
-    <div class="mb-3">
+</div>
 
-        <label asp-for="Description"></label>
+<div class="dashboard-card">
 
-        <textarea asp-for="Description" class="form-control"></textarea>
+    <form asp-action="Edit" method="post">
 
-    </div>
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="UserId" type="hidden" />
+        <input asp-for="ProjectId" type="hidden" />
+        <input asp-for="IsCompleted" type="hidden" />
 
-    <div class="mb-3">
+        <div class="mb-4">
 
-        <label asp-for="Priority"></label>
+            <label asp-for="Title" class="form-label"></label>
 
-        <select asp-for="Priority" class="form-select">
+            <input asp-for="Title"
+                   class="form-control" />
 
-            <option value="0">Low</option>
+            <span asp-validation-for="Title"
+                  class="text-danger"></span>
 
-            <option value="1">Medium</option>
+        </div>
 
-            <option value="2">High</option>
+        <div class="mb-4">
 
-            <option value="3">Critical</option>
+            <label asp-for="Description"
+                   class="form-label"></label>
 
-        </select>
+            <textarea asp-for="Description"
+                      rows="5"
+                      class="form-control"></textarea>
 
-    </div>
+        </div>
 
-    <button class="btn btn-primary">
+        <div class="mb-4">
 
-        Save
+            <label asp-for="Priority"
+                   class="form-label"></label>
 
-    </button>
+            <select asp-for="Priority"
+                    class="form-select">
 
-    <a asp-action="Index" class="btn btn-secondary">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+                <option value="4">Critical</option>
 
-        Cancel
+            </select>
 
-    </a>
+        </div>
 
-</form>
+        <div class="d-flex justify-content-end gap-3">
+
+            <a asp-action="Index"
+               class="btn-outline-custom">
+
+                Cancel
+
+            </a>
+
+            <button type="submit"
+                    class="btn-primary-custom">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Changes
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -1,84 +1,24 @@
 ﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM.MyTaskPageVm
 
-<h2>My Tasks</h2>
+@{
+    ViewData["Title"] = "My Tasks";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-<table class="table table-bordered table-hover">
+<div class="dashboard-header">
 
-    <thead>
+    <div class="dashboard-title">
 
-        <tr>
+        <h1>My Tasks</h1>
 
-            <th>Title</th>
+        <p>
 
-            <th>Priority</th>
+            View and manage your assigned tasks.
 
-            <th>Status</th>
+        </p>
 
-            <th>Project</th>
+    </div>
 
-            <th>Operations</th>
+</div>
 
-        </tr>
-
-    </thead>
-
-    <tbody>
-
-        @foreach (var item in Model.Tasks)
-        {
-            <tr>
-
-                <td>@item.Title</td>
-
-                <td>@item.Priority</td>
-
-                <td>
-
-                    @if (item.IsCompleted)
-                    {
-                        <span class="badge bg-success">
-                            Completed
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning">
-                            Waiting
-                        </span>
-                    }
-
-                </td>
-
-                <td>@item.Project?.ProjectName</td>
-
-                <td>
-
-                    <a asp-action="Details"
-                       asp-route-id="@item.Id"
-                       class="btn btn-info btn-sm">
-                        Details
-                    </a>
-
-                    <a asp-action="Edit"
-                       asp-route-id="@item.Id"
-                       class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
-
-                    @if (!item.IsCompleted)
-                    {
-                        <a asp-action="Complete"
-                           asp-route-id="@item.Id"
-                           class="btn btn-success btn-sm">
-                            Complete
-                        </a>
-                    }
-
-                </td>
-
-            </tr>
-        }
-
-    </tbody>
-
-</table>
+@await Html.PartialAsync("_MyTaskCards", Model)
