@@ -7,7 +7,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
     [Area("Member")]
     public class MyTaskController : Controller
     {
-        readonly ITaskManager _taskManager;
+        private readonly ITaskManager _taskManager;
 
         public MyTaskController(ITaskManager taskManager)
         {
@@ -16,20 +16,22 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Login sistemi tamamlanınca burası Session/User.Identity'den alınacak.
             int userId = 1;
 
-            MyTaskPageVm vm = new MyTaskPageVm();
+            MyTaskPageVm vm = new()
+            {
+                Tasks = await _taskManager.GetTasksByUserAsync(userId)
+            };
 
-            vm.Tasks = await _taskManager.GetTasksByUserAsync(userId);
             return View(vm);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            TaskDetailPageVm vm = new();
-
-            vm.Task = await _taskManager.GetByIdAsync(id);
+            TaskDetailPageVm vm = new()
+            {
+                Task = await _taskManager.GetByIdAsync(id)
+            };
 
             if (vm.Task == null)
                 return NotFound();
@@ -48,6 +50,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TH.ENTITIES.Models.Task task)
         {
             if (!ModelState.IsValid)
