@@ -1,0 +1,64 @@
+﻿/* ==========================================
+   My Task Page
+========================================== */
+
+.mytask-card {
+    transition: .25s;
+}
+
+    .mytask-card:hover {
+        transform: translateY(-4px);
+    }
+
+.priority-low {
+    color: #198754;
+    font-weight: 600;
+}
+
+.priority-medium {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.priority-high {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.priority-critical {
+    color: #6f42c1;
+    font-weight: 700;
+}
+
+.status-completed {
+    color: #198754;
+    font-weight: 600;
+}
+
+.status-pending {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.task-title {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.task-description {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.task-detail-card {
+    border-radius: 15px;
+}
+
+.task-info {
+    margin-bottom: 12px;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
