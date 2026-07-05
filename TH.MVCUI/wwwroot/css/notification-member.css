@@ -1,0 +1,34 @@
+﻿/* ===========================================
+   MEMBER NOTIFICATION
+=========================================== */
+
+.notification-card {
+    transition: .25s;
+}
+
+    .notification-card:hover {
+        transform: translateY(-5px);
+    }
+
+.notification-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: rgba(13,110,253,.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: var(--primary-color);
+}
+
+.notification-detail-card {
+    max-width: 900px;
+    margin: auto;
+}
+
+.notification-message {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #555;
+}
