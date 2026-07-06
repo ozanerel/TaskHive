@@ -9,6 +9,8 @@ builder.Services.AddDbContextService(builder.Configuration);
 builder.Services.AddIdentityService();
 builder.Services.AddRepositoryService();
 builder.Services.AddManagerService();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddService();
 
 builder.Services.ConfigureApplicationCookie(x =>
 {
