@@ -8,30 +8,32 @@ namespace TH.MVCUI.Areas.Member.Controllers
     [Area("Member")]
     public class TaskCommentController : Controller
     {
-        readonly ITaskCommentManager _taskCommentManager;
-        readonly ITaskManager _taskManager;
-        readonly IUserManager _userManager;
+        private readonly ITaskCommentManager _taskCommentManager;
+        private readonly ITaskManager _taskManager;
+        private readonly IUserManager _userManager;
 
-        public TaskCommentController
-        (
+        public TaskCommentController(
             ITaskCommentManager taskCommentManager,
             ITaskManager taskManager,
-            IUserManager userManager
-        )
+            IUserManager userManager)
         {
             _taskCommentManager = taskCommentManager;
             _taskManager = taskManager;
             _userManager = userManager;
         }
+
+        // LIST
         public async Task<IActionResult> Index()
         {
-            TaskCommentIndexVm vm = new TaskCommentIndexVm();
-
-            vm.Comments = await _taskCommentManager.GetAllAsync();
+            TaskCommentIndexVm vm = new()
+            {
+                Comments = await _taskCommentManager.GetAllAsync()
+            };
 
             return View(vm);
         }
 
+        // DETAILS
         public async Task<IActionResult> Details(int id)
         {
             var comment = await _taskCommentManager.GetByIdAsync(id);
@@ -47,12 +49,13 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return View(vm);
         }
 
+        // CREATE
         public async Task<IActionResult> Create()
         {
             ViewBag.Tasks = await _taskManager.GetAllAsync();
             ViewBag.Users = await _userManager.GetAllAsync();
 
-            return View();
+            return View(new TaskCommentCreateVm());
         }
 
         [HttpPost]
@@ -63,10 +66,11 @@ namespace TH.MVCUI.Areas.Member.Controllers
             {
                 ViewBag.Tasks = await _taskManager.GetAllAsync();
                 ViewBag.Users = await _userManager.GetAllAsync();
+
                 return View(vm);
             }
 
-            TH.ENTITIES.Models.TaskComment comment = new()
+            TaskComment comment = new()
             {
                 Message = vm.Message,
                 TaskId = vm.TaskId,
@@ -79,6 +83,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // EDIT
         public async Task<IActionResult> Edit(int id)
         {
             var comment = await _taskCommentManager.GetByIdAsync(id);
@@ -128,6 +133,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // DELETE
         public async Task<IActionResult> Delete(int id)
         {
             var comment = await _taskCommentManager.GetByIdAsync(id);
@@ -135,14 +141,19 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (comment == null)
                 return NotFound();
 
-            return View(comment);
+            TaskCommentDeleteVm vm = new()
+            {
+                Comment = comment
+            };
+
+            return View(vm);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(TaskCommentDeleteVm vm)
         {
-            var comment = await _taskCommentManager.GetByIdAsync(id);
+            var comment = await _taskCommentManager.GetByIdAsync(vm.Comment.Id);
 
             if (comment == null)
                 return NotFound();
