@@ -1,26 +1,47 @@
-﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.ProfileVM.ProfileVm
+﻿@model TH.MVCUI.Areas.Member.ViewModels.ProfileVM.EditProfileVm
 
 @{
     ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="dashboard-header">
 
-    <div class="card shadow">
+    <div class="dashboard-title">
 
-        <div class="card-header bg-warning">
-            <h3>Edit Profile</h3>
-        </div>
+        <h1>Edit Profile</h1>
 
-        <div class="card-body">
+        <p>
 
-            <form asp-action="Edit" method="post">
+            Update your personal information.
 
-                <input asp-for="Id" type="hidden" />
+        </p>
 
-                <div class="mb-3">
+    </div>
 
-                    <label asp-for="FirstName" class="form-label"></label>
+</div>
+
+<div class="dashboard-card">
+
+    <form asp-action="Edit"
+          method="post"
+          class="profile-form">
+
+        <input asp-for="Id"
+               type="hidden" />
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="mb-4">
+
+                    <label asp-for="FirstName"
+                           class="form-label">
+
+                        First Name
+
+                    </label>
 
                     <input asp-for="FirstName"
                            class="form-control" />
@@ -30,9 +51,18 @@
 
                 </div>
 
-                <div class="mb-3">
+            </div>
 
-                    <label asp-for="LastName" class="form-label"></label>
+            <div class="col-md-6">
+
+                <div class="mb-4">
+
+                    <label asp-for="LastName"
+                           class="form-label">
+
+                        Last Name
+
+                    </label>
 
                     <input asp-for="LastName"
                            class="form-control" />
@@ -42,37 +72,53 @@
 
                 </div>
 
-                <div class="mb-3">
-
-                    <label asp-for="Email" class="form-label"></label>
-
-                    <input asp-for="Email"
-                           class="form-control" />
-
-                    <span asp-validation-for="Email"
-                          class="text-danger"></span>
-
-                </div>
-
-                <button type="submit"
-                        class="btn btn-success">
-                    Save Changes
-                </button>
-
-                <a asp-action="Index"
-                   class="btn btn-secondary">
-                    Cancel
-                </a>
-
-            </form>
+            </div>
 
         </div>
 
-    </div>
+        <div class="mb-4">
+
+            <label asp-for="Email"
+                   class="form-label">
+
+                Email Address
+
+            </label>
+
+            <input asp-for="Email"
+                   class="form-control" />
+
+            <span asp-validation-for="Email"
+                  class="text-danger"></span>
+
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+
+            <a asp-action="Index"
+               class="btn-outline-custom">
+
+                Cancel
+
+            </a>
+
+            <button type="submit"
+                    class="btn-primary-custom">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Changes
+
+            </button>
+
+        </div>
+
+    </form>
 
 </div>
 
-@section Scripts
-{
+@section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
+
 }

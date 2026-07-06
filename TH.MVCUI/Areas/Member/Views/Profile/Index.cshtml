@@ -2,46 +2,129 @@
 
 @{
     ViewData["Title"] = "My Profile";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="dashboard-header">
 
-    <div class="card shadow">
+    <div class="dashboard-title">
 
-        <div class="card-header bg-primary text-white">
-            <h3>My Profile</h3>
+        <h1>My Profile</h1>
+
+        <p>
+
+            View your personal information.
+
+        </p>
+
+    </div>
+
+    <a asp-action="Edit"
+       class="btn-primary-custom">
+
+        <i class="fa-solid fa-user-pen"></i>
+
+        Edit Profile
+
+    </a>
+
+</div>
+
+<div class="dashboard-card profile-card">
+
+    <div class="row">
+
+        <div class="col-lg-3 text-center">
+
+            <div class="profile-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <h4 class="mt-3">
+
+                @Model.FirstName @Model.LastName
+
+            </h4>
+
+            <span class="status-badge">
+
+                @Model.RoleName
+
+            </span>
+
         </div>
 
-        <div class="card-body">
+        <div class="col-lg-9">
 
-            <table class="table table-bordered">
+            <div class="row g-4">
 
-                <tr>
-                    <th>First Name</th>
-                    <td>@Model.FirstName</td>
-                </tr>
+                <div class="col-md-6">
 
-                <tr>
-                    <th>Last Name</th>
-                    <td>@Model.LastName</td>
-                </tr>
+                    <label class="text-muted">
 
-                <tr>
-                    <th>Email</th>
-                    <td>@Model.Email</td>
-                </tr>
+                        First Name
 
-                <tr>
-                    <th>Role</th>
-                    <td>@Model.RoleName</td>
-                </tr>
+                    </label>
 
-            </table>
+                    <h5>
 
-            <a asp-action="Edit"
-               class="btn btn-warning">
-                Edit Profile
-            </a>
+                        @Model.FirstName
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="text-muted">
+
+                        Last Name
+
+                    </label>
+
+                    <h5>
+
+                        @Model.LastName
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-12">
+
+                    <label class="text-muted">
+
+                        Email Address
+
+                    </label>
+
+                    <h5>
+
+                        @Model.Email
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-12">
+
+                    <label class="text-muted">
+
+                        Role
+
+                    </label>
+
+                    <h5>
+
+                        @Model.RoleName
+
+                    </h5>
+
+                </div>
+
+            </div>
 
         </div>
 
