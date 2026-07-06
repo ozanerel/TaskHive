@@ -1,0 +1,79 @@
+﻿/* ===========================
+   PROFILE
+=========================== */
+
+.profile-card {
+    padding: 40px;
+}
+
+.profile-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#4f46e5,#7c3aed);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    color: white;
+    font-size: 50px;
+    box-shadow: 0 15px 35px rgba(79,70,229,.25);
+}
+
+.profile-card h4 {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.profile-card label {
+    font-size: .85rem;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.profile-card h5 {
+    font-weight: 600;
+    color: #334155;
+}
+
+.profile-form {
+    max-width: 900px;
+}
+
+    .profile-form .form-control {
+        border-radius: 12px;
+        min-height: 48px;
+    }
+
+        .profile-form .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 .2rem rgba(99,102,241,.15);
+        }
+
+    .profile-form .form-label {
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .profile-form .text-danger {
+        font-size: .85rem;
+    }
+
+.profile-card .status-badge {
+    margin-top: 12px;
+}
+
+@media (max-width:768px) {
+
+    .profile-card {
+        padding: 25px;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 38px;
+        margin-bottom: 20px;
+    }
+}
