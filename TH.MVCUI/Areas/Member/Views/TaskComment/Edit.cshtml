@@ -2,91 +2,136 @@
 
 @using Microsoft.AspNetCore.Mvc.Rendering
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "Edit Comment";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-    <div class="card">
+<div class="dashboard-header">
 
-        <div class="card-header bg-warning">
+    <div class="dashboard-title">
 
-            <h3>Edit Comment</h3>
+        <h1>Edit Comment</h1>
 
-        </div>
-
-        <div class="card-body">
-
-            <form asp-action="Edit">
-
-                <input asp-for="Id" hidden />
-
-                <div class="mb-3">
-
-                    <label asp-for="Message"></label>
-
-                    <textarea asp-for="Message"
-                              class="form-control"
-                              rows="5"></textarea>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>Task</label>
-
-                    <select asp-for="TaskId"
-                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
-                            class="form-control"></select>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>User</label>
-
-                    <select asp-for="UserId"
-                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
-                            class="form-control"></select>
-
-                </div>
-
-                <div class="form-check mb-3">
-
-                    <input asp-for="IsRead"
-                           class="form-check-input" />
-
-                    <label asp-for="IsRead"
-                           class="form-check-label">
-
-                        Mark As Read
-
-                    </label>
-
-                </div>
-
-                <button class="btn btn-primary">
-
-                    Save
-
-                </button>
-
-                <a asp-action="Index"
-                   class="btn btn-secondary">
-
-                    Cancel
-
-                </a>
-
-            </form>
-
-        </div>
+        <p>
+            Update the selected task comment.
+        </p>
 
     </div>
 
 </div>
 
+<div class="dashboard-card">
+
+    <form asp-action="Edit" method="post">
+
+        <input asp-for="Id" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+        <div class="mb-4">
+
+            <label asp-for="Message"
+                   class="form-label">
+
+                Comment
+
+            </label>
+
+            <textarea asp-for="Message"
+                      rows="5"
+                      class="form-control">
+            </textarea>
+
+            <span asp-validation-for="Message"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Task
+
+                    </label>
+
+                    <select asp-for="TaskId"
+                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
+                            class="form-select">
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        User
+
+                    </label>
+
+                    <select asp-for="UserId"
+                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
+                            class="form-select">
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="form-check mb-4">
+
+            <input asp-for="IsRead"
+                   class="form-check-input" />
+
+            <label asp-for="IsRead"
+                   class="form-check-label">
+
+                Mark as Read
+
+            </label>
+
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+
+            <a asp-action="Index"
+               class="btn-outline-custom">
+
+                Cancel
+
+            </a>
+
+            <button class="btn-primary-custom">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Update Comment
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
 @section Scripts {
 
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 
 }

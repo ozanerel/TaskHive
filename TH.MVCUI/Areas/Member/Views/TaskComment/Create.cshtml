@@ -4,91 +4,135 @@
 
 @{
     ViewData["Title"] = "Create Comment";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="dashboard-header">
 
-    <div class="card">
+    <div class="dashboard-title">
 
-        <div class="card-header bg-success text-white">
+        <h1>Create Comment</h1>
 
-            <h3>Create Task Comment</h3>
+        <p>
 
-        </div>
+            Add a new comment to a task.
 
-        <div class="card-body">
-
-            <form asp-action="Create">
-
-                <div asp-validation-summary="ModelOnly"
-                     class="text-danger"></div>
-
-                <div class="mb-3">
-
-                    <label asp-for="Message"></label>
-
-                    <textarea asp-for="Message"
-                              class="form-control"
-                              rows="5"></textarea>
-
-                    <span asp-validation-for="Message"
-                          class="text-danger"></span>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>Task</label>
-
-                    <select asp-for="TaskId"
-                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
-                            class="form-control">
-
-                        <option value="">Choose Task</option>
-
-                    </select>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>User</label>
-
-                    <select asp-for="UserId"
-                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
-                            class="form-control">
-
-                        <option value="">Choose User</option>
-
-                    </select>
-
-                </div>
-
-                <button class="btn btn-success">
-
-                    Save
-
-                </button>
-
-                <a asp-action="Index"
-                   class="btn btn-secondary">
-
-                    Back
-
-                </a>
-
-            </form>
-
-        </div>
+        </p>
 
     </div>
 
 </div>
 
+<div class="dashboard-card">
+
+    <form asp-action="Create" method="post">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+        <div class="mb-4">
+
+            <label asp-for="Message"
+                   class="form-label">
+
+                Comment
+
+            </label>
+
+            <textarea asp-for="Message"
+                      rows="5"
+                      class="form-control">
+            </textarea>
+
+            <span asp-validation-for="Message"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Task
+
+                    </label>
+
+                    <select asp-for="TaskId"
+                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
+                            class="form-select">
+
+                        <option value="">
+
+                            Select Task
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        User
+
+                    </label>
+
+                    <select asp-for="UserId"
+                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
+                            class="form-select">
+
+                        <option value="">
+
+                            Select User
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+
+            <a asp-action="Index"
+               class="btn-outline-custom">
+
+                Cancel
+
+            </a>
+
+            <button type="submit"
+                    class="btn-primary-custom">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Comment
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
 @section Scripts {
 
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 
 }

@@ -1,95 +1,146 @@
 ﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM.TaskCommentDetailsVm
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "Comment Details";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
 
-    <div class="card">
+<div class="dashboard-header">
 
-        <div class="card-header bg-info text-white">
+    <div class="dashboard-title">
 
-            <h3>Comment Detail</h3>
+        <h1>Comment Details</h1>
 
-        </div>
+        <p>
 
-        <div class="card-body">
+            View complete information about this comment.
 
-            <dl class="row">
+        </p>
 
-                <dt class="col-3">
-                    Id
-                </dt>
+    </div>
 
-                <dd class="col-9">
-                    @Model.Comment.Id
-                </dd>
+</div>
 
-                <dt class="col-3">
-                    Message
-                </dt>
+<div class="dashboard-card">
 
-                <dd class="col-9">
-                    @Model.Comment.Message
-                </dd>
+    <div class="row g-4">
 
-                <dt class="col-3">
-                    Task
-                </dt>
+        <div class="col-md-6">
 
-                <dd class="col-9">
-                    @Model.Comment.Task?.Title
-                </dd>
+            <label class="text-muted">
 
-                <dt class="col-3">
-                    User
-                </dt>
+                Task
 
-                <dd class="col-9">
-                    @Model.Comment.User?.FirstName
-                    @Model.Comment.User?.LastName
-                </dd>
+            </label>
 
-                <dt class="col-3">
-                    Status
-                </dt>
+            <h5>
 
-                <dd class="col-9">
+                @Model.Comment.Task?.Title
 
-                    @if (Model.Comment.IsRead)
-                    {
-                        <span class="badge bg-success">
-                            Read
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning">
-                            Unread
-                        </span>
-                    }
-
-                </dd>
-
-            </dl>
+            </h5>
 
         </div>
 
-        <div class="card-footer">
+        <div class="col-md-6">
 
-            <a asp-action="Edit"
-               asp-route-id="@Model.Comment.Id"
-               class="btn btn-warning">
+            <label class="text-muted">
 
-                Edit
+                User
 
-            </a>
+            </label>
 
-            <a asp-action="Index"
-               class="btn btn-secondary">
+            <h5>
 
-                Back
+                @Model.Comment.User?.FirstName
+                @Model.Comment.User?.LastName
 
-            </a>
+            </h5>
 
         </div>
+
+        <div class="col-12">
+
+            <label class="text-muted">
+
+                Comment
+
+            </label>
+
+            <div class="border rounded p-3 mt-2">
+
+                @Model.Comment.Message
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <label class="text-muted">
+
+                Status
+
+            </label>
+
+            <br />
+
+            @if (Model.Comment.IsRead)
+            {
+                <span class="status-badge completed">
+
+                    Read
+
+                </span>
+            }
+            else
+            {
+                <span class="status-badge pending">
+
+                    Unread
+
+                </span>
+            }
+
+        </div>
+
+        <div class="col-md-6">
+
+            <label class="text-muted">
+
+                Created Date
+
+            </label>
+
+            <h6>
+
+                @Model.Comment.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+
+            </h6>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="d-flex justify-content-end gap-3">
+
+        <a asp-action="Edit"
+           asp-route-id="@Model.Comment.Id"
+           class="btn-warning">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Edit
+
+        </a>
+
+        <a asp-action="Index"
+           class="btn-outline-custom">
+
+            Back
+
+        </a>
 
     </div>
 

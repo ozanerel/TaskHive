@@ -2,97 +2,30 @@
 
 @{
     ViewData["Title"] = "Task Comments";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-<div class="container mt-4">
+<div class="dashboard-header">
 
-    <div class="d-flex justify-content-between mb-3">
-        <h2>Task Comments</h2>
+    <div class="dashboard-title">
 
-        <a asp-action="Create" class="btn btn-success">
-            New Comment
-        </a>
+        <h1>Task Comments</h1>
+
+        <p>
+            Manage comments for your tasks.
+        </p>
+
     </div>
 
-    <table class="table table-bordered table-hover">
+    <a asp-action="Create"
+       class="btn-primary-custom">
 
-        <thead class="table-dark">
+        <i class="fa-solid fa-plus"></i>
 
-            <tr>
-                <th>Id</th>
-                <th>Message</th>
-                <th>Task</th>
-                <th>User</th>
-                <th>Read</th>
-                <th width="240"></th>
-            </tr>
+        New Comment
 
-        </thead>
-
-        <tbody>
-
-            @foreach (var item in Model.Comments)
-            {
-                <tr>
-
-                    <td>@item.Id</td>
-
-                    <td>@item.Message</td>
-
-                    <td>@item.Task?.Title</td>
-
-                    <td>@item.User?.FirstName @item.User?.LastName</td>
-
-                    <td>
-
-                        @if (item.IsRead)
-                        {
-                            <span class="badge bg-success">
-                                Read
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-warning">
-                                Unread
-                            </span>
-                        }
-
-                    </td>
-
-                    <td>
-
-                        <a asp-action="Details"
-                           asp-route-id="@item.Id"
-                           class="btn btn-info btn-sm">
-
-                            Details
-
-                        </a>
-
-                        <a asp-action="Edit"
-                           asp-route-id="@item.Id"
-                           class="btn btn-warning btn-sm">
-
-                            Edit
-
-                        </a>
-
-                        <a asp-action="Delete"
-                           asp-route-id="@item.Id"
-                           class="btn btn-danger btn-sm">
-
-                            Delete
-
-                        </a>
-
-                    </td>
-
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
+    </a>
 
 </div>
+
+@await Html.PartialAsync("_CommentCards", Model)
