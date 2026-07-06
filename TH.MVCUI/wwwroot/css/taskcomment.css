@@ -1,0 +1,111 @@
+﻿/* ===========================
+   TASK COMMENT
+=========================== */
+
+.comment-card {
+    transition: all .25s ease;
+}
+
+    .comment-card:hover {
+        transform: translateY(-4px);
+    }
+
+.comment-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg,#6366f1,#8b5cf6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 10px 25px rgba(99,102,241,.25);
+}
+
+.comment-message {
+    min-height: 80px;
+    color: #64748b;
+    line-height: 1.7;
+    margin-top: 10px;
+}
+
+.comment-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 15px;
+}
+
+.comment-info-item {
+    flex: 1;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+}
+
+    .comment-info-item small {
+        display: block;
+        color: #94a3b8;
+        margin-bottom: 6px;
+    }
+
+    .comment-info-item strong {
+        color: #1e293b;
+    }
+
+.comment-detail-box {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 18px;
+    line-height: 1.8;
+    color: #334155;
+    border-left: 5px solid #6366f1;
+}
+
+.comment-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .comment-status i {
+        font-size: 14px;
+    }
+
+.comment-form textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.comment-form select,
+.comment-form textarea,
+.comment-form input {
+    border-radius: 12px;
+}
+
+.comment-delete-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 15px;
+    padding: 18px;
+}
+
+    .comment-delete-box h5 {
+        color: #dc2626;
+        margin-bottom: 15px;
+    }
+
+.comment-delete-message {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+    color: #475569;
+}
+
+.comment-table td,
+.comment-table th {
+    vertical-align: middle;
+}
