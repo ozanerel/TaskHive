@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Services.Abstracts;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.MyProjectVM;
 
@@ -11,24 +12,28 @@ namespace TH.MVCUI.Areas.Member.Controllers
     {
         private readonly IProjectManager _projectManager;
         private readonly IUserManager _userManager;
+        private readonly IUserContext _userContext;
 
         public MyProjectController(IProjectManager projectManager,
-                                   IUserManager userManager)
+                                   IUserManager userManager,IUserContext userContext)
         {
             _projectManager = projectManager;
             _userManager = userManager;
+            _userContext = userContext;
         }
 
         // MEMBER'A AİT PROJELER
         public async Task<IActionResult> Index()
         {
-            // Login işlemi tamamlanınca burası Session'dan gelecek.
-            // TODO:
-            // Login sistemi tamamlandıktan sonra
-            // userId Claim üzerinden alınacak.
-            int userId = 1;
+            //// Login işlemi tamamlanınca burası Session'dan gelecek.
+            //// TODO:
+            //// Login sistemi tamamlandıktan sonra
+            //// userId Claim üzerinden alınacak.
+            //int userId = 1;
 
-            var user = await _userManager.GetByIdAsync(userId);
+            //var user = await _userManager.GetByIdAsync(userId);
+
+            var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
