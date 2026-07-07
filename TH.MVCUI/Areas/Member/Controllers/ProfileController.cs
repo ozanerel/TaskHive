@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Services.Abstracts;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.ProfileVM;
 using TH.MVCUI.Areas.Member.ViewModels.ProfileVM;
@@ -10,10 +11,12 @@ namespace TH.MVCUI.Areas.Member.Controllers
     public class ProfileController : Controller
     {
         private readonly IUserManager _userManager;
+        private readonly IUserContext _userContext;
 
-        public ProfileController(IUserManager userManager)
+        public ProfileController(IUserManager userManager,IUserContext userContext)
         {
             _userManager = userManager;
+            _userContext = userContext;
         }
 
         public async Task<IActionResult> Index()
@@ -41,9 +44,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit()
         {
-            int userId = 1;
-
-            User user = await _userManager.GetByIdAsync(userId);
+            var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();

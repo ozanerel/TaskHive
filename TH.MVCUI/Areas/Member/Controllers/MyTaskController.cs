@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Services.Abstracts;
 using TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM;
 
 namespace TH.MVCUI.Areas.Member.Controllers
@@ -8,19 +9,24 @@ namespace TH.MVCUI.Areas.Member.Controllers
     public class MyTaskController : Controller
     {
         private readonly ITaskManager _taskManager;
+        private readonly IUserContext _userContext;
 
-        public MyTaskController(ITaskManager taskManager)
+        public MyTaskController(ITaskManager taskManager,IUserContext userContext)
         {
             _taskManager = taskManager;
+            _userContext = userContext;
         }
 
         public async Task<IActionResult> Index()
         {
-            int userId = 1;
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
 
             MyTaskPageVm vm = new()
             {
-                Tasks = await _taskManager.GetTasksByUserAsync(userId)
+                Tasks = await _taskManager.GetTasksByUserAsync(user.Id)
             };
 
             return View(vm);

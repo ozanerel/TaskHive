@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Services.Abstracts;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM;
 
@@ -11,11 +12,12 @@ namespace TH.MVCUI.Areas.Member.Controllers
         private readonly ITaskCommentManager _taskCommentManager;
         private readonly ITaskManager _taskManager;
         private readonly IUserManager _userManager;
-
+        private readonly IUserContext _userContext;
         public TaskCommentController(
             ITaskCommentManager taskCommentManager,
             ITaskManager taskManager,
-            IUserManager userManager)
+            IUserManager userManager,
+            IUserContext userContext)
         {
             _taskCommentManager = taskCommentManager;
             _taskManager = taskManager;
@@ -25,9 +27,15 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // LIST
         public async Task<IActionResult> Index()
         {
+            var user = await _userContext.GetCurrentUserAsync();
+
+            var comments = (await _taskCommentManager.GetAllAsync())
+                .Where(x => x.UserId == user.Id)
+                .ToList();
+
             TaskCommentIndexVm vm = new()
             {
-                Comments = await _taskCommentManager.GetAllAsync()
+                Comments = comments
             };
 
             return View(vm);
@@ -52,8 +60,10 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // CREATE
         public async Task<IActionResult> Create()
         {
-            ViewBag.Tasks = await _taskManager.GetAllAsync();
-            ViewBag.Users = await _userManager.GetAllAsync();
+            var user = await _userContext.GetCurrentUserAsync();
+
+            ViewBag.Tasks = user.Tasks;
+            ViewBag.Users = new List<User> { user };
 
             return View(new TaskCommentCreateVm());
         }
@@ -70,11 +80,13 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 return View(vm);
             }
 
+            var user = await _userContext.GetCurrentUserAsync();
+
             TaskComment comment = new()
             {
                 Message = vm.Message,
                 TaskId = vm.TaskId,
-                UserId = vm.UserId,
+                UserId = user.Id,
                 IsRead = false
             };
 
@@ -91,8 +103,10 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (comment == null)
                 return NotFound();
 
-            ViewBag.Tasks = await _taskManager.GetAllAsync();
-            ViewBag.Users = await _userManager.GetAllAsync();
+            var user = await _userContext.GetCurrentUserAsync();
+
+            ViewBag.Tasks = user.Tasks;
+            ViewBag.Users = new List<User> { user };
 
             TaskCommentUpdateVm vm = new()
             {
@@ -119,13 +133,14 @@ namespace TH.MVCUI.Areas.Member.Controllers
             }
 
             var comment = await _taskCommentManager.GetByIdAsync(vm.Id);
+            var user = await _userContext.GetCurrentUserAsync();
 
             if (comment == null)
                 return NotFound();
 
             comment.Message = vm.Message;
             comment.TaskId = vm.TaskId;
-            comment.UserId = vm.UserId;
+            comment.UserId = user.Id;
             comment.IsRead = vm.IsRead;
 
             await _taskCommentManager.UpdateAsync(comment);
@@ -137,6 +152,11 @@ namespace TH.MVCUI.Areas.Member.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var comment = await _taskCommentManager.GetByIdAsync(id);
+
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (comment.UserId != user.Id)
+                return Forbid();
 
             if (comment == null)
                 return NotFound();

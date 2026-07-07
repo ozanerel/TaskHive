@@ -25,10 +25,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // MEMBER'A AİT PROJELER
         public async Task<IActionResult> Index()
         {
-            //// Login işlemi tamamlanınca burası Session'dan gelecek.
-            //// TODO:
-            //// Login sistemi tamamlandıktan sonra
-            //// userId Claim üzerinden alınacak.
+            
             //int userId = 1;
 
             //var user = await _userManager.GetByIdAsync(userId);

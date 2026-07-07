@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Services.Abstracts;
 using TH.MVCUI.Areas.Member.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Member.Controllers
@@ -8,17 +9,22 @@ namespace TH.MVCUI.Areas.Member.Controllers
     public class NotificationController : Controller
     {
         private readonly INotificationManager _notificationManager;
+        private readonly IUserContext _userContext;
 
-        public NotificationController(INotificationManager notificationManager)
+        public NotificationController(INotificationManager notificationManager,IUserContext userContext)
         {
             _notificationManager = notificationManager;
+            _userContext = userContext;
         }
 
         public async Task<IActionResult> Index()
         {
+            var user = await _userContext.GetCurrentUserAsync();
+
             NotificationPageVm vm = new()
             {
-                Notifications = await _notificationManager.GetAllAsync()
+                Notifications = await _notificationManager
+                    .GetUnreadNotificationsAsync(user.Id)
             };
 
             return View(vm);
@@ -30,6 +36,11 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             if (notification == null)
                 return NotFound();
+
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (notification.UserId != user.Id)
+                return Forbid();
 
             NotificationPageVm vm = new()
             {
