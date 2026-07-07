@@ -10,5 +10,6 @@ namespace TH.BLL.Managers.Abstracts
     public interface ITaskCommentManager:IManager<TH.ENTITIES.Models.TaskComment>
     {
         Task<List<TaskComment>> GetCommentsByTaskAsync(int taskId);
+        Task<List<TaskComment>> GetCommentsByUserAsync(int userId);
     }
 }
