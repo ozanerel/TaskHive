@@ -31,13 +31,14 @@
 
         <!-- Notification -->
 
-        <div class="th-navbar-icon">
+        @* <div class="th-navbar-icon">
 
             <i class="fa-regular fa-bell"></i>
 
             <span class="th-badge">3</span>
 
-        </div>
+        </div> *@
+        @await Component.InvokeAsync("Notification")
 
         <!-- Message -->
 
