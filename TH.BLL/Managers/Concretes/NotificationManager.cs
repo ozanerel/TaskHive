@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
 using TH.DAL.Repositories.Concretes;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.BLL.Managers.Concretes
@@ -26,6 +27,15 @@ namespace TH.BLL.Managers.Concretes
             return await _repository
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
+        }
+
+        public async Task<int> GetUnreadCountAsync(int userId)
+        {
+            return await _repository
+                .Where(x => x.UserId == userId &&
+                            !x.IsRead &&
+                            x.Status != DataStatus.Deleted)
+                .CountAsync();
         }
 
         public async Task<List<Notification>> GetUnreadNotificationsAsync(int userId)
