@@ -21,10 +21,12 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Şimdilik örnek kullanıcı
-            int userId = 1;
+            //// Şimdilik örnek kullanıcı
+            //int userId = 1;
 
-            User user = await _userManager.GetByIdAsync(userId);
+            //User user = await _userManager.GetByIdAsync(userId);
+
+            var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
@@ -35,7 +37,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                RoleName = user.Role?.Name
+                RoleName = user.Role?.Name,
+                ImageUrl = user.AppUser?.AppUserProfile?.ImageUrl
             };
 
             return View(vm);
@@ -54,7 +57,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email
+                Email = user.Email,
+                ImageUrl = user.AppUser?.AppUserProfile?.ImageUrl
             };
 
             return View(vm);

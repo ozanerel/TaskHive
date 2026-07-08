@@ -17,5 +17,11 @@ namespace TH.MVCUI.Areas.Member.ViewModels.ProfileVM
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
+        //mevcut fotoğraf
+        public string? ImageUrl { get; set; }
+
+        //yeni yüklenecek fotoğraf
+        public IFormFile? ImageFile { get; set; }
     }
 }
