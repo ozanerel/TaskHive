@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,13 @@ namespace TH.BLL.Managers.Concretes
             // İleride UserProject tablosu eklersek burada kullanacağız.
 
             await System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        public async Task<List<Project>> GetProjectsByUserAsync(int userId)
+        {
+            return await _repository
+                .Where(x => x.Users.Any(u => u.Id == userId))
+                .ToListAsync();
         }
     }
 }

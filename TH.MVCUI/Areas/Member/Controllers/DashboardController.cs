@@ -29,10 +29,19 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            //var user = await _userContext.GetCurrentUserAsync();
 
-            var projects = user.Projects.ToList();
-            var tasks = user.Tasks.ToList();
+            //var projects = user.Projects.ToList();
+            //var tasks = user.Tasks.ToList();
+
+            var currentUser = await _userContext.GetCurrentUserAsync();
+
+            if (currentUser == null)
+                return RedirectToAction("Login", "Account", new { area = "" });
+
+            var projects = await _projectManager.GetProjectsByUserAsync(currentUser.Id);
+
+            var tasks = await _taskManager.GetTasksByUserAsync(currentUser.Id);
 
             DashboardVm vm = new()
             {

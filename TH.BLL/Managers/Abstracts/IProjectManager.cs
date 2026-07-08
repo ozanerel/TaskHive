@@ -14,6 +14,8 @@ namespace TH.BLL.Managers.Abstracts
 
         Task<Project> GetProjectDetailsAsync(int projectId);
 
+        Task<List<Project>> GetProjectsByUserAsync(int userId);
+
         Task AddUserToProjectAsync(int projectId, int userId);
     }
 }
