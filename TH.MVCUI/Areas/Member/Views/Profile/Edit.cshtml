@@ -11,11 +11,7 @@
 
         <h1>Edit Profile</h1>
 
-        <p>
-
-            Update your personal information.
-
-        </p>
+        <p>Update your personal information.</p>
 
     </div>
 
@@ -25,10 +21,55 @@
 
     <form asp-action="Edit"
           method="post"
+          enctype="multipart/form-data"
           class="profile-form">
 
-        <input asp-for="Id"
-               type="hidden" />
+        <input asp-for="Id" hidden />
+
+        <input asp-for="ImageUrl" hidden />
+
+        <div class="text-center mb-4">
+
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl"
+                     class="profile-avatar" />
+            }
+            else
+            {
+                <img src="~/images/default-user.png"
+                     class="profile-avatar" />
+            }
+
+        </div>
+
+        <div class="mb-4">
+
+            <label class="form-label">
+
+                Profile Photo
+
+            </label>
+
+            <input asp-for="Image"
+                   class="form-control"
+                   type="file" />
+
+            <small class="text-muted">
+
+                Allowed formats:
+                JPG, JPEG, PNG, WEBP
+
+                <br />
+
+                Maximum size:
+                2 MB
+
+            </small>
+
+            <span asp-validation-for="Image" class="text-danger"></span>
+
+        </div>
 
         <div class="row">
 
@@ -37,11 +78,7 @@
                 <div class="mb-4">
 
                     <label asp-for="FirstName"
-                           class="form-label">
-
-                        First Name
-
-                    </label>
+                           class="form-label"></label>
 
                     <input asp-for="FirstName"
                            class="form-control" />
@@ -58,11 +95,7 @@
                 <div class="mb-4">
 
                     <label asp-for="LastName"
-                           class="form-label">
-
-                        Last Name
-
-                    </label>
+                           class="form-label"></label>
 
                     <input asp-for="LastName"
                            class="form-control" />
@@ -79,11 +112,7 @@
         <div class="mb-4">
 
             <label asp-for="Email"
-                   class="form-label">
-
-                Email Address
-
-            </label>
+                   class="form-label"></label>
 
             <input asp-for="Email"
                    class="form-control" />
