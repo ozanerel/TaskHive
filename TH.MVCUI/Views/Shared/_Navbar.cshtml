@@ -6,6 +6,10 @@
     var currentUser = await UserManager.GetUserAsync(User);
 }
 
+@{
+    var profilePhoto = currentUser?.AppUserProfile?.ImageUrl;
+}
+
 <header class="th-navbar">
 
     <div class="th-navbar-left">
@@ -59,7 +63,14 @@
 
                 <div class="th-user-avatar">
 
-                    @User.Identity?.Name?.Substring(0, 1).ToUpper()
+                    @if (!string.IsNullOrEmpty(profilePhoto))
+                    {
+                        <img src="@profilePhoto" />
+                    }
+                    else
+                    {
+                        @User.Identity?.Name?.Substring(0, 1).ToUpper()
+                    }
 
                 </div>
 

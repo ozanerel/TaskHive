@@ -2,6 +2,11 @@
 @using TH.ENTITIES.Models
 @inject UserManager<AppUser> UserManager
 
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var profilePhoto = currentUser?.AppUserProfile?.ImageUrl;
+}
+
 <div class="th-sidebar">
 
     <div>
@@ -127,7 +132,15 @@
 
             <div class="th-sidebar-avatar">
 
-                @User.Identity.Name?.Substring(0, 1).ToUpper()
+                @if (!string.IsNullOrEmpty(profilePhoto))
+                {
+                    <img src="@profilePhoto"
+                         alt="Profile" />
+                }
+                else
+                {
+                    @User.Identity?.Name?.Substring(0, 1).ToUpper()
+                }
 
             </div>
 
