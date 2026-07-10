@@ -44,9 +44,9 @@ namespace TH.MVCUI.Controllers
             var roles = await _userManager.GetRolesAsync(user);
 
             if (roles.Contains("Admin"))
-                return RedirectToAction("Index", "Home", new { area = "Admin" });
+                return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
             else if (roles.Contains("Member"))
-                return RedirectToAction("Index", "Home", new { area = "Member" });
+                return RedirectToAction("Index", "Dashboard", new { area = "Member" });
             else
                 return RedirectToAction("AccessDenied", "Account");
         }
