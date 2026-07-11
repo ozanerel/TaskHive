@@ -262,3 +262,14 @@
             transform: translateX(0);
         }
 }
+
+.th-sidebar-menu ul li a.active {
+    background: var(--primary);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(21,21,125,.15);
+}
+
+    .th-sidebar-menu ul li a.active i {
+        color: white;
+    }

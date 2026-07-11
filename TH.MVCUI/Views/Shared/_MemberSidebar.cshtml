@@ -3,6 +3,10 @@
 @inject UserManager<AppUser> UserManager
 
 @{
+    string controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
+
+@{
     var currentUser = await UserManager.GetUserAsync(User);
     var profilePhoto = currentUser?.AppUserProfile?.ImageUrl;
 }
@@ -38,7 +42,7 @@
                     <a asp-area="Member"
                        asp-controller="Dashboard"
                        asp-action="Index"
-                       class="active">
+                       class="@(controller=="Dashboard" ? "active" : "")">
 
                         <i class="fa-solid fa-chart-line"></i>
 
@@ -52,7 +56,8 @@
 
                     <a asp-area="Member"
                        asp-controller="MyProject"
-                       asp-action="Index">
+                       asp-action="Index"
+                       class="@(controller=="MyProject" ? "active" : "")">
 
                         <i class="fa-solid fa-diagram-project"></i>
 
@@ -66,7 +71,8 @@
 
                     <a asp-area="Member"
                        asp-controller="MyTask"
-                       asp-action="Index">
+                       asp-action="Index"
+                       class="@(controller=="MyTask" ? "active" : "")">
 
                         <i class="fa-solid fa-list-check"></i>
 
@@ -80,7 +86,8 @@
 
                     <a asp-area="Member"
                        asp-controller="Notification"
-                       asp-action="Index">
+                       asp-action="Index"
+                       class="@(controller=="Notification" ? "active" : "")">
 
                         <i class="fa-solid fa-bell"></i>
 
@@ -94,7 +101,8 @@
 
                     <a asp-area="Member"
                        asp-controller="TaskComment"
-                       asp-action="Index">
+                       asp-action="Index"
+                       class="@(controller=="TaskComment" ? "active" : "")">
 
                         <i class="fa-solid fa-comments"></i>
 
@@ -108,7 +116,8 @@
 
                     <a asp-area="Member"
                        asp-controller="Profile"
-                       asp-action="Index">
+                       asp-action="Index"
+                       class="@(controller=="Profile" ? "active" : "")">
 
                         <i class="fa-solid fa-user"></i>
 
