@@ -59,13 +59,16 @@
         <div class="dropdown">
 
             <button class="th-user-button"
-                    data-bs-toggle="dropdown">
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
 
                 <div class="th-user-avatar">
 
                     @if (!string.IsNullOrEmpty(profilePhoto))
                     {
-                        <img src="@profilePhoto" />
+                        <img src="@profilePhoto" 
+                            alt="Profile Photo" />
                     }
                     else
                     {

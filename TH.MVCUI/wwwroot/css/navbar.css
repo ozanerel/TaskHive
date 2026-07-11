@@ -323,3 +323,69 @@
     justify-content: center;
     align-items: center;
 }
+
+/*=========================================
+    USER BUTTON
+=========================================*/
+
+.th-user-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    background: transparent;
+    padding: 8px 14px;
+    border-radius: 14px;
+    transition: .25s;
+}
+
+    .th-user-button:hover {
+        background: #f8fafc;
+    }
+
+.th-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg,var(--primary),var(--secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+    .th-user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.th-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+    .th-user-info h6 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .th-user-info span {
+        margin-top: 2px;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+.th-user-button i.fa-chevron-down {
+    margin-left: 4px;
+    font-size: 12px;
+    color: #94a3b8;
+}
