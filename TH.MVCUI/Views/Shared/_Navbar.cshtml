@@ -20,14 +20,31 @@
 
         </button>
 
-        <div class="th-search">
+        @* <div class="th-search">
 
             <i class="fa-solid fa-magnifying-glass"></i>
 
             <input type="text"
                    placeholder="Search project, task, user..." />
 
-        </div>
+        </div> *@
+
+        <form asp-controller="Search"
+              asp-action="Index"
+              method="get"
+              class="th-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input name="keyword"
+                   placeholder="Search project, task, user..."
+                   autocomplete="off" />
+
+            @* <span class="search-shortcut">
+                Enter
+            </span> *@
+
+        </form>
 
     </div>
 
