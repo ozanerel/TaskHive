@@ -21,6 +21,7 @@ namespace TH.BLL.DependencyResolvers
             services.AddScoped<ITaskCommentManager,TaskCommentManager>();
             services.AddScoped<ITaskManager,TaskManager>();
             services.AddScoped<IUserManager,UserManager>();
+            services.AddScoped<ISearchManager, SearchManager>();
 
         }
     }
