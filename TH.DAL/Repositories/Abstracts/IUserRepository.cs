@@ -10,5 +10,6 @@ namespace TH.DAL.Repositories.Abstracts
     public interface IUserRepository:IRepository<User>
     {
         Task<User> GetUserWithTasksAsync(int id);
+        Task<List<User>> SearchUsersAsync(string keyword);
     }
 }

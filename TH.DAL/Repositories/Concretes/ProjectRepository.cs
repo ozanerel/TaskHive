@@ -30,5 +30,18 @@ namespace TH.DAL.Repositories.Concretes
                 .Include(x => x.Tasks)
                 .ToListAsync();
         }
+
+        public async Task<List<Project>> SearchProjectsAsync(string keyword)
+        {
+            keyword = keyword.Trim().ToLower();
+
+            return await _context.Projects
+                .Where(x =>
+                    x.ProjectName.Contains(keyword) ||
+                    x.Description.Contains(keyword))
+                .OrderBy(x => x.ProjectName)
+                .Take(10)
+                .ToListAsync();
+        }
     }
 }

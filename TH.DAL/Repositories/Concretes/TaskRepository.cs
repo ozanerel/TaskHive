@@ -37,5 +37,18 @@ namespace TH.DAL.Repositories.Concretes
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
         }
+
+        public async Task<List<ENTITIES.Models.Task>> SearchTasksAsync(string keyword)
+        {
+            keyword = keyword.Trim().ToLower();
+
+            return await _context.Tasks
+                .Where(x =>
+                    x.Title.Contains(keyword) ||
+                    x.Description.Contains(keyword))
+                .OrderBy(x => x.Title)
+                .Take(10)
+                .ToListAsync();
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace TH.DAL.Repositories.Abstracts
         Task<List<ENTITIES.Models.Task>> GetTasksByUserAsync(int userId);
         Task<List<ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId);
         Task<List<ENTITIES.Models.Task>> GetHighPriorityTasksAsync();
+        Task<List<ENTITIES.Models.Task>> SearchTasksAsync(string keyword);
     }
 }
