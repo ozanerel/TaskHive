@@ -36,8 +36,10 @@
 
             <i class="fa-solid fa-magnifying-glass"></i>
 
-            <input name="keyword"
-                   placeholder="Search project, task, user..."
+            <input type="search"
+                   name="keyword"
+                   value="@Context.Request.Query["keyword"]"
+                   placeholder="Search project, task or user..."
                    autocomplete="off" />
 
             @* <span class="search-shortcut">

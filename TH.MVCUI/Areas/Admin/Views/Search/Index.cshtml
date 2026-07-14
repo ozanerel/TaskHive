@@ -1,0 +1,280 @@
+﻿@model TH.MVCUI.Models.ViewModels.SearchVm
+
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Keyword))
+{
+    <div class="dashboard-header">
+
+        <div class="dashboard-title">
+
+            <h2>
+
+                Search Results
+
+            </h2>
+
+            <p>
+
+                "@Model.Keyword" için
+                <strong>@Model.TotalResultCount</strong>
+                sonuç bulundu.
+
+            </p>
+
+        </div>
+
+    </div>
+}
+
+<div class="dashboard-header">
+
+    <div class="dashboard-title">
+
+        <h1>Search Results</h1>
+
+        <p>
+
+            Results for "<strong>@Model.Keyword</strong>"
+
+        </p>
+
+    </div>
+
+</div>
+
+@if (!Model.Projects.Any() &&
+   !Model.Tasks.Any() &&
+   !Model.Users.Any())
+{
+    <div class="dashboard-card text-center py-5">
+
+        <i class="fa-solid fa-magnifying-glass fa-3x text-muted mb-3"></i>
+
+        <h4>No results found</h4>
+
+        <p class="text-muted">
+
+            Try another keyword.
+
+        </p>
+
+    </div>
+}
+else
+{
+
+    <!-- Projects -->
+    @if (Model.Projects.Any())
+    {
+        <div class="dashboard-card mb-4">
+
+            <h4 class="mb-4">
+
+                <i class="fa-solid fa-diagram-project me-2"></i>
+
+                Projects
+
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Description</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.Projects)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <a asp-area="Member"
+                                       asp-controller="MyProject"
+                                       asp-action="Details"
+                                       asp-route-id="@item.Id">
+
+                                        @item.ProjectName
+
+                                    </a>
+
+                                </td>
+
+                                <td>@item.Description</td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    }
+
+    <!-- Tasks -->
+    @if (Model.Tasks.Any())
+    {
+        <div class="dashboard-card mb-4">
+
+            <h4 class="mb-4">
+
+                <i class="fa-solid fa-list-check me-2"></i>
+
+                Tasks
+
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Title</th>
+
+                            <th>Description</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.Tasks)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <a asp-area="Member"
+                                       asp-controller="MyTask"
+                                       asp-action="Details"
+                                       asp-route-id="@item.Id">
+
+                                        @item.Title
+
+                                    </a>
+
+                                </td>
+
+                                <td>@item.Description</td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    }
+
+    <!-- Users -->
+    @if (Model.Users.Any())
+    {
+        <div class="dashboard-card">
+
+            <h4 class="mb-4">
+
+                <i class="fa-solid fa-users me-2"></i>
+
+                Users
+
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.Users)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <i class="fa-solid fa-user text-primary"></i>
+
+                                        @item.FirstName @item.LastName
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    @item.Email
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    }
+
+}
+
+@if (!Model.HasResult && !string.IsNullOrWhiteSpace(Model.Keyword))
+{
+    <div class="dashboard-card text-center p-5">
+
+        <i class="fa-solid fa-magnifying-glass fa-3x mb-3 text-secondary"></i>
+
+        <h4>
+
+            Sonuç bulunamadı.
+
+        </h4>
+
+        <p>
+
+            Farklı bir anahtar kelime deneyebilirsiniz.
+
+        </p>
+
+    </div>
+}

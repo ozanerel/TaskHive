@@ -11,5 +11,15 @@ namespace TH.MVCUI.Models.ViewModels
         public List<TH.ENTITIES.Models.Task> Tasks { get; set; } = new();
 
         public List<User> Users { get; set; } = new();
+
+        public bool HasResult =>
+            Projects.Any() ||
+            Tasks.Any() ||
+            Users.Any();
+
+        public int TotalResultCount =>
+            Projects.Count +
+            Tasks.Count +
+            Users.Count;
     }
 }
