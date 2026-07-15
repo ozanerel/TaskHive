@@ -1,5 +1,6 @@
 ﻿@import url("variables.css");
 
+
 /*=========================================
     SEARCH PAGE
 =========================================*/
@@ -15,6 +16,142 @@
         margin-bottom: 8px;
     }
 
+
     .search-header p {
         color: var(--text-light);
-        margin
+        margin: 0;
+    }
+
+
+/*=========================================
+    SEARCH CARD
+=========================================*/
+
+
+.search-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+}
+
+
+
+/*=========================================
+    SEARCH TITLE
+=========================================*/
+
+
+.search-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+    .search-title i {
+        color: var(--primary);
+    }
+
+
+    .search-title h4 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+
+
+/*=========================================
+    TABLE
+=========================================*/
+
+
+.search-table {
+    width: 100%;
+}
+
+
+    .search-table th {
+        padding: 15px;
+        color: #94a3b8;
+        font-weight: 600;
+    }
+
+
+    .search-table td {
+        padding: 18px 15px;
+    }
+
+
+    .search-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+
+/*==========================================
+        EMPTY SEARCH
+==========================================*/
+
+
+.search-empty {
+    margin-top: 60px;
+    padding: 60px;
+    text-align: center;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+
+    .search-empty i {
+        font-size: 70px;
+        color: var(--primary);
+        margin-bottom: 20px;
+    }
+
+
+    .search-empty h3 {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+
+    .search-empty p {
+        color: #94a3b8;
+        margin: 0;
+    }
+
+
+
+/*==========================================
+        VIEW BUTTON
+==========================================*/
+
+
+.table .btn {
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+}
+
+
+
+/*=========================================
+    RESPONSIVE
+=========================================*/
+
+
+@media(max-width:768px) {
+
+    .search-card {
+        padding: 20px;
+    }
+
+
+    .search-header h2 {
+        font-size: 22px;
+    }
+}
