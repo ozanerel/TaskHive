@@ -31,7 +31,11 @@ namespace TH.BLL.Services.Concretes
         public async Task<User> GetCurrentUserAsync()
         {
             var userName =
-                _httpContextAccessor.HttpContext.User.Identity.Name;
+                _httpContextAccessor
+                .HttpContext?
+                .User?
+                .Identity?
+                .Name;
 
 
             if (string.IsNullOrEmpty(userName))

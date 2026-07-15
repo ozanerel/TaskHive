@@ -22,6 +22,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             _taskCommentManager = taskCommentManager;
             _taskManager = taskManager;
             _userManager = userManager;
+            _userContext = userContext;
         }
 
         // LIST
@@ -153,13 +154,14 @@ namespace TH.MVCUI.Areas.Member.Controllers
         {
             var comment = await _taskCommentManager.GetByIdAsync(id);
 
+            if (comment == null)
+                return NotFound();
+
             var user = await _userContext.GetCurrentUserAsync();
 
             if (comment.UserId != user.Id)
                 return Forbid();
 
-            if (comment == null)
-                return NotFound();
 
             TaskCommentDeleteVm vm = new()
             {
