@@ -41,24 +41,24 @@
     max-width: 900px;
 }
 
-    .profile-form .form-control {
-        border-radius: 12px;
-        min-height: 48px;
-    }
+.profile-form .form-control {
+    border-radius: 12px;
+    min-height: 48px;
+}
 
-        .profile-form .form-control:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 .2rem rgba(99,102,241,.15);
-        }
+.profile-form .form-control:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 .2rem rgba(99,102,241,.15);
+}
 
-    .profile-form .form-label {
-        font-weight: 600;
-        color: #334155;
-    }
+.profile-form .form-label {
+    font-weight: 600;
+    color: #334155;
+}
 
-    .profile-form .text-danger {
-        font-size: .85rem;
-    }
+.profile-form .text-danger {
+    font-size: .85rem;
+}
 
 .profile-card .status-badge {
     margin-top: 12px;
@@ -92,4 +92,12 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.btn-edit-profile {
+    position: relative;
+    display: inline-flex;
+    z-index: 99999;
+    pointer-events: auto !important;
+    cursor: pointer;
 }

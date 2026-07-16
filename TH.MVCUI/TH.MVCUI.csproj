@@ -25,4 +25,11 @@
     <Folder Include="wwwroot\images\profiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\Member\Views\_ViewImports.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -12,11 +12,21 @@
         <p>View your personal information.</p>
     </div>
 
-    <a asp-action="Edit"
+   @*  <a asp-action="Edit"
        class="btn-primary-custom">
 
         <i class="fa-solid fa-user-pen"></i>
 
+        Edit Profile
+
+    </a> *@
+
+    <a asp-action="Edit"
+       asp-controller="Profile"
+       asp-area="Member"
+       class="btn-edit-profile">
+
+        <i class="fa-solid fa-user-pen"></i>
         Edit Profile
 
     </a>
