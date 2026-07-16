@@ -32,18 +32,18 @@
     border-bottom: 1px solid #edf2f7;
 }
 
-    .th-sidebar-logo img {
-        width: 48px;
-        height: 48px;
-        object-fit: contain;
-    }
+.th-sidebar-logo img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
 
-    .th-sidebar-logo h2 {
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--primary);
-        margin: 0;
-    }
+.th-sidebar-logo h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
 
 /*=========================================================
     MENU
@@ -55,62 +55,62 @@
     overflow-y: auto;
 }
 
-    .th-sidebar-menu ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
+.th-sidebar-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 
-    .th-sidebar-menu li {
-        margin-bottom: 8px;
-    }
+.th-sidebar-menu li {
+    margin-bottom: 8px;
+}
 
-    /*=========================================================
+/*=========================================================
     MENU ITEM
 =========================================================*/
 
-    .th-sidebar-menu a {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 14px 18px;
-        border-radius: 14px;
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 500;
-        transition: var(--transition);
-    }
+.th-sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
 
-        .th-sidebar-menu a i {
-            width: 22px;
-            text-align: center;
-            font-size: 18px;
-        }
+.th-sidebar-menu a i {
+    width: 22px;
+    text-align: center;
+    font-size: 18px;
+}
 
-        /*=========================================================
+/*=========================================================
     HOVER
 =========================================================*/
 
-        .th-sidebar-menu a:hover {
-            background: rgba(21,21,125,.08);
-            color: var(--primary);
-            transform: translateX(4px);
-        }
+.th-sidebar-menu a:hover {
+    background: rgba(21,21,125,.08);
+    color: var(--primary);
+    transform: translateX(4px);
+}
 
-    /*=========================================================
+/*=========================================================
     ACTIVE
 =========================================================*/
 
-    .th-sidebar-menu .active {
-        background: var(--primary);
-        color: #fff;
-        box-shadow: 0 10px 25px rgba(21,21,125,.18);
-    }
+.th-sidebar-menu .active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(21,21,125,.18);
+}
 
-        .th-sidebar-menu .active:hover {
-            color: #fff;
-            transform: none;
-        }
+.th-sidebar-menu .active:hover {
+    color: #fff;
+    transform: none;
+}
 
 /*=========================================================
     MENU TITLE
@@ -272,4 +272,62 @@
 
     .th-sidebar-menu ul li a.active i {
         color: white;
+    }
+
+/*=========================================================
+    MAIN CONTENT
+=========================================================*/
+
+.th-main {
+    margin-left: 280px;
+    margin-top: 80px;
+    padding: 30px;
+    transition: .35s;
+}
+
+
+/* Sidebar küçüldüğünde */
+
+.th-sidebar.collapsed ~ .th-navbar ~ .th-main {
+    margin-left: 90px;
+}
+
+/*=========================================================
+    SIDEBAR USER IMAGE
+=========================================================*/
+
+.th-sidebar-avatar {
+    overflow: hidden;
+}
+
+
+    .th-sidebar-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+/*=========================================================
+    SIDEBAR OVERLAY
+=========================================================*/
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,.35);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: .30s ease;
+    z-index: 998;
+}
+
+
+    .sidebar-overlay.show {
+        opacity: 1;
+        visibility: visible;
     }

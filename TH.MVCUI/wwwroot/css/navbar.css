@@ -54,12 +54,19 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
 }
 
-    .th-menu-btn:hover {
-        background: var(--primary);
-        color: #fff;
-    }
+.th-menu-btn:hover {
+    background: var(--primary);
+    /*color: #fff;*/
+    color: white;
+    transform: scale(1.05);
+}
+
+.th-menu-btn:active {
+    transform: scale(.95);
+}
 
 /*=========================================================
     SEARCH
