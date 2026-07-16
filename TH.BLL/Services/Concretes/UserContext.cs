@@ -50,9 +50,20 @@ namespace TH.BLL.Services.Concretes
                 return null;
 
 
+            //User user =
+            //    await _context.Users
+            //    .Include(x => x.Role)
+            //    .
+            //    .FirstOrDefaultAsync(x => x.AppUserId == appUser.Id);
+
             User user =
                 await _context.Users
                 .Include(x => x.Role)
+                .Include(x => x.AppUser)
+                .ThenInclude(x => x.AppUserProfile)
+                .Include(x => x.Tasks)
+                .Include(x => x.Projects)
+                .Include(x => x.Notifications)
                 .FirstOrDefaultAsync(x => x.AppUserId == appUser.Id);
 
 

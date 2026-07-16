@@ -82,6 +82,14 @@ namespace TH.MVCUI.Areas.Member.Controllers
             user.LastName = vm.LastName;
             user.Email = vm.Email;
 
+
+            if (user.AppUser == null)
+            {
+                TempData["Error"] = "User profile could not be found.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
             if (user.AppUser.AppUserProfile == null)
             {
                 user.AppUser.AppUserProfile = new AppUserProfile()
