@@ -18,6 +18,7 @@
     padding: 0 32px;
     z-index: 999;
     transition: var(--transition);
+    z-index: 99999 !important;
 }
 
 /*=========================================================
@@ -28,6 +29,20 @@
     left: 90px;
 }
 
+.th-main {
+    margin-left: 280px;
+    margin-top: 80px;
+    padding: 32px;
+    transition: .35s;
+}
+
+.th-sidebar.collapsed ~ .th-main {
+    margin-left: 90px;
+}
+
+.th-sidebar {
+    z-index: 1 !important;
+}
 /*=========================================================
     LEFT
 =========================================================*/

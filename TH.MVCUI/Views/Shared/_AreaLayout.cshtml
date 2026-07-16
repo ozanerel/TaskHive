@@ -52,9 +52,9 @@
         @await Html.PartialAsync("_MemberSidebar")
     }
 
-    @await Html.PartialAsync("_Navbar")
-
     <div class="sidebar-overlay"></div>
+
+    @await Html.PartialAsync("_Navbar")
 
     <main class="th-main">
 
@@ -68,7 +68,7 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="~/js/site.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 
