@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectCreateVm
 
 @{
     ViewData["Title"] = "Create Project";
@@ -27,8 +27,14 @@
 
 <div class="form-card">
 
-    <form asp-action="Create" method="post">
+    <form asp-action="Create"
+          asp-controller="Project"
+          asp-area="Admin"
+          method="post">
 
+        <div asp-validation-summary="All"
+             class="text-danger">
+        </div>
         <div class="row">
 
             <div class="col-md-12 mb-4">
@@ -39,10 +45,10 @@
 
                 </label>
 
-                <input asp-for="Project.ProjectName"
+                <input asp-for="ProjectName"
                        class="form-control-custom" />
 
-                <span asp-validation-for="Project.ProjectName"
+                <span asp-validation-for="ProjectName"
                       class="text-danger"></span>
 
             </div>
@@ -55,11 +61,11 @@
 
                 </label>
 
-                <textarea asp-for="Project.Description"
+                <textarea asp-for="Description"
                           rows="6"
                           class="form-control-custom"></textarea>
 
-                <span asp-validation-for="Project.Description"
+                <span asp-validation-for="Description"
                       class="text-danger"></span>
 
             </div>
@@ -68,7 +74,7 @@
 
         <div class="form-buttons">
 
-            <button class="btn-primary-custom">
+            <button type="submit" class="btn-primary-custom">
 
                 <i class="fa-solid fa-floppy-disk"></i>
 
