@@ -1,5 +1,5 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
-@model ProjectPageVm
+@model ProjectDeleteVm
 
 @{
     ViewData["Title"] = "Delete Project";
@@ -30,13 +30,13 @@
 
         <h4>
 
-            @Model.Project.ProjectName
+            @Model.ProjectName
 
         </h4>
 
         <p>
 
-            @Model.Project.Description
+            @Model.Description
 
         </p>
 
@@ -45,7 +45,7 @@
     <form asp-action="Delete"
           method="post">
 
-        <input asp-for="Project.Id"
+        <input asp-for="Id"
                type="hidden" />
 
         <div class="form-buttons">

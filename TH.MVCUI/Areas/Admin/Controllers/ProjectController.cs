@@ -134,9 +134,16 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (project == null)
                 return NotFound();
 
-            ProjectPageVm vm = new ProjectPageVm
+            //ProjectPageVm vm = new ProjectPageVm
+            //{
+            //    Project = project
+            //};
+
+            ProjectDeleteVm vm = new ProjectDeleteVm
             {
-                Project = project
+                Id = project.Id,
+                ProjectName = project.ProjectName,
+                Description = project.Description
             };
 
             return View(vm);
@@ -145,9 +152,14 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(ProjectPageVm vm)
+        public async Task<IActionResult> Delete(ProjectDeleteVm vm)
         {
-            await _projectManager.MakePassiveAsync(vm.Project);
+            Project project = new()
+            {
+                Id = vm.Id
+            };
+
+            await _projectManager.MakePassiveAsync(project);
 
             return RedirectToAction(nameof(Index));
         }

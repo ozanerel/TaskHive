@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TH.DAL.ContextClasses;
 using TH.DAL.Repositories.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.DAL.Repositories.Concretes
@@ -13,7 +14,7 @@ namespace TH.DAL.Repositories.Concretes
     public class ProjectRepository : BaseRepository<Project>, IProjectRepository
     {
         readonly MyContext _context;
-        public ProjectRepository(MyContext context):base(context)
+        public ProjectRepository(MyContext context) : base(context)
         {
             _context = context;
         }
@@ -26,7 +27,12 @@ namespace TH.DAL.Repositories.Concretes
 
         public async Task<List<Project>> GetProjectsWithTasksAsync()
         {
+            //return await _context.Projects
+            //    .Include(x => x.Tasks)
+            //    .ToListAsync();
+
             return await _context.Projects
+                .Where(x => x.Status != DataStatus.Deleted)
                 .Include(x => x.Tasks)
                 .ToListAsync();
         }
