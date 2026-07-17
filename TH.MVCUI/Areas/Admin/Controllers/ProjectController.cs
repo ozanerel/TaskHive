@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
-using TH.MVCUI.Areas.Admin.Models.PageVMs;
 using Microsoft.AspNetCore.Authorization;
 using TH.ENTITIES.Models;
+using TH.MVCUI.Areas.Admin.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -49,8 +49,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // GET
         public IActionResult Create()
         {
-            ProjectPageVm vm = new();
-            vm.Project = new Project(); // Initialize the Project property
+            ProjectCreateVm vm = new();
+            //vm.Project = new Project(); // Initialize the Project property
 
             return View(vm);
         }
@@ -58,14 +58,31 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectPageVm vm)
+        public async Task<IActionResult> Create(ProjectCreateVm vm)
         {
+            //if (!ModelState.IsValid)
+            //    return View(vm);
+
+            //await _projectManager.CreateAsync(vm.Project);
+
+            //return RedirectToAction(nameof(Index));
+
             if (!ModelState.IsValid)
                 return View(vm);
 
-            await _projectManager.CreateAsync(vm.Project);
+
+            Project project = new Project
+            {
+                ProjectName = vm.ProjectName,
+                Description = vm.Description
+            };
+
+
+            await _projectManager.CreateAsync(project);
+
 
             return RedirectToAction(nameof(Index));
+
         }
 
         // GET
