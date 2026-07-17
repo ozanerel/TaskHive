@@ -1,4 +1,4 @@
-﻿namespace TH.MVCUI.Areas.Admin.Models.PageVMs
+﻿namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
 {
     public class ProjectCreateVm
     {

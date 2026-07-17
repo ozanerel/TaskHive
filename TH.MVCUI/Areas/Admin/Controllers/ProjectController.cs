@@ -2,7 +2,7 @@
 using TH.BLL.Managers.Abstracts;
 using Microsoft.AspNetCore.Authorization;
 using TH.ENTITIES.Models;
-using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -93,9 +93,16 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (project == null)
                 return NotFound();
 
-            ProjectPageVm vm = new ProjectPageVm
+            //ProjectPageVm vm = new ProjectPageVm
+            //{
+            //    Project = project
+            //};
+
+            ProjectUpdateVm vm = new()
             {
-                Project = project
+                Id = project.Id,
+                ProjectName = project.ProjectName,
+                Description = project.Description
             };
 
             return View(vm);
@@ -104,12 +111,17 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(ProjectPageVm vm)
+        public async Task<IActionResult> Update(ProjectUpdateVm vm)
         {
             if (!ModelState.IsValid)
                 return View(vm);
 
-            await _projectManager.UpdateAsync(vm.Project);
+            var project = await _projectManager.GetByIdAsync(vm.Id);
+
+            project.ProjectName = vm.ProjectName;
+            project.Description = vm.Description;
+
+            await _projectManager.UpdateAsync(project);
 
             return RedirectToAction(nameof(Index));
         }
