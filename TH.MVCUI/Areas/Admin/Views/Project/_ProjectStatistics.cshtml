@@ -1,5 +1,5 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
-@model ProjectPageVm
+@model ProjectDetailsVm
 
 <div class="dashboard-card">
 
@@ -15,7 +15,7 @@
 
             <div class="stat-value">
 
-                @(Model.Project.Users?.Count ?? 0)
+                @(Model.Users?.Count ?? 0)
 
             </div>
 
@@ -31,7 +31,7 @@
 
             <div class="stat-value">
 
-                @(Model.Project.Tasks?.Count ?? 0)
+                @(Model.Tasks?.Count ?? 0)
 
             </div>
 
@@ -47,7 +47,7 @@
 
             <div class="stat-value">
 
-                @(Model.Project.Tasks?.Count(x => x.IsCompleted) ?? 0)
+                @(Model.Tasks?.Count(x => x.IsCompleted) ?? 0)
 
             </div>
 

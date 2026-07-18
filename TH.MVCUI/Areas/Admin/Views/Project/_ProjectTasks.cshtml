@@ -1,5 +1,5 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
-@model ProjectPageVm
+@model ProjectDetailsVm
 
 <div class="dashboard-card">
 
@@ -9,7 +9,7 @@
 
     </h3>
 
-    @foreach (var task in Model.Project.Tasks)
+    @foreach (var task in Model.Tasks)
     {
 
         <div class="project-item">

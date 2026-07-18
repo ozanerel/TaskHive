@@ -1,10 +1,10 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
-@model ProjectPageVm
+@model ProjectDetailsVm
 
 @{
-    var totalTask = Model.Project.Tasks?.Count ?? 0;
+    var totalTask = Model.Tasks?.Count ?? 0;
 
-    var completedTask = Model.Project.Tasks?.Count(x => x.IsCompleted) ?? 0;
+    var completedTask = Model.Tasks?.Count(x => x.IsCompleted) ?? 0;
 
     var progress = totalTask == 0
         ? 0
@@ -26,13 +26,13 @@
 
         <h1>
 
-            @Model.Project.ProjectName
+            @Model.ProjectName
 
         </h1>
 
         <p>
 
-            @Model.Project.Description
+            @Model.Description
 
         </p>
 

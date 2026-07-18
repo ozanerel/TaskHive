@@ -22,7 +22,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         {
             var projects = await _projectManager.GetProjectsWithTasksAsync();
 
-            ProjectPageVm vm = new()
+            ProjectIndexVm vm = new()
             {
                 Projects = projects
             };
@@ -38,9 +38,14 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (project == null)
                 return NotFound();
 
-            ProjectPageVm vm = new ProjectPageVm
+            ProjectDetailsVm vm = new ProjectDetailsVm
             {
-                Project = project
+                Id = project.Id,
+                ProjectName = project.ProjectName,
+                Description = project.Description,
+                Tasks = project.Tasks?.ToList() ?? new(),
+                Users = project.Users?.ToList() ?? new(),
+                CreatedDate = project.CreatedDate
             };
 
             return View(vm);

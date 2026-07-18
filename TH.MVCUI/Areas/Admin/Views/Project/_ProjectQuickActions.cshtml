@@ -1,5 +1,5 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
-@model ProjectPageVm
+@model ProjectDetailsVm
 
 <div class="dashboard-card">
 
@@ -12,7 +12,7 @@
     <div class="d-grid gap-3">
 
         <a asp-action="Update"
-           asp-route-id="@Model.Project.Id"
+           asp-route-id="@Model.Id"
            class="btn-primary-custom">
 
             <i class="fa fa-pen"></i>
@@ -22,7 +22,7 @@
         </a>
 
         <a asp-action="Delete"
-           asp-route-id="@Model.Project.Id"
+           asp-route-id="@Model.Id"
            class="btn-danger-custom">
 
             <i class="fa fa-trash"></i>
