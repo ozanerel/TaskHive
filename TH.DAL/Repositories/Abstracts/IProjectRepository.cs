@@ -12,5 +12,6 @@ namespace TH.DAL.Repositories.Abstracts
         Task<List<Project>> GetProjectsWithTasksAsync();
         Task<Project> GetProjectDetailsAsync(int id);
         Task<List<Project>> SearchProjectsAsync(string keyword);
+        Task<List<Project>> GetDashboardProjectsAsync();
     }
 }

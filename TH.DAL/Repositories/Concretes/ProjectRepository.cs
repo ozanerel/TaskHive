@@ -18,9 +18,24 @@ namespace TH.DAL.Repositories.Concretes
         {
             _context = context;
         }
-        public async Task<Project> GetProjectDetailsAsync(int id)
+
+        public async Task<List<Project>> GetDashboardProjectsAsync()
         {
             return await _context.Projects
+                .Where(x => x.Status != DataStatus.Deleted)
+                .Include(x => x.Tasks)
+                .OrderByDescending(x => x.CreatedDate)
+                .Take(5)
+                .ToListAsync();
+        }
+
+        public async Task<Project> GetProjectDetailsAsync(int id)
+        {
+            //return await _context.Projects
+            //    .Include(x => x.Tasks)
+            //    .FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Projects
+                .Where(x => x.Status != DataStatus.Deleted)
                 .Include(x => x.Tasks)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -42,9 +57,14 @@ namespace TH.DAL.Repositories.Concretes
             keyword = keyword.Trim().ToLower();
 
             return await _context.Projects
+                //.Where(x =>
+                //    x.ProjectName.Contains(keyword) ||
+                //    x.Description.Contains(keyword))
                 .Where(x =>
-                    x.ProjectName.Contains(keyword) ||
-                    x.Description.Contains(keyword))
+                x.Status != DataStatus.Deleted &&
+                (
+                x.ProjectName.Contains(keyword) ||x.Description.Contains(keyword)
+                ))
                 .OrderBy(x => x.ProjectName)
                 .Take(10)
                 .ToListAsync();

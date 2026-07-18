@@ -44,5 +44,10 @@ namespace TH.BLL.Managers.Concretes
                 .Where(x => x.Users.Any(u => u.Id == userId))
                 .ToListAsync();
         }
+
+        public async Task<List<Project>> GetDashboardProjectsAsync()
+        {
+            return await _repository.GetDashboardProjectsAsync();
+        }
     }
 }

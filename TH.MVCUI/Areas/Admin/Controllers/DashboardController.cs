@@ -30,7 +30,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var projects = await _projectManager.GetAllAsync();
+            //var projects = await _projectManager.GetAllAsync();
+            var projects = await _projectManager.GetDashboardProjectsAsync();
             var tasks = await _taskManager.GetAllAsync();
             var users = await _userManager.GetAllAsync();
             var notifications = await _notificationManager.GetAllAsync();
