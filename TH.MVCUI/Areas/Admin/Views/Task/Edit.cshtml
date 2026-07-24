@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskUpdateVm
 
 @{
     ViewData["Title"] = "Edit Task";
@@ -30,7 +30,7 @@
     <form asp-action="Edit"
           method="post">
 
-        <input asp-for="Task.Id" type="hidden" />
+        <input asp-for="Id" type="hidden" />
 
         <div class="row">
 
@@ -40,10 +40,10 @@
                     Title
                 </label>
 
-                <input asp-for="Task.Title"
+                <input asp-for="Title"
                        class="form-control-custom" />
 
-                <span asp-validation-for="Task.Title"
+                <span asp-validation-for="Title"
                       class="text-danger"></span>
 
             </div>
@@ -54,7 +54,7 @@
                     Description
                 </label>
 
-                <textarea asp-for="Task.Description"
+                <textarea asp-for="Description"
                           rows="5"
                           class="form-control-custom"></textarea>
 
@@ -66,7 +66,7 @@
                     Priority
                 </label>
 
-                <select asp-for="Task.Priority"
+                <select asp-for="Priority"
                         class="form-control-custom">
 
                     <option value="Low">Low</option>
@@ -84,7 +84,7 @@
                     Assigned User
                 </label>
 
-                <select asp-for="Task.UserId"
+                <select asp-for="UserId"
                         class="form-control-custom">
 
                     @foreach (var user in Model.Users)
@@ -106,7 +106,7 @@
                     Project
                 </label>
 
-                <select asp-for="Task.ProjectId"
+                <select asp-for="ProjectId"
                         class="form-control-custom">
 
                     @foreach (var project in Model.Projects)
@@ -132,10 +132,10 @@
 
                 <div class="form-check mt-2">
 
-                    <input asp-for="Task.IsCompleted"
+                    <input asp-for="IsCompleted"
                            class="form-check-input" />
 
-                    <label asp-for="Task.IsCompleted"
+                    <label asp-for="IsCompleted"
                            class="form-check-label">
 
                         Completed

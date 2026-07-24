@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskDeleteVm
 
 @{
     ViewData["Title"] = "Delete Task";
@@ -37,7 +37,7 @@
 
                 <strong>
 
-                    @Model.Task.Title
+                    @Model.Title
 
                 </strong>
 
@@ -49,7 +49,7 @@
 
                 <strong>
 
-                    @(Model.Task.Project?.ProjectName ?? "-")
+                    @(Model.ProjectName ?? "-")
 
                 </strong>
 
@@ -61,7 +61,7 @@
 
                 <strong>
 
-                    @(Model.Task.User?.FirstName ?? "-")
+                    @(Model.UserName ?? "-")
 
                 </strong>
 
@@ -73,7 +73,7 @@
 
                 <strong>
 
-                    @(Model.Task.IsCompleted
+                    @(Model.IsCompleted
                         ? "Completed"
                         : "In Progress")
 
@@ -86,7 +86,7 @@
         <form asp-action="Delete"
               method="post">
 
-            <input asp-for="Task.Id"
+            <input asp-for="Id"
                    type="hidden" />
 
             <div class="delete-buttons">

@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskDetailsVm
 
 @{
     ViewData["Title"] = "Task Details";
@@ -26,7 +26,7 @@
     <div>
 
         <a asp-action="Edit"
-           asp-route-id="@Model.Task.Id"
+           asp-route-id="@Model.Id"
            class="btn-primary-custom">
 
             <i class="fa-solid fa-pen"></i>

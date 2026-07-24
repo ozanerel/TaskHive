@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskCreateVm
 
 @{
     ViewData["Title"] = "Create Task";
@@ -40,10 +40,10 @@
 
                 </label>
 
-                <input asp-for="Task.Title"
+                <input asp-for="Title"
                        class="form-control-custom" />
 
-                <span asp-validation-for="Task.Title"
+                <span asp-validation-for="Title"
                       class="text-danger"></span>
 
             </div>
@@ -56,7 +56,7 @@
 
                 </label>
 
-                <textarea asp-for="Task.Description"
+                <textarea asp-for="Description"
                           rows="5"
                           class="form-control-custom"></textarea>
 
@@ -70,7 +70,7 @@
 
                 </label>
 
-                <select asp-for="Task.Priority"
+                <select asp-for="Priority"
                         class="form-control-custom">
 
                     <option value="Low">Low</option>
@@ -93,7 +93,7 @@
 
                 </label>
 
-                <select asp-for="Task.UserId"
+                <select asp-for="UserId"
                         class="form-control-custom">
 
                     <option value="">
@@ -123,7 +123,7 @@
 
                 </label>
 
-                <select asp-for="Task.ProjectId"
+                <select asp-for="ProjectId"
                         class="form-control-custom">
 
                     <option value="">
