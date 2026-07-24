@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Managers.Concretes;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -25,7 +26,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         {
             var tasks = await _taskManager.GetAllAsync();
 
-            TaskPageVm vm = new()
+            TaskIndexVm vm = new()
             {
                 Tasks = tasks
             };
@@ -35,14 +36,25 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var task = await _taskManager.GetByIdAsync(id);
+            var task = await _taskManager.GetTaskDetailsAsync(id);
 
             if (task == null)
                 return NotFound();
 
-            TaskPageVm vm = new()
+            TaskDetailsVm vm = new()
             {
-                Task = task
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Priority = task.Priority,
+                IsCompleted = task.IsCompleted,
+                //User = task.User,
+                //Project = task.Project,
+                //TaskComments = task.TaskComments?.ToList() ?? new()
+
+                UserName = task.User.FirstName,
+                ProjectName = task.Project.ProjectName,
+                Comments = task.TaskComments?.ToList() ?? new()
             };
 
             return View(vm);
@@ -50,20 +62,26 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            TaskPageVm vm = new();
+            //TaskPageVm vm = new();
 
-            vm.Task = new ENTITIES.Models.Task();
+            //vm.Task = new ENTITIES.Models.Task();
 
-            vm.Users = await _userManager.GetAllAsync();
+            //vm.Users = await _userManager.GetAllAsync();
 
-            vm.Projects = await _projectManager.GetAllAsync();
+            //vm.Projects = await _projectManager.GetAllAsync();
+
+            TaskCreateVm vm = new()
+            {
+                Users = await _userManager.GetAllAsync(),
+                Projects = await _projectManager.GetAllAsync()
+            };
 
             return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaskPageVm vm)
+        public async Task<IActionResult> Create(TaskCreateVm vm)
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +91,16 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 return View(vm);
             }
 
-            await _taskManager.CreateAsync(vm.Task);
+            ENTITIES.Models.Task task = new()
+            {
+                Title = vm.Title,
+                Description = vm.Description,
+                Priority = vm.Priority,
+                UserId = vm.UserId,
+                ProjectId = vm.ProjectId
+            };
+
+            await _taskManager.CreateAsync(task);
 
             return RedirectToAction(nameof(Index));
         }
@@ -85,9 +112,15 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (task == null)
                 return NotFound();
 
-            TaskPageVm vm = new()
+            TaskUpdateVm vm = new()
             {
-                Task = task,
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Priority = task.Priority,
+                UserId = task.UserId,
+                ProjectId = task.ProjectId,
+                IsCompleted = task.IsCompleted,
                 Users = await _userManager.GetAllAsync(),
                 Projects = await _projectManager.GetAllAsync()
             };
@@ -97,7 +130,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TaskPageVm vm)
+        public async Task<IActionResult> Edit(TaskUpdateVm vm)
         {
             if (!ModelState.IsValid)
             {
@@ -107,7 +140,19 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 return View(vm);
             }
 
-            await _taskManager.UpdateAsync(vm.Task);
+            var task = await _taskManager.GetByIdAsync(vm.Id);
+
+            if (task == null)
+                return NotFound();
+
+            task.Title = vm.Title;
+            task.Description = vm.Description;
+            task.Priority = vm.Priority;
+            task.UserId = vm.UserId;
+            task.ProjectId = vm.ProjectId;
+            task.IsCompleted = vm.IsCompleted;
+
+            await _taskManager.UpdateAsync(task);
 
             return RedirectToAction(nameof(Index));
         }
@@ -119,9 +164,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (task == null)
                 return NotFound();
 
-            TaskPageVm vm = new()
+            TaskDeleteVm vm = new()
             {
-                Task = task
+                Id = task.Id,
+                Title = task.Title,
+                UserName = task.User?.FirstName,
+                ProjectName = task.Project?.ProjectName,
+                IsCompleted = task.IsCompleted
             };
 
             return View(vm);
@@ -129,9 +178,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(TaskPageVm vm)
+        public async Task<IActionResult> Delete(TaskDeleteVm vm)
         {
-            var task = await _taskManager.GetByIdAsync(vm.Task.Id);
+            var task = await _taskManager.GetByIdAsync(vm.Id);
 
             if (task == null)
                 return NotFound();
