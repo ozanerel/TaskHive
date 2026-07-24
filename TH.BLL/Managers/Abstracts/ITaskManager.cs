@@ -18,5 +18,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<TH.ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId);
 
         Task CompleteTaskAsync(int taskId);
+
+        Task<ENTITIES.Models.Task> GetTaskDetailsAsync(int id);
     }
 }

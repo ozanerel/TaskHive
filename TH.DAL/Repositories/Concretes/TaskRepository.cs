@@ -50,5 +50,14 @@ namespace TH.DAL.Repositories.Concretes
                 .Take(10)
                 .ToListAsync();
         }
+
+        public async Task<ENTITIES.Models.Task> GetTaskDetailsAsync(int id)
+        {
+            return await _context.Tasks
+                .Include(x => x.Project)
+                .Include(x => x.User)
+                .Include(x => x.TaskComments)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

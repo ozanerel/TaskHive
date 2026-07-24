@@ -67,5 +67,10 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.GetTasksByUserAsync(userId);
         }
+
+        public async Task<ENTITIES.Models.Task> GetTaskDetailsAsync(int id)
+        {
+            return await _repository.GetTaskDetailsAsync(id);
+        }
     }
 }
