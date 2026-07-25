@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskDetailsVm
 
 <div class="dashboard-card">
 
@@ -8,7 +8,7 @@
 
     </h3>
 
-    @if (Model.Task.IsCompleted)
+    @if (Model.IsCompleted)
     {
         <div class="status-badge completed">
 

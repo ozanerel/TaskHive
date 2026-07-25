@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskDetailsVm
 
 <div class="dashboard-card">
 
@@ -12,7 +12,7 @@
 
         <a asp-controller="TaskComment"
            asp-action="Index"
-           asp-route-taskId="@Model.Task.Id"
+           asp-route-taskId="@Model.Id"
            class="btn-outline-custom">
 
             View All
@@ -21,10 +21,10 @@
 
     </div>
 
-    @if (Model.Task.TaskComments != null &&
-    Model.Task.TaskComments.Any())
+    @if (Model.Comments != null &&
+    Model.Comments.Any())
     {
-        foreach (var comment in Model.Task.TaskComments.Take(3))
+        foreach (var comment in Model.Comments.Take(3))
         {
             <div class="activity">
 

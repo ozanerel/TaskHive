@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskDetailsVm
 
 <div class="dashboard-card">
 
@@ -14,7 +14,7 @@
 
             <th>Title</th>
 
-            <td>@Model.Task.Title</td>
+            <td>@Model.Title</td>
 
         </tr>
 
@@ -24,7 +24,7 @@
 
             <td>
 
-                @(Model.Task.Project?.ProjectName ?? "-")
+                @(Model.ProjectName ?? "-")
 
             </td>
 
@@ -34,11 +34,17 @@
 
             <th>Assigned User</th>
 
+          @*   <td>
+
+                @(Model.User != null
+                    ? Model.User.FirstName + " " + Model.User.LastName
+                    : "-")
+
+            </td> *@
+
             <td>
 
-                @(Model.Task.User != null
-                    ? Model.Task.User.FirstName + " " + Model.Task.User.LastName
-                    : "-")
+                @(Model.UserName ?? "-")
 
             </td>
 
@@ -48,7 +54,7 @@
 
             <th>Priority</th>
 
-            <td>@Model.Task.Priority</td>
+            <td>@Model.Priority</td>
 
         </tr>
 

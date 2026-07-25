@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskDetailsVm
 
 <div class="dashboard-card">
 
@@ -10,9 +10,9 @@
 
     <p>
 
-        @(string.IsNullOrWhiteSpace(Model.Task.Description)
+        @(string.IsNullOrWhiteSpace(Model.Description)
             ? "No description available."
-            : Model.Task.Description)
+            : Model.Description)
 
     </p>
 
