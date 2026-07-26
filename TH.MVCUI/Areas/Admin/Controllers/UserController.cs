@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.MVCUI.Areas.Admin.Models.PageVMs.UserVM;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly IUserManager _userManager;
@@ -13,11 +17,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         public UserController(IUserManager userManager,IRoleManager roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            UserPageVm vm = new UserPageVm()
+            UserIndexVm vm = new UserIndexVm()
             {
                 Users = await _userManager.GetAllAsync()
             };
@@ -32,9 +37,15 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
-            UserPageVm vm = new()
+            UserDetailsVm vm = new()
             {
-                User = user
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                RoleName = user.Role?.Name,
+                Projects = user.Projects?.ToList() ?? new(),
+                Tasks = user.Tasks?.ToList() ?? new()
             };
 
             return View(vm);
@@ -42,20 +53,34 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Roles = await _roleManager.GetAllAsync();
+            //ViewBag.Roles = await _roleManager.GetAllAsync();
+            UserCreateVm vm = new()
+            {
+                Roles = await _roleManager.GetAllAsync()
+            };
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(UserCreateVm vm)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Roles = await _roleManager.GetAllAsync();
+                //ViewBag.Roles = await _roleManager.GetAllAsync();
+                vm.Roles = await _roleManager.GetAllAsync();
 
-                return View(user);
+                return View(vm);
             }
+
+            User user = new()
+            {
+                FirstName = vm.FirstName,
+                LastName = vm.LastName,
+                Email = vm.Email,
+                RoleId = vm.RoleId
+            };
+
 
             await _userManager.CreateAsync(user);
 
@@ -69,18 +94,39 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
-            ViewBag.Roles = await _roleManager.GetAllAsync();
+            //ViewBag.Roles = await _roleManager.GetAllAsync();
+
+            UserUpdateVm vm = new()
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                RoleId = user.RoleId,
+                Roles = await _roleManager.GetAllAsync()
+            };
+
 
             return View(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UserPageVm vm)
+        public async Task<IActionResult> Edit(UserUpdateVm vm)
         {
             if (!ModelState.IsValid)
+            {
+                vm.Roles = await _roleManager.GetAllAsync();
                 return View(vm);
+            }
 
-            await _userManager.UpdateAsync(vm.User);
+            var user = await _userManager.GetByIdAsync(vm.Id);
+
+            user.FirstName = vm.FirstName;
+            user.LastName = vm.LastName;
+            user.Email = vm.Email;
+            user.RoleId = vm.RoleId;
+
+            await _userManager.UpdateAsync(user);
 
             return RedirectToAction(nameof(Index));
         }
@@ -92,13 +138,29 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (user == null)
                 return NotFound();
 
+            UserDeleteVm vm = new()
+            {
+                Id = user.Id,
+                FullName = user.FirstName + " " + user.LastName,
+                Email = user.Email,
+                RoleName = user.Role?.Name ?? "No Role",
+                ProjectCount = user.Projects?.Count ?? 0,
+                TaskCount = user.Tasks?.Count ?? 0,
+                Status = user.Status
+            };
+
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(User user)
+        public async Task<IActionResult> Delete(UserDeleteVm vm)
         {
+            var user = await _userManager.GetByIdAsync(vm.Id);
+
+            if (user == null)
+                return NotFound();
+
             await _userManager.MakePassiveAsync(user);
 
             return RedirectToAction(nameof(Index));
