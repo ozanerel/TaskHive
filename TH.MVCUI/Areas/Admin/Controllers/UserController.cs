@@ -45,7 +45,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Email = user.Email,
                 RoleName = user.Role?.Name,
                 Projects = user.Projects?.ToList() ?? new(),
-                Tasks = user.Tasks?.ToList() ?? new()
+                Tasks = user.Tasks?.ToList() ?? new(),
+                Status = user.Status,
+                CreatedDate = user.CreatedDate
             };
 
             return View(vm);

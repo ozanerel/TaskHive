@@ -51,9 +51,12 @@
 
                 <span class="user-role">
 
-                    @(Model.Role != null
-                        ? Model.Role.Name
-                        : "No Role")
+                    @* @(Model.Role != null
+                        ? Model.RoleName
+                        : "No Role") *@
+
+                    @(Model.RoleName ?? "No Role")
+
 
                 </span>
 
@@ -73,7 +76,8 @@
 
                     <h2>
 
-                        @(Model.Projects?.Count ?? 0)
+                        @* @(Model.Projects?.Count ?? 0) *@
+						@Model.ProjectCount
 
                     </h2>
 
@@ -85,7 +89,8 @@
 
                     <h2>
 
-                        @(Model.Tasks?.Count ?? 0)
+                        @* @(Model.Tasks?.Count ?? 0) *@
+                        @Model.TaskCount
 
                     </h2>
 
