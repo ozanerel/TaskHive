@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RolePageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RoleVM.RoleDeleteVm
 
 @{
     ViewData["Title"] = "Delete Role";
@@ -41,7 +41,7 @@
 
         <div class="form-control">
 
-            @Model.Role.Name
+            @Model.RoleName
 
         </div>
 
@@ -57,7 +57,7 @@
 
         <div class="form-control" style="min-height:120px;">
 
-            @Model.Role.Description
+            @Model.Description
 
         </div>
 
@@ -65,7 +65,7 @@
 
     <form asp-action="Delete" method="post">
 
-        <input asp-for="Role.Id" type="hidden" />
+        <input asp-for="Id" type="hidden" />
 
         <div class="d-flex justify-content-end gap-3">
 

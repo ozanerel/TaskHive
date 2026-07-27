@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RolePageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RoleVM.RoleDetailsVm
 
 @{
     ViewData["Title"] = "Role Details";
@@ -33,7 +33,7 @@
 
                 <div class="form-control">
 
-                    @Model.Role.Name
+                    @Model.RoleName
 
                 </div>
 
@@ -53,7 +53,7 @@
 
         <div class="form-control" style="min-height:120px;">
 
-            @Model.Role.Description
+            @Model.Description
 
         </div>
 
@@ -71,7 +71,8 @@
 
             <div class="form-control">
 
-                @(Model.Role.Users?.Count ?? 0)
+                @* @(Model.Users?.Count ?? 0) *@
+				@Model.UserCount
 
             </div>
 
@@ -87,7 +88,7 @@
 
             <div class="form-control">
 
-                @Model.Role.Status
+                @Model.Status
 
             </div>
 
@@ -103,7 +104,7 @@
 
             <div class="form-control">
 
-                @Model.Role.CreatedDate.ToString("dd.MM.yyyy")
+                @Model.CreatedDate.ToString("dd.MM.yyyy")
 
             </div>
 
@@ -123,7 +124,7 @@
         </a>
 
         <a asp-action="Edit"
-           asp-route-id="@Model.Role.Id"
+           asp-route-id="@Model.Id"
            class="btn-primary-custom">
 
             <i class="fa-solid fa-pen"></i>

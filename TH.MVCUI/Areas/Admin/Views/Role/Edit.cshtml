@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RolePageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RoleVM.RoleUpdateVm
 
 @{
     ViewData["Title"] = "Edit Role";
@@ -21,7 +21,7 @@
 
     <form asp-action="Edit" method="post">
 
-        <input asp-for="Role.Id" type="hidden" />
+        <input asp-for="Id" type="hidden" />
 
         <div class="row">
 
@@ -29,17 +29,17 @@
 
                 <div class="mb-4">
 
-                    <label asp-for="Role.Name"
+                    <label asp-for="RoleName"
                            class="form-label">
 
                         Role Name
 
                     </label>
 
-                    <input asp-for="Role.Name"
+                    <input asp-for="RoleName"
                            class="form-control" />
 
-                    <span asp-validation-for="Role.Name"
+                    <span asp-validation-for="RoleName"
                           class="text-danger">
                     </span>
 
@@ -51,19 +51,19 @@
 
         <div class="mb-4">
 
-            <label asp-for="Role.Description"
+            <label asp-for="Description"
                    class="form-label">
 
                 Description
 
             </label>
 
-            <textarea asp-for="Role.Description"
+            <textarea asp-for="Description"
                       rows="5"
                       class="form-control">
             </textarea>
 
-            <span asp-validation-for="Role.Description"
+            <span asp-validation-for="Description"
                   class="text-danger">
             </span>
 

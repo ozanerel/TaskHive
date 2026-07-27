@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RolePageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.RoleVM.RoleCreateVm
 
 @{
     ViewData["Title"] = "Create Role";
@@ -27,13 +27,13 @@
 
                 <div class="mb-4">
 
-                    <label asp-for="Role.Name" class="form-label">
+                    <label asp-for="RoleName" class="form-label">
                         Role Name
                     </label>
 
-                    <input asp-for="Role.Name" class="form-control" />
+                    <input asp-for="RoleName" class="form-control" />
 
-                    <span asp-validation-for="Role.Name"
+                    <span asp-validation-for="RoleName"
                           class="text-danger">
                     </span>
 
@@ -45,17 +45,17 @@
 
         <div class="mb-4">
 
-            <label asp-for="Role.Description"
+            <label asp-for="Description"
                    class="form-label">
                 Description
             </label>
 
-            <textarea asp-for="Role.Description"
+            <textarea asp-for="Description"
                       rows="5"
                       class="form-control">
             </textarea>
 
-            <span asp-validation-for="Role.Description"
+            <span asp-validation-for="Description"
                   class="text-danger">
             </span>
 
