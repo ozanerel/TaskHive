@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.MVCUI.Areas.Admin.Models.PageVMs.RoleVM;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -19,7 +20,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var vm = new RolePageVm
+            RoleIndexVm vm = new()
             {
                 Roles = await _roleManager.GetAllAsync()
             };
@@ -29,22 +30,24 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            RolePageVm vm = new RolePageVm()
-            {
-                Role = new Role()
-            };
 
-            return View(vm);
+            return View(new RoleCreateVm());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RolePageVm vm)
+        public async Task<IActionResult> Create(RoleCreateVm vm)
         {
             if (!ModelState.IsValid)
                 return View(vm);
 
-            await _roleManager.CreateAsync(vm.Role);
+            Role role = new()
+            {
+                Name = vm.RoleName,
+                Description = vm.Description
+            };
+
+            await _roleManager.CreateAsync(role);
 
             return RedirectToAction(nameof(Index));
         }
@@ -56,9 +59,14 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (role == null)
                 return NotFound();
 
-            RolePageVm vm = new()
+            RoleDetailsVm vm = new()
             {
-                Role = role
+                Id = role.Id,
+                RoleName = role.Name,
+                Description = role.Description,
+                Users = role.Users?.ToList() ?? new(),
+                Status = role.Status,
+                CreatedDate = role.CreatedDate
             };
 
             return View(vm);
@@ -71,9 +79,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (role == null)
                 return NotFound();
 
-            RolePageVm vm = new()
+            RoleUpdateVm vm = new()
             {
-                Role = role
+                Id = role.Id,
+                RoleName = role.Name,
+                Description = role.Description
             };
 
             return View(vm);
@@ -81,12 +91,18 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(RolePageVm vm)
+        public async Task<IActionResult> Edit(RoleUpdateVm vm)
         {
             if (!ModelState.IsValid)
                 return View(vm);
 
-            await _roleManager.UpdateAsync(vm.Role);
+            var role = await _roleManager.GetByIdAsync(vm.Id);
+
+            role.Name = vm.RoleName;
+            role.Description = vm.Description;
+
+
+            await _roleManager.UpdateAsync(role);
 
             return RedirectToAction(nameof(Index));
         }
@@ -98,9 +114,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (role == null)
                 return NotFound();
 
-            RolePageVm vm = new()
+            RoleDeleteVm vm = new()
             {
-                Role = role
+                Id = role.Id,
+                RoleName = role.Name,
+                Description = role.Description
             };
 
             return View(vm);
@@ -108,9 +126,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(RolePageVm vm)
+        public async Task<IActionResult> Delete(RoleDeleteVm vm)
         {
-            await _roleManager.MakePassiveAsync(vm.Role);
+            var role = await _roleManager.GetByIdAsync(vm.Id);
+
+            await _roleManager.MakePassiveAsync(role);
 
             return RedirectToAction(nameof(Index));
         }
