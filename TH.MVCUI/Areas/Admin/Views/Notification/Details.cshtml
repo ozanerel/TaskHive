@@ -1,4 +1,4 @@
-﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.NotificationPageVm
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.NotificationVM.NotificationDetailsVm
 
 @{
     ViewData["Title"] = "Notification Details";
@@ -29,13 +29,13 @@
 
             <h2>
 
-                @Model.Notification.Title
+                @Model.Title
 
             </h2>
 
             <p class="text-muted">
 
-                @Model.Notification.NotificationDate.ToString("dd.MM.yyyy HH:mm")
+                @Model.NotificationDate.ToString("dd.MM.yyyy HH:mm")
 
             </p>
 
@@ -43,7 +43,7 @@
 
         <span class="status-badge">
 
-            @(Model.Notification.IsRead ? "Read" : "Unread")
+            @(Model.IsRead ? "Read" : "Unread")
 
         </span>
 
@@ -59,7 +59,7 @@
 
     <p class="text-muted">
 
-        @Model.Notification.Message
+        @Model.Message
 
     </p>
 
@@ -73,8 +73,8 @@
 
             <p>
 
-                @(Model.Notification.User != null
-                    ? Model.Notification.User.FirstName + " " + Model.Notification.User.LastName
+                @(Model.User != null
+                    ? Model.User.FirstName + " " + Model.User.LastName
                     : "-")
 
             </p>
@@ -87,7 +87,7 @@
 
             <p>
 
-                @(Model.Notification.IsRead ? "Read" : "Unread")
+                @(Model.IsRead ? "Read" : "Unread")
 
             </p>
 
@@ -104,10 +104,10 @@
 
         </a>
 
-        @if (!Model.Notification.IsRead)
+        @if (!Model.IsRead)
         {
             <a asp-action="MarkAsRead"
-               asp-route-id="@Model.Notification.Id"
+               asp-route-id="@Model.Id"
                class="btn-primary-custom">
 
                 <i class="fa-solid fa-check"></i>
