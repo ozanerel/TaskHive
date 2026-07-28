@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.MVCUI.Areas.Admin.Models.PageVMs.NotificationVM;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -18,7 +19,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            NotificationPageVm vm = new()
+            NotificationIndexVm vm = new()
             {
                 Notifications = await _notificationManager.GetAllAsync()
             };
@@ -33,9 +34,14 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (notification == null)
                 return NotFound();
 
-            NotificationPageVm vm = new()
+            NotificationDetailsVm vm = new()
             {
-                Notification = notification
+                Id = notification.Id,
+                Title = notification.Title,
+                Message = notification.Message,
+                NotificationDate = notification.NotificationDate,
+                IsRead = notification.IsRead,
+                User = notification.User
             };
 
             return View(vm);
