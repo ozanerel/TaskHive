@@ -61,6 +61,21 @@
 
                 </div>
 
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Password
+                    </label>
+
+                    <input asp-for="Password"
+                           type="password"
+                           class="form-control" />
+
+                    <span asp-validation-for="Password"
+                          class="text-danger"></span>
+
+                </div>
+
             </div>
 
             <!-- RIGHT -->
@@ -120,6 +135,23 @@
                         }
 
                     </select>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Confirm Password
+
+                    </label>
+
+                    <input asp-for="ConfirmPassword"
+                           type="password"
+                           class="form-control" />
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="text-danger"></span>
 
                 </div>
 
