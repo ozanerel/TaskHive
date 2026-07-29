@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
 using TH.MVCUI.Areas.Admin.Models.PageVMs.UserVM;
@@ -13,11 +15,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
     {
         private readonly IUserManager _userManager;
         private readonly IRoleManager _roleManager;
+        private readonly UserManager<AppUser> _identityManager;
 
-        public UserController(IUserManager userManager,IRoleManager roleManager)
+        public UserController(IUserManager userManager,IRoleManager roleManager,UserManager<AppUser> identityManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _identityManager = identityManager;
         }
 
         public async Task<IActionResult> Index()
@@ -61,7 +65,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Roles = await _roleManager.GetAllAsync()
             };
 
-            return View();
+            return View(vm);
         }
 
         [HttpPost]
@@ -75,6 +79,28 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 return View(vm);
             }
 
+            var appUser = new AppUser
+            {
+                UserName = vm.Email,
+                Email = vm.Email,
+                CreatedDate = DateTime.Now,
+                Status = DataStatus.Inserted
+            };
+
+            var result = await _identityManager.CreateAsync(appUser, vm.Password); // You can set a default password or generate one
+
+            if (!result.Succeeded)
+            {
+                vm.Roles = await _roleManager.GetAllAsync();
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(vm);
+            }
+
             User user = new()
             {
                 FirstName = vm.FirstName,
@@ -83,7 +109,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 RoleId = vm.RoleId
             };
 
-
+            
             await _userManager.CreateAsync(user);
 
             return RedirectToAction(nameof(Index));
@@ -109,7 +135,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             };
 
 
-            return View(user);
+            return View(vm);
         }
 
         [HttpPost]
