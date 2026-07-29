@@ -100,12 +100,22 @@
 
                         </option>
 
-                        @foreach (var role in ViewBag.Roles)
+                        @* @foreach (var role in ViewBag.Roles)
                         {
                             <option value="@role.Id">
 
                                 @role.Name
 
+                            </option>
+                        } *@
+
+                        
+
+                        @foreach (var role in Model.Roles)
+                        {
+                            <option value="@role.Id"
+                                    selected="@(Model.RoleId == role.Id)">
+                                @role.Name
                             </option>
                         }
 

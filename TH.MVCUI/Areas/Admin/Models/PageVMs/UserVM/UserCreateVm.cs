@@ -11,7 +11,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.UserVM
 
         public string Email { get; set; }
 
-        //public string Password { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Role selection is required.")]
         public int RoleId { get; set; }
