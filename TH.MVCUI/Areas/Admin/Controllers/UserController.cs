@@ -69,11 +69,25 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserCreateVm vm)
         {
+
+            //if (!ModelState.IsValid)
+            //{
+            //    //ViewBag.Roles = await _roleManager.GetAllAsync();
+            //    vm.Roles = await _roleManager.GetAllAsync();
+
+            //    return View(vm);
+            //}
+
             if (!ModelState.IsValid)
             {
-                //ViewBag.Roles = await _roleManager.GetAllAsync();
+                foreach (var error in ModelState.Values.SelectMany(x => x.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+
                 vm.Roles = await _roleManager.GetAllAsync();
 
                 return View(vm);
@@ -89,16 +103,24 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
             var result = await _identityManager.CreateAsync(appUser, vm.Password); // You can set a default password or generate one
 
+            //if (!result.Succeeded)
+            //{
+            //    vm.Roles = await _roleManager.GetAllAsync();
+
+            //    foreach (var error in result.Errors)
+            //    {
+            //        ModelState.AddModelError("", error.Description);
+            //    }
+
+            //    return View(vm);
+            //}
+
             if (!result.Succeeded)
             {
-                vm.Roles = await _roleManager.GetAllAsync();
-
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    Console.WriteLine(error.Description);
                 }
-
-                return View(vm);
             }
 
             User user = new()
@@ -106,7 +128,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 FirstName = vm.FirstName,
                 LastName = vm.LastName,
                 Email = vm.Email,
-                RoleId = vm.RoleId
+                RoleId = vm.RoleId.Value,
+                AppUserId= appUser.Id
             };
 
             
@@ -177,7 +200,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Status = user.Status
             };
 
-            return View(user);
+            return View(vm);
         }
 
         [HttpPost]
