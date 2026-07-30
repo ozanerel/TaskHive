@@ -14,11 +14,13 @@ namespace TH.BLL.Managers.Concretes
     public class TaskManager : BaseManager<TH.ENTITIES.Models.Task>,ITaskManager
     {
         private readonly ITaskRepository _repository;
+        private readonly INotificationManager _notificationManager;
 
-        public TaskManager(ITaskRepository repository)
+        public TaskManager(ITaskRepository repository, INotificationManager notificationManager)
             : base(repository)
         {
             _repository = repository;
+            _notificationManager = notificationManager;
         }
 
         public async Task AssignTaskAsync(int taskId, int userId)
@@ -29,6 +31,8 @@ namespace TH.BLL.Managers.Concretes
                 return;
 
             task.UserId = userId;
+
+            await _notificationManager.CreateNotificationAsync(userId,"New Task",$"{task.Title} assigned to you.");
 
             await _repository.UpdateAsync(task, task);
         }
@@ -54,6 +58,8 @@ namespace TH.BLL.Managers.Concretes
 
             task.IsCompleted = true;
             task.UpdatedDate = DateTime.Now;
+
+            await _notificationManager.CreateNotificationAsync(task.UserId,"Task Completed",$"{task.Title} completed.");
 
             await _repository.UpdateAsync(task, task);
         }

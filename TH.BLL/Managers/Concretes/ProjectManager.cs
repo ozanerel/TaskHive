@@ -7,17 +7,31 @@ using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
 using TH.ENTITIES.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace TH.BLL.Managers.Concretes
 {
     public class ProjectManager : BaseManager<Project>, IProjectManager
     {
         private readonly IProjectRepository _repository;
+        private readonly INotificationManager _notificationManager;
 
-        public ProjectManager(IProjectRepository repository)
+        public ProjectManager(IProjectRepository repository, INotificationManager notificationManager)
             : base(repository)
         {
             _repository = repository;
+            _notificationManager = notificationManager;
+        }
+
+        public override async Task CreateAsync(Project project)
+        {
+            await base.CreateAsync(project);
+
+            await _notificationManager.CreateNotificationAsync(
+                1, // Admin Id
+                "New Project",
+                $"{project.ProjectName} created."
+            );
         }
 
         public async Task<Project> GetProjectDetailsAsync(int projectId)

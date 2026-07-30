@@ -18,7 +18,7 @@ namespace TH.BLL.Managers.Concretes
         {
             _repository = repository;
         }
-        public async Task CreateAsync(T entity)
+        public virtual async Task CreateAsync(T entity)
         {
             entity.CreatedDate = DateTime.Now;
             entity.Status = DataStatus.Inserted;
