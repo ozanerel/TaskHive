@@ -14,6 +14,7 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs
         public List<Notification> RecentNotifications { get; set; } = new();
         public int UnreadNotificationCount { get; set; }
         public List<Notification> Notifications { get; set; }
+        public List<User> RecentUsers { get; set; }
 
     }
 }

@@ -56,7 +56,18 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 RecentNotifications = notifications
                     .OrderByDescending(x => x.CreatedDate)
                     .Take(5)
-                    .ToList()
+                    .ToList(),
+
+                RecentUsers = users
+                .OrderByDescending(x => x.CreatedDate)
+                .Take(5)
+                .ToList(),
+
+                Notifications = notifications,
+
+                UnreadNotificationCount = notifications.Count(x => !x.IsRead)
+
+
             };
 
             return View(vm);
