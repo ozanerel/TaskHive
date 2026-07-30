@@ -15,6 +15,10 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs
         public int UnreadNotificationCount { get; set; }
         public List<Notification> Notifications { get; set; }
         public List<User> RecentUsers { get; set; }
+        public int CompletionRate { get; set; }
+        public int PendingTasks { get; set; }
+
+        public int InProgressTasks { get; set; }
 
     }
 }

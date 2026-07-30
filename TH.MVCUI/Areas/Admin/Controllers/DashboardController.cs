@@ -41,6 +41,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 TotalProjects = projects.Count,
                 TotalTasks = tasks.Count,
                 CompletedTasks = tasks.Count(x => x.IsCompleted),
+                PendingTasks = tasks.Count(x => !x.IsCompleted),
+
+                InProgressTasks = tasks.Count(x =>
+                    !x.IsCompleted &&
+                    x.Status == TH.ENTITIES.Enums.DataStatus.Updated),
+                CompletionRate = tasks.Count == 0 ? 0 : (tasks.Count(x => x.IsCompleted) * 100) / tasks.Count,
+
                 TotalUsers = users.Count,
 
                 RecentProjects = projects
