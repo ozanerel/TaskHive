@@ -11,6 +11,8 @@ namespace TH.MVCUI.Areas.Member.Models.PageVMs
         public int TotalUsers { get; set; }
         public List<Project> RecentProjects { get; set; }
         public List<ENTITIES.Models.Task> RecentTasks { get; set; }
+        public int UnreadNotificationCount { get; set; }
+        public List<Notification> Notifications { get; set; }
 
     }
 }

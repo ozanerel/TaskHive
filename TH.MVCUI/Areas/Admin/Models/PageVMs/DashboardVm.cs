@@ -12,6 +12,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs
         public List<Project> RecentProjects { get; set; }
         public List<ENTITIES.Models.Task> RecentTasks { get; set; }
         public List<Notification> RecentNotifications { get; set; } = new();
+        public int UnreadNotificationCount { get; set; }
+        public List<Notification> Notifications { get; set; }
 
     }
 }
