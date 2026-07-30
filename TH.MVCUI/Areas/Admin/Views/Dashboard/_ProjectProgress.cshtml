@@ -1,8 +1,10 @@
-﻿<div class="dashboard-card">
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h3>Project Progress</h3>
+        <h3>System Progress</h3>
 
         <button class="btn btn-outline-primary btn-sm">
 
@@ -13,6 +15,22 @@
     </div>
 
     <canvas id="projectChart" height="260"></canvas>
+
+    <div class="text-center mt-4">
+
+        <h2>
+
+            @Model.CompletionRate%
+
+        </h2>
+
+        <p class="text-muted">
+
+            Task Completion Rate
+
+        </p>
+
+    </div>
 
 </div>
 
@@ -34,7 +52,12 @@
 
         datasets:[{
 
-        data:[52,24,18],
+        // data:[52,24,18],
+                data:[
+        @Model.CompletedTasks,
+        @Model.PendingTasks,
+        @Model.InProgressTasks
+        ]
 
         backgroundColor:[
 

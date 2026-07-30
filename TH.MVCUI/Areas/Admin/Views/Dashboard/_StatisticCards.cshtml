@@ -148,4 +148,55 @@
 
     </div>
 
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+
+                    Completion Rate
+
+                </div>
+
+                <div class="stat-value">
+
+                    @Model.CompletionRate%
+
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-purple">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="dashboard-card mt-3">
+
+        <div class="d-flex justify-content-between">
+
+            <span>Task Completion</span>
+
+            <span>@Model.CompletionRate%</span>
+
+        </div>
+
+        <div class="progress mt-2">
+
+            <div class="progress-bar"
+                 role="progressbar"
+                 style="width:@(Model.CompletionRate)%">
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
