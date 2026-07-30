@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
+using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs;
 
 namespace TH.MVCUI.Areas.Member.Controllers
@@ -14,17 +15,20 @@ namespace TH.MVCUI.Areas.Member.Controllers
         private readonly ITaskManager _taskManager;
         private readonly IUserManager _userManager;
         private readonly IUserContext _userContext;
+        private readonly INotificationManager _notificationManager;
 
         public DashboardController(
             IProjectManager projectManager,
             ITaskManager taskManager,
             IUserManager userManager,
-            IUserContext userContext)
+            IUserContext userContext,
+            INotificationManager notificationManager)
         {
             _projectManager = projectManager;
             _taskManager = taskManager;
             _userManager = userManager;
             _userContext = userContext;
+            _notificationManager = notificationManager;
         }
 
         public async Task<IActionResult> Index()
@@ -42,6 +46,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
             var projects = await _projectManager.GetProjectsByUserAsync(currentUser.Id);
 
             var tasks = await _taskManager.GetTasksByUserAsync(currentUser.Id);
+
+            //var notifications = await _notificationManager.GetAllAsync();
+            var notifications = await _notificationManager.GetNotificationsByUserAsync(currentUser.Id);
 
             DashboardVm vm = new()
             {
@@ -64,7 +71,21 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 RecentTasks = tasks
                     .OrderByDescending(x => x.CreatedDate)
                     .Take(5)
-                    .ToList()
+                .ToList(),
+
+                Notifications = notifications,
+
+                UnreadNotificationCount = notifications.Count(x => !x.IsRead),
+
+                RecentNotifications = notifications
+                .OrderByDescending(x => x.NotificationDate)
+                .Take(5).ToList(),
+
+                RecentUsers = projects
+                .SelectMany(x => x.Users)
+                .Distinct()
+                .Take(5)
+                .ToList()
             };
 
             return View(vm);
