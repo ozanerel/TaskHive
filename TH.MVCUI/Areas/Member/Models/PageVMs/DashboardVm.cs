@@ -15,6 +15,7 @@ namespace TH.MVCUI.Areas.Member.Models.PageVMs
         public List<Notification> Notifications { get; set; }
         public List<Notification> RecentNotifications { get; set; } = new();
         public List<User> RecentUsers { get; set; } = new();
+        public int CompletionRate { get; set; }
 
     }
 }

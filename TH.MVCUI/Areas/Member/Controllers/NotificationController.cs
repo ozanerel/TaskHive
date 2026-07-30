@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
 using TH.MVCUI.Areas.Member.Models.PageVMs;
@@ -7,6 +8,7 @@ using TH.MVCUI.Areas.Member.Models.PageVMs.NotificationVM;
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
+    [Authorize(Roles = "Member")]
     public class NotificationController : Controller
     {
         private readonly INotificationManager _notificationManager;

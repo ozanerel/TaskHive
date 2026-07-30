@@ -58,6 +58,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
                 CompletedTasks = tasks.Count(x => x.IsCompleted),
 
+                CompletionRate = tasks.Count == 0 ? 0 : (tasks.Count(x => x.IsCompleted) * 100) / tasks.Count,
+
                 TotalUsers = projects
                     .SelectMany(x => x.Users)
                     .Distinct()
