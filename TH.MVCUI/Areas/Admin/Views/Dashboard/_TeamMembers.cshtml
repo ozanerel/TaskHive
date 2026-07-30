@@ -19,7 +19,7 @@
 
     <div class="member-list">
 
-        @for (int i = 1; i <= Math.Min(Model.TotalUsers, 5); i++)
+        @* @for (int i = 1; i <= Math.Min(Model.TotalUsers, 5); i++)
         {
             <div class="member-item">
 
@@ -41,6 +41,26 @@
 
                     Active
 
+                </span>
+
+            </div>
+        } *@
+
+        @foreach (var user in Model.RecentUsers)
+        {
+            <div class="member-item">
+
+                <div class="member-avatar">
+                    @user.FirstName.Substring(0, 1)
+                </div>
+
+                <div class="member-info">
+                    <h5>@user.FirstName @user.LastName</h5>
+                    <span>@user.Role?.Name</span>
+                </div>
+
+                <span class="badge bg-success">
+                    Active
                 </span>
 
             </div>
