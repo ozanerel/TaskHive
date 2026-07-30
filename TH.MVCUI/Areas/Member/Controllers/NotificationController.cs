@@ -2,6 +2,7 @@
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
 using TH.MVCUI.Areas.Member.Models.PageVMs;
+using TH.MVCUI.Areas.Member.Models.PageVMs.NotificationVM;
 
 namespace TH.MVCUI.Areas.Member.Controllers
 {
@@ -21,7 +22,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
         {
             var user = await _userContext.GetCurrentUserAsync();
 
-            NotificationPageVm vm = new()
+            NotificationIndexVm vm = new()
             {
                 Notifications = await _notificationManager
                     .GetUnreadNotificationsAsync(user.Id)
@@ -42,9 +43,14 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (notification.UserId != user.Id)
                 return Forbid();
 
-            NotificationPageVm vm = new()
+            NotificationDetailsVm vm = new()
             {
-                Notification = notification
+                Id = notification.Id,
+                Title = notification.Title,
+                Message = notification.Message,
+                NotificationDate = notification.NotificationDate,
+                IsRead = notification.IsRead,
+                User = notification.User
             };
 
             return View(vm);
