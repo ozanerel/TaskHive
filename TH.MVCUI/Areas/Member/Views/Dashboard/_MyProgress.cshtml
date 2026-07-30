@@ -1,0 +1,33 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
+
+    <h3>
+
+        My Progress
+
+    </h3>
+
+    <br />
+
+    <h1 class="text-center">
+
+        @Model.CompletionRate%
+
+    </h1>
+
+    <div class="progress mt-3">
+
+        <div class="progress-bar bg-success"
+             style="width:@(Model.CompletionRate)%">
+        </div>
+
+    </div>
+
+    <p class="text-center mt-3 text-muted">
+
+        @Model.CompletedTasks of @Model.TotalTasks tasks completed.
+
+    </p>
+
+</div>
