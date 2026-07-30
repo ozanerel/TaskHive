@@ -22,11 +22,28 @@ namespace TH.BLL.Managers.Concretes
             _repository = repository;
         }
 
+        public async System.Threading.Tasks.Task CreateNotificationAsync(int userId, string title, string message)
+        {
+            Notification notification = new()
+            {
+                UserId = userId,
+                Title = title,
+                Message = message,
+                NotificationDate = DateTime.Now,
+                IsRead = false
+            };
+
+            await CreateAsync(notification);
+        }
+
         public async Task<List<Notification>> GetNotificationsByUserAsync(int userId)
         {
+            //return await _repository
+            //    .Where(x => x.UserId == userId)
+            //    .ToListAsync();
+
             return await _repository
-                .Where(x => x.UserId == userId)
-                .ToListAsync();
+    .GetNotificationsByUserAsync(userId);
         }
 
         public async Task<int> GetUnreadCountAsync(int userId)
@@ -40,9 +57,12 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<Notification>> GetUnreadNotificationsAsync(int userId)
         {
-            return _repository
-                .Where(x => x.UserId == userId && !x.IsRead)
-                .ToList();
+            //return _repository
+            //    .Where(x => x.UserId == userId && !x.IsRead)
+            //    .ToList();
+
+            return await _repository
+    .GetNotificationsByUserAsync(userId);
         }
 
         public async System.Threading.Tasks.Task MarkAsReadAsync(int notificationId)
@@ -56,5 +76,7 @@ namespace TH.BLL.Managers.Concretes
 
             await _repository.UpdateAsync(notification, notification);
         }
+
+
     }
 }

@@ -16,5 +16,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<Notification>> GetNotificationsByUserAsync(int userId);
 
         Task<int> GetUnreadCountAsync(int userId);
+
+        Task CreateNotificationAsync(int userId,string title,string message);
     }
 }
