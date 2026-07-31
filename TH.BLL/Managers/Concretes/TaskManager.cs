@@ -23,6 +23,22 @@ namespace TH.BLL.Managers.Concretes
             _notificationManager = notificationManager;
         }
 
+        public async Task CreateAsync(ENTITIES.Models.Task task)
+        {
+            await base.CreateAsync(task);
+
+
+            if (task.UserId > 0)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    task.UserId,
+                    "New Task Assigned",
+                    $"You have been assigned a new task: {task.Title}",
+                    NotificationType.TaskAssigned
+                );
+            }
+        }
+
         public async Task AssignTaskAsync(int taskId, int userId)
         {
             var task = await _repository.GetByIdAsync(taskId);
@@ -32,7 +48,7 @@ namespace TH.BLL.Managers.Concretes
 
             task.UserId = userId;
 
-            await _notificationManager.CreateNotificationAsync(userId,"New Task",$"{task.Title} assigned to you.");
+            await _notificationManager.CreateNotificationAsync(userId,"New Task",$"{task.Title} assigned to you.",NotificationType.TaskAssigned);
 
             await _repository.UpdateAsync(task, task);
         }
@@ -59,7 +75,7 @@ namespace TH.BLL.Managers.Concretes
             task.IsCompleted = true;
             task.UpdatedDate = DateTime.Now;
 
-            await _notificationManager.CreateNotificationAsync(task.UserId,"Task Completed",$"{task.Title} completed.");
+            await _notificationManager.CreateNotificationAsync(task.UserId,"Task Completed",$"{task.Title} completed.",NotificationType.TaskCompleted);
 
             await _repository.UpdateAsync(task, task);
         }
