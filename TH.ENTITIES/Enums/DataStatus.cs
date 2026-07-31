@@ -29,5 +29,16 @@ namespace TH.ENTITIES.Enums
         Critical = 4
     }
 
+    public enum NotificationType
+    {
+        TaskAssigned = 1,
+
+        TaskCompleted = 2,
+
+        ProjectCreated = 3,
+
+        CommentAdded = 4
+    }
+
 
 }

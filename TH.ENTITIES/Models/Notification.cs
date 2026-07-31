@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TH.ENTITIES.Enums;
 
 namespace TH.ENTITIES.Models
 {
@@ -12,6 +13,7 @@ namespace TH.ENTITIES.Models
         public DateTime NotificationDate { get; set; }
         public string Message { get; set; }
         public bool IsRead { get; set; }
+        public NotificationType Type { get; set; }
 
         public int UserId { get; set; }
         //Relational Properties
