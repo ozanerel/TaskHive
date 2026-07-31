@@ -1,6 +1,10 @@
 ﻿@model int
 
-<a asp-area="Member"
+@{
+    var area = User.IsInRole("Admin") ? "Admin" : "Member";
+}
+
+<a asp-area="@area"
    asp-controller="Notification"
    asp-action="Index"
    class="notification-link">

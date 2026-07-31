@@ -19,15 +19,26 @@ namespace TH.MVCUI.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            int count = 0;
 
-            if (user == null)
-                return View(0);
+            if (User.IsInRole("Admin"))
+            {
+                var notifications = await _notificationManager.GetAllAsync();
 
-            var notifications =
-                await _notificationManager.GetUnreadNotificationsAsync(user.Id);
+                count = notifications.Count(x => !x.IsRead);
+            }
+            else
+            {
+                var user = await _userContext.GetCurrentUserAsync();
 
-            return View(notifications.Count);
+                if (user != null)
+                {
+                    count = await _notificationManager
+                        .GetUnreadCountAsync(user.Id);
+                }
+            }
+
+            return View(count);
         }
     }
 }
