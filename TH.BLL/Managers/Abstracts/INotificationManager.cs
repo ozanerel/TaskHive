@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -17,6 +18,6 @@ namespace TH.BLL.Managers.Abstracts
 
         Task<int> GetUnreadCountAsync(int userId);
 
-        Task CreateNotificationAsync(int userId,string title,string message);
+        Task CreateNotificationAsync(int userId,string title,string message, NotificationType type);
     }
 }

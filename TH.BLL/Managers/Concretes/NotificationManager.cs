@@ -22,7 +22,7 @@ namespace TH.BLL.Managers.Concretes
             _repository = repository;
         }
 
-        public async System.Threading.Tasks.Task CreateNotificationAsync(int userId, string title, string message)
+        public async System.Threading.Tasks.Task CreateNotificationAsync(int userId, string title, string message, NotificationType type)
         {
             Notification notification = new()
             {
@@ -30,7 +30,8 @@ namespace TH.BLL.Managers.Concretes
                 Title = title,
                 Message = message,
                 NotificationDate = DateTime.Now,
-                IsRead = false
+                IsRead = false,
+                Type = type,
             };
 
             await CreateAsync(notification);
