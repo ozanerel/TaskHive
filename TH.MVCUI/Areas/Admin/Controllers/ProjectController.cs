@@ -11,10 +11,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
     public class ProjectController : Controller
     {
         private readonly IProjectManager _projectManager;
+        private readonly IUserManager _userManager;
 
-        public ProjectController(IProjectManager projectManager)
+        public ProjectController(IProjectManager projectManager,IUserManager userManager)
         {
             _projectManager = projectManager;
+            _userManager = userManager;
         }
 
         // Proje Listesi
@@ -52,9 +54,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         // GET
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ProjectCreateVm vm = new();
+            ProjectCreateVm vm = new()
+            {
+                Users = await _userManager.GetAllAsync()
+            };
             //vm.Project = new Project(); // Initialize the Project property
 
             return View(vm);
@@ -79,9 +84,20 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             Project project = new Project
             {
                 ProjectName = vm.ProjectName,
-                Description = vm.Description
+                Description = vm.Description,
+                Users = new List<User>(),
+
             };
 
+            foreach (var id in vm.UserIds)
+            {
+                var user = await _userManager.GetByIdAsync(id);
+
+                if (user != null)
+                {
+                    project.Users.Add(user);
+                }
+            }
 
             await _projectManager.CreateAsync(project);
 
