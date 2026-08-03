@@ -37,7 +37,17 @@ namespace TH.ENTITIES.Enums
 
         ProjectCreated = 3,
 
-        CommentAdded = 4
+        CommentAdded = 4,
+
+        Welcome = 5,
+
+        ProjectUpdated = 6,
+
+        TaskUpdated = 7,
+
+        TaskDeleted = 8,
+
+        UserCreated = 9
     }
 
 

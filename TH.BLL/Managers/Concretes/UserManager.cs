@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -29,7 +30,7 @@ namespace TH.BLL.Managers.Concretes
             await _notificationManager.CreateNotificationAsync(
                 user.Id,
                 "Welcome",
-                $"Welcome {user.FirstName}!"
+                $"Welcome {user.FirstName}!",NotificationType.Welcome
             );
         }
 

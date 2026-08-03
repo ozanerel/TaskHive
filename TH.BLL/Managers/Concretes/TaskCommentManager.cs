@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
 using TH.DAL.Repositories.Concretes;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -31,7 +32,7 @@ namespace TH.BLL.Managers.Concretes
             await _notificationManager.CreateNotificationAsync(
                 comment.Task.UserId,
                 "New Comment",
-                "Someone commented on your task."
+                "Someone commented on your task.",NotificationType.CommentAdded
             );
         }
 
