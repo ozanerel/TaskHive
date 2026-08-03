@@ -71,6 +71,32 @@
 
             </div>
 
+            <div class="col-md-12 mb-4">
+
+                <label class="form-label">
+                    Assign Users
+                </label>
+
+
+                <select asp-for="UserIds"
+                        class="form-select"
+                        multiple>
+
+
+                    @foreach (var user in Model.Users)
+                    {
+                        <option value="@user.Id">
+
+                            @user.FirstName @user.LastName
+
+                        </option>
+                    }
+
+
+                </select>
+
+            </div>
+
         </div>
 
         <div class="form-buttons">
