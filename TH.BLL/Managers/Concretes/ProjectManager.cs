@@ -28,10 +28,30 @@ namespace TH.BLL.Managers.Concretes
         {
             await base.CreateAsync(project);
 
+            //await _notificationManager.CreateNotificationAsync(
+            //    1, // Admin Id
+            //    "New Project",
+            //    $"{project.ProjectName} created.",NotificationType.ProjectCreated
+            //);
+
+            // Kullanıcılara bildir
+            foreach (var user in project.Users)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "New Project Assigned",
+                    $"{project.ProjectName} assigned to you.",
+                    NotificationType.ProjectCreated
+                );
+            }
+
+
+            // Admin bildirimi
             await _notificationManager.CreateNotificationAsync(
-                1, // Admin Id
-                "New Project",
-                $"{project.ProjectName} created.",NotificationType.ProjectCreated
+                1,
+                "New Project Created",
+                $"{project.ProjectName} created.",
+                NotificationType.ProjectCreated
             );
         }
 
