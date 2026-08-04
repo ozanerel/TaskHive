@@ -3,6 +3,7 @@ using TH.BLL.Managers.Abstracts;
 using Microsoft.AspNetCore.Authorization;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM;
+using TH.ENTITIES.Enums;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -12,11 +13,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
     {
         private readonly IProjectManager _projectManager;
         private readonly IUserManager _userManager;
+        private readonly INotificationManager _notificationManager;
 
-        public ProjectController(IProjectManager projectManager, IUserManager userManager)
+        public ProjectController(IProjectManager projectManager, IUserManager userManager,INotificationManager notificationManager)
         {
             _projectManager = projectManager;
             _userManager = userManager;
+            _notificationManager = notificationManager;
         }
 
         // Proje Listesi
@@ -157,6 +160,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             project.ProjectName = vm.ProjectName;
             project.Description = vm.Description;
 
+            var oldUsers = project.Users.ToList();
+
             // Önce mevcut kullanıcıları temizle
             project.Users.Clear();
 
@@ -170,6 +175,37 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     project.Users.Add(user);
                 }
             }
+
+            //Eklenen kullanıcıları bulma
+            var addedUsers = project.Users
+                .Where(x => !oldUsers.Any(y => y.Id == x.Id))
+                .ToList();
+
+            //Çıkarılan kullanıcıları bulma 
+            var removedUsers = oldUsers
+                .Where(x => !project.Users.Any(y => y.Id == x.Id))
+                .ToList();
+
+            foreach (var user in addedUsers)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "Project Updated",
+                    $"You have been added to project '{project.ProjectName}'.",
+                    NotificationType.ProjectUpdated
+                );
+            }
+
+            foreach (var user in removedUsers)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "Project Updated",
+                    $"You have been removed from project '{project.ProjectName}'.",
+                    NotificationType.ProjectUpdated
+                );
+            }
+
 
             await _projectManager.UpdateAsync(project);
 
