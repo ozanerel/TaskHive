@@ -13,7 +13,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         private readonly IProjectManager _projectManager;
         private readonly IUserManager _userManager;
 
-        public ProjectController(IProjectManager projectManager,IUserManager userManager)
+        public ProjectController(IProjectManager projectManager, IUserManager userManager)
         {
             _projectManager = projectManager;
             _userManager = userManager;
@@ -109,7 +109,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // GET
         public async Task<IActionResult> Update(int id)
         {
-            var project = await _projectManager.GetByIdAsync(id);
+            //var project = await _projectManager.GetByIdAsync(id);
+            var project = await _projectManager.GetProjectDetailsAsync(id);
 
             if (project == null)
                 return NotFound();
@@ -123,7 +124,12 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             {
                 Id = project.Id,
                 ProjectName = project.ProjectName,
-                Description = project.Description
+                Description = project.Description,
+                UserIds = project.Users
+                .Select(x => x.Id)
+                .ToList(),
+
+                Users = await _userManager.GetAllAsync()
             };
 
             return View(vm);
@@ -134,13 +140,36 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(ProjectUpdateVm vm)
         {
-            if (!ModelState.IsValid)
-                return View(vm);
+            //if (!ModelState.IsValid)
+            //    return View(vm);
 
-            var project = await _projectManager.GetByIdAsync(vm.Id);
+            if (!ModelState.IsValid)
+            {
+                vm.Users = await _userManager.GetAllAsync();
+                return View(vm);
+            }
+
+            var project = await _projectManager.GetProjectDetailsAsync(vm.Id);
+
+            if (project == null)
+                return NotFound();
 
             project.ProjectName = vm.ProjectName;
             project.Description = vm.Description;
+
+            // Önce mevcut kullanıcıları temizle
+            project.Users.Clear();
+
+            // Yeni seçilen kullanıcıları ekle
+            foreach (var userId in vm.UserIds)
+            {
+                var user = await _userManager.GetByIdAsync(userId);
+
+                if (user != null)
+                {
+                    project.Users.Add(user);
+                }
+            }
 
             await _projectManager.UpdateAsync(project);
 
