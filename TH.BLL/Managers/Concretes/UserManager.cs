@@ -48,5 +48,10 @@ namespace TH.BLL.Managers.Concretes
 
             return user.Tasks.ToList();
         }
+
+        public async Task<List<User>> GetAdminsAsync()
+        {
+            return await _repository.GetAdminsAsync();
+        }
     }
 }

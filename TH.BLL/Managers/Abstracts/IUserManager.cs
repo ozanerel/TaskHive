@@ -12,5 +12,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<User> GetUserWithTasksAsync(int userId);
 
         Task<List<ENTITIES.Models.Task>> GetAssignedTasksAsync(int userId);
+
+        Task<List<User>> GetAdminsAsync();
     }
 }
