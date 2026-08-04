@@ -70,7 +70,7 @@ namespace TH.BLL.Managers.Concretes
             return _repository.Where(x => x.Status == DataStatus.Deleted).ToList();
         }
 
-        public async Task MakePassiveAsync(T entity)
+        public virtual async Task MakePassiveAsync(T entity)
         {
             if (entity == null) return;
 

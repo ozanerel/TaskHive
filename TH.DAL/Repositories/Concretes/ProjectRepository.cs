@@ -34,10 +34,16 @@ namespace TH.DAL.Repositories.Concretes
             //return await _context.Projects
             //    .Include(x => x.Tasks)
             //    .FirstOrDefaultAsync(x => x.Id == id);
+
+            //return await _context.Projects
+            //    .Where(x => x.Status != DataStatus.Deleted)
+            //    .Include(x => x.Tasks)
+            //    .FirstOrDefaultAsync(x => x.Id == id);
+
             return await _context.Projects
-                .Where(x => x.Status != DataStatus.Deleted)
+                .Include(x => x.Users)
                 .Include(x => x.Tasks)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id); 
         }
 
         public async Task<List<Project>> GetProjectsWithTasksAsync()

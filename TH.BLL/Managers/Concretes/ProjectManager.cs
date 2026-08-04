@@ -16,12 +16,14 @@ namespace TH.BLL.Managers.Concretes
     {
         private readonly IProjectRepository _repository;
         private readonly INotificationManager _notificationManager;
+        private readonly IUserManager _userManager;
 
-        public ProjectManager(IProjectRepository repository, INotificationManager notificationManager)
+        public ProjectManager(IProjectRepository repository, INotificationManager notificationManager,IUserManager userManager)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
+            _userManager = userManager;
         }
 
         public override async Task CreateAsync(Project project)
@@ -45,14 +47,58 @@ namespace TH.BLL.Managers.Concretes
                 );
             }
 
+            var admins = await _userManager.GetAdminsAsync();
 
-            // Admin bildirimi
-            await _notificationManager.CreateNotificationAsync(
-                1,
-                "New Project Created",
-                $"{project.ProjectName} created.",
-                NotificationType.ProjectCreated
-            );
+            foreach (var user in admins)
+            {
+                // Admin bildirimi
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "New Project Created",
+                    $"{project.ProjectName} created.",
+                    NotificationType.ProjectCreated
+                );
+            }
+            
+        }
+
+        public override async Task MakePassiveAsync(Project project)
+        {
+            //Projeyi kullanıcılar ile birlikte getiriyoruz ki kullanıcıları da bildirelim.
+            var projectWithUsers = await _repository.GetProjectDetailsAsync(project.Id);
+
+            if (projectWithUsers == null)
+                return;
+
+            //Silinmeden önce kullanı listelerini alıyoruz
+            var users = projectWithUsers.Users.ToList();
+
+            //Soft delete işlemi
+            await base.MakePassiveAsync(projectWithUsers);
+
+            //Projeye bağlı kullanıcılara bildirim gönderiyoruz
+            foreach (var user in users)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "Project Deleted",
+                    $"Project \"{projectWithUsers.ProjectName}\" has been deleted.",
+                    NotificationType.ProjectDeleted
+                );
+            }
+
+            var admins = await _userManager.GetAdminsAsync();
+
+            foreach (var user in admins)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "Project Deleted",
+                    $"Project \"{projectWithUsers.ProjectName}\" has been deleted.",
+                    NotificationType.ProjectDeleted
+                );
+            }
+            
         }
 
         public async Task<Project> GetProjectDetailsAsync(int projectId)
