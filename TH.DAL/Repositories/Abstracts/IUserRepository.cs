@@ -11,5 +11,7 @@ namespace TH.DAL.Repositories.Abstracts
     {
         Task<User> GetUserWithTasksAsync(int id);
         Task<List<User>> SearchUsersAsync(string keyword);
+
+        Task<List<User>> GetAdminsAsync();
     }
 }

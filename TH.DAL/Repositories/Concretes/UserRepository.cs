@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TH.DAL.ContextClasses;
 using TH.DAL.Repositories.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.DAL.Repositories.Concretes
@@ -17,6 +18,14 @@ namespace TH.DAL.Repositories.Concretes
         {
             _context = context;
         }
+
+        public async Task<List<User>> GetAdminsAsync()
+        {
+            return await _context.Users
+                .Where(x => x.Role.Name == "Admin" && x.Status != DataStatus.Deleted)
+                .ToListAsync();
+        }
+
         public async Task<User> GetUserWithTasksAsync(int id)
         {
             return await _context.Users
