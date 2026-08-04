@@ -67,6 +67,32 @@
 
             </div>
 
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Assign Members
+                </label>
+
+
+                <select asp-for="UserIds"
+                        class="form-select"
+                        multiple>
+
+                    @foreach (var user in Model.Users)
+                    {
+                        <option value="@user.Id"
+                                selected="@(Model.UserIds.Contains(user.Id))">
+
+                            @user.FirstName @user.LastName
+
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+
         </div>
 
         <div class="form-buttons">
