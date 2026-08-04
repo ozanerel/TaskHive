@@ -47,7 +47,9 @@ namespace TH.ENTITIES.Enums
 
         TaskDeleted = 8,
 
-        UserCreated = 9
+        UserCreated = 9,
+
+        ProjectDeleted = 10
     }
 
 
