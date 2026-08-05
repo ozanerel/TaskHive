@@ -15,12 +15,14 @@ namespace TH.BLL.Managers.Concretes
     {
         private readonly ITaskRepository _repository;
         private readonly INotificationManager _notificationManager;
+        private readonly IUserManager _userManager;
 
-        public TaskManager(ITaskRepository repository, INotificationManager notificationManager)
+        public TaskManager(ITaskRepository repository, INotificationManager notificationManager,IUserManager userManager)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
+            _userManager = userManager;
         }
 
         public override async Task CreateAsync(ENTITIES.Models.Task task)
@@ -101,14 +103,50 @@ namespace TH.BLL.Managers.Concretes
                     NotificationType.TaskUpdated
                 );
             }
+            else 
+            {
+                // Güncel kullanıcıya bilgi ver
+                await _notificationManager.CreateNotificationAsync(
+                    task.UserId,
+                    "Task Updated",
+                    $"Task \"{task.Title}\" has been updated.",
+                    NotificationType.TaskUpdated
+                );
+            }
+        }
 
-            // Güncel kullanıcıya bilgi ver
-            await _notificationManager.CreateNotificationAsync(
-                task.UserId,
-                "Task Updated",
-                $"Task \"{task.Title}\" has been updated.",
-                NotificationType.TaskUpdated
-            );
+        public override async Task MakePassiveAsync(ENTITIES.Models.Task task)
+        {
+            var taskWithDetails = await _repository.GetTaskDetailsAsync(task.Id);
+
+            if (taskWithDetails == null)
+                return;
+
+            await base.MakePassiveAsync(taskWithDetails);
+
+            // Atanan kullanıcıya bildir
+            if (taskWithDetails.UserId > 0)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    taskWithDetails.UserId,
+                    "Task Deleted",
+                    $"Task \"{taskWithDetails.Title}\" has been deleted.",
+                    NotificationType.TaskDeleted
+                );
+            }
+
+            // Tüm adminlere bildir
+            var admins = await _userManager.GetAdminsAsync();
+
+            foreach (var admin in admins)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    admin.Id,
+                    "Task Deleted",
+                    $"Task \"{taskWithDetails.Title}\" has been deleted.",
+                    NotificationType.TaskDeleted
+                );
+            }
         }
 
         public async Task<List<ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId)
