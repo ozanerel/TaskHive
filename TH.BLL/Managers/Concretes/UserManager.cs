@@ -34,6 +34,65 @@ namespace TH.BLL.Managers.Concretes
             );
         }
 
+        public override async Task UpdateAsync(User user)
+        {
+            var oldUser = await _repository.GetByIdAsync(user.Id);
+
+            if (oldUser == null)
+                return;
+
+
+            bool roleChanged = oldUser.RoleId != user.RoleId;
+
+
+            await base.UpdateAsync(user);
+
+
+            if (roleChanged)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "Role Updated",
+                    $"Your role has been changed.",
+                    NotificationType.UserUpdated
+                );
+            }
+            else
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    user.Id,
+                    "Profile Updated",
+                    "Your profile information has been updated.",
+                    NotificationType.UserUpdated
+                );
+            }
+        }
+
+        public override async Task MakePassiveAsync(User user)
+        {
+            var userWithDetails = await _repository.GetByIdAsync(user.Id);
+
+            if (userWithDetails == null)
+                return;
+
+
+            await base.MakePassiveAsync(userWithDetails);
+
+
+            var admins = await GetAdminsAsync();
+
+
+            foreach (var admin in admins)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    admin.Id,
+                    "User Deleted",
+                    $"User \"{userWithDetails.FirstName} {userWithDetails.LastName}\" has been deleted.",
+                    NotificationType.UserDeleted
+                );
+            }
+        }
+
         public async Task<User> GetUserWithTasksAsync(int userId)
         {
             return await _repository.GetUserWithTasksAsync(userId);
