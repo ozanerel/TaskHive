@@ -80,6 +80,37 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(task, task);
         }
 
+        public override async Task UpdateAsync(ENTITIES.Models.Task task)
+        {
+            var oldTask = await _repository.GetTaskDetailsAsync(task.Id);
+
+            if (oldTask == null)
+                return;
+
+            var oldUserId = oldTask.UserId;
+
+            await base.UpdateAsync(task);
+
+            // Eğer görev başka kullanıcıya atanmışsa
+            if (oldUserId != task.UserId)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    task.UserId,
+                    "Task Updated",
+                    $"You have been assigned to task \"{task.Title}\".",
+                    NotificationType.TaskUpdated
+                );
+            }
+
+            // Güncel kullanıcıya bilgi ver
+            await _notificationManager.CreateNotificationAsync(
+                task.UserId,
+                "Task Updated",
+                $"Task \"{task.Title}\" has been updated.",
+                NotificationType.TaskUpdated
+            );
+        }
+
         public async Task<List<ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId)
         {
             return await _repository.GetTasksByProjectAsync(projectId);

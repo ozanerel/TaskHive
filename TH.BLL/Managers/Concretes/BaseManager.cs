@@ -96,7 +96,7 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(original, original);
         }
 
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             entity.UpdatedDate = DateTime.Now;
             entity.Status = DataStatus.Updated;
