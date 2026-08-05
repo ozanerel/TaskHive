@@ -21,8 +21,13 @@ namespace TH.DAL.Repositories.Concretes
 
         public async Task<List<User>> GetAdminsAsync()
         {
+            //return await _context.Users
+            //    .Where(x => x.Role.Name == "Admin" && x.Status != DataStatus.Deleted)
+            //    .ToListAsync();
+
             return await _context.Users
-                .Where(x => x.Role.Name == "Admin" && x.Status != DataStatus.Deleted)
+                .Include(x => x.Role)
+                .Where(x => x.Role.Name == "Admin")
                 .ToListAsync();
         }
 
