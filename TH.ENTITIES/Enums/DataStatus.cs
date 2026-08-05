@@ -49,7 +49,11 @@ namespace TH.ENTITIES.Enums
 
         UserCreated = 9,
 
-        ProjectDeleted = 10
+        ProjectDeleted = 10,
+
+        UserUpdated = 11,
+
+        UserDeleted = 12
     }
 
 
