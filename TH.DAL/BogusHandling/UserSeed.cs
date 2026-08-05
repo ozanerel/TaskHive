@@ -12,9 +12,19 @@ namespace TH.DAL.BogusHandling
     {
         public static void SeedUsers(ModelBuilder modelBuilder)
         {
-            User user1 = new()
+            User admin = new()
             {
                 Id = 1,
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@test.com",
+                RoleId = 1,
+                AppUserId = 1
+            };
+
+            User member = new()
+            {
+                Id = 2,
                 FirstName = "Ahmet",
                 LastName = "Yilmaz",
                 Email = "ahmet@test.com",
@@ -42,7 +52,7 @@ namespace TH.DAL.BogusHandling
             //     AppUserId = 2
             // };
 
-            modelBuilder.Entity<User>().HasData(user1);
+            modelBuilder.Entity<User>().HasData(admin,member);
         }
     }
 }
