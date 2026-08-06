@@ -16,12 +16,14 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         private readonly IUserManager _userManager;
         private readonly IRoleManager _roleManager;
         private readonly UserManager<AppUser> _identityManager;
+        private readonly RoleManager<IdentityRole<int>> _identityRoleManager;
 
-        public UserController(IUserManager userManager,IRoleManager roleManager,UserManager<AppUser> identityManager)
+        public UserController(IUserManager userManager, IRoleManager roleManager, UserManager<AppUser> identityManager, RoleManager<IdentityRole<int>> identityRoleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _identityManager = identityManager;
+            _identityRoleManager = identityRoleManager;
         }
 
         public async Task<IActionResult> Index()
@@ -123,9 +125,29 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             //    }
             //}
 
+            //Craete kontrol
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                vm.Roles = await _roleManager.GetAllAsync();
+
+                return View(vm);
+            }
+
+            //await _identityManager.AddToRoleAsync(appUser,"Member");
+
+            var roleResult = await _identityManager.AddToRoleAsync(appUser, "Member");
+
+            //roleResult kontrol
+            if (!roleResult.Succeeded)
+            {
+                await _identityManager.DeleteAsync(appUser); //Eğer rol atanamazsa oluşturduğumuz kullanıcıyı siliyoruz. Böylece yarım kayıt kalmıyor.
+
+                foreach (var error in roleResult.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
@@ -141,10 +163,10 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 LastName = vm.LastName,
                 Email = vm.Email,
                 RoleId = vm.RoleId.Value,
-                AppUserId= appUser.Id
+                AppUserId = appUser.Id
             };
 
-            
+
             await _userManager.CreateAsync(user);
 
             return RedirectToAction(nameof(Index));
