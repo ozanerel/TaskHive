@@ -115,12 +115,24 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             //    return View(vm);
             //}
 
+            //if (!result.Succeeded)
+            //{
+            //    foreach (var error in result.Errors)
+            //    {
+            //        Console.WriteLine(error.Description);
+            //    }
+            //}
+
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
                 {
-                    Console.WriteLine(error.Description);
+                    ModelState.AddModelError("", error.Description);
                 }
+
+                vm.Roles = await _roleManager.GetAllAsync();
+
+                return View(vm);
             }
 
             User user = new()
