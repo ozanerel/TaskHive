@@ -17,30 +17,47 @@ namespace TH.BLL.Managers.Concretes
     {
         private readonly ITaskCommentRepository _repository;
         private readonly INotificationManager _notificationManager;
+        private readonly ITaskRepository _taskRepository;
+        private readonly IUserRepository _userRepository;
 
-        public TaskCommentManager(ITaskCommentRepository repository, INotificationManager notificationManager)
+        public TaskCommentManager(ITaskCommentRepository repository, INotificationManager notificationManager,ITaskRepository taskRepository,IUserRepository userRepository)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
+            _taskRepository = taskRepository;
+            _userRepository = userRepository;
         }
 
         public override async Task CreateAsync(TaskComment comment)
         {
+            var task = await _taskRepository.GetTaskDetailsAsync(comment.TaskId);
+
+            if (task == null)
+                return;
+
             await base.CreateAsync(comment);
 
-            await _notificationManager.CreateNotificationAsync(
-                comment.Task.UserId,
-                "New Comment",
-                "Someone commented on your task.",NotificationType.CommentAdded
-            );
+            var user = await _userRepository.GetByIdAsync(comment.UserId);
+
+            // Yorumu yapan kişi task sahibi değilse bildirim gönder
+            if (task.UserId != comment.UserId)
+            {
+                await _notificationManager.CreateNotificationAsync(
+                    task.UserId,
+                    "New Comment Added",
+                    //$"A new comment was added to your task \"{task.Title}\".",
+                    $"{user.FirstName} {user.LastName} commented on \"{task.Title}\".",
+                    NotificationType.CommentAdded
+                );
+            }
         }
 
         public async Task<List<TaskComment>> GetCommentsByTaskAsync(int taskId)
         {
-            return _repository
+            return await _repository
                 .Where(x => x.TaskId == taskId)
-                .ToList();
+                .ToListAsync();
         }
 
         public async Task<List<TaskComment>> GetCommentsByUserAsync(int userId)
