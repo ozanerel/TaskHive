@@ -26,11 +26,17 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             _identityRoleManager = identityRoleManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search,int? roleId,DataStatus? status)
         {
             UserIndexVm vm = new UserIndexVm()
             {
-                Users = await _userManager.GetAllAsync()
+                Users = await _userManager.FilterUsersAsync(search,roleId,status),
+
+                Roles = await _roleManager.GetAllAsync(),
+
+                Search = search,
+                RoleId = roleId,
+                Status = status?.ToString()
             };
 
             return View(vm);

@@ -112,5 +112,10 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.GetAdminsAsync();
         }
+
+        public async Task<List<User>> FilterUsersAsync(string search, int? roleId, DataStatus? status)
+        {
+            return await _repository.FilterUsersAsync(search,roleId,status);
+        }
     }
 }
