@@ -19,6 +19,39 @@ namespace TH.DAL.Repositories.Concretes
             _context = context;
         }
 
+        public async Task<List<User>> FilterUsersAsync(string search,int? roleId,DataStatus? status)
+        {
+            var query = _context.Users
+                .Include(x => x.Role)
+                .AsQueryable();
+
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+
+                query = query.Where(x =>
+                    x.FirstName.ToLower().Contains(search) ||
+                    x.LastName.ToLower().Contains(search) ||
+                    x.Email.ToLower().Contains(search));
+            }
+
+
+            if (roleId.HasValue)
+            {
+                query = query.Where(x => x.RoleId == roleId);
+            }
+
+
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status);
+            }
+
+
+            return await query.ToListAsync();
+        }
+
         public async Task<List<User>> GetAdminsAsync()
         {
             //return await _context.Users
