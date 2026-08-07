@@ -1,58 +1,114 @@
 ﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.UserVM.UserIndexVm
-<div class="dashboard-card mb-4">
 
-    <div class="row g-3">
+<form asp-action="Index"
+	  method="get">
 
-        <div class="col-md-4">
+	<div class="dashboard-card mb-4">
 
-            <input type="text"
-                   class="form-control"
-                   placeholder="Search user..." />
+		<div class="row g-3">
 
-        </div>
+			<!-- Search -->
 
-        <div class="col-md-3">
+			<div class="col-md-4">
 
-            <select class="form-select">
+				<input type="text"
+					   name="search"
+					   value="@Model.Search"
+					   class="form-control"
+					   placeholder="Search user..." />
 
-                <option>All Roles</option>
+			</div>
 
-                <option>Admin</option>
+			<!-- Role -->
+			<div class="col-md-3">
 
-                <option>Manager</option>
+				<select name="roleId"
+						class="form-select">
 
-                <option>Member</option>
+					<option value="">
+						All Roles
+					</option>
 
-            </select>
+					@foreach (var role in Model.Roles)
+					{
+						if (Model.RoleId == role.Id)
+						{
+							<option value="@role.Id" selected>
+								@role.Name
+							</option>
+						}
+						else
+						{
+							<option value="@role.Id">
+								@role.Name
+							</option>
+						}
+					}
 
-        </div>
+				</select>
 
-        <div class="col-md-3">
+			</div>
 
-            <select class="form-select">
 
-                <option>All Status</option>
+			<!-- Status -->
 
-                <option>Active</option>
+			<div class="col-md-3">
 
-                <option>Passive</option>
+				<select name="status"
+						class="form-select">
 
-            </select>
+					<option value="">
+						All Status
+					</option>
 
-        </div>
+					@if (Model.Status == "Inserted")
+					{
+						<option value="Inserted" selected>
+							Active
+						</option>
+					}
+					else
+					{
+						<option value="Inserted">
+							Active
+						</option>
+					}
 
-        <div class="col-md-2">
+					@if (Model.Status == "Deleted")
+					{
+						<option value="Deleted" selected>
+							Passive
+						</option>
+					}
+					else
+					{
+						<option value="Deleted">
+							Passive
+						</option>
+					}
 
-            <button class="btn-primary-custom w-100">
+				</select>
 
-                <i class="fa fa-filter"></i>
+			</div>
 
-                Filter
 
-            </button>
+			<!-- Filter Button -->
 
-        </div>
+			<div class="col-md-2">
 
-    </div>
+				<button type="submit"
+						class="btn-primary-custom w-100">
 
-</div>
+					<i class="fa fa-filter"></i>
+
+					Filter
+
+				</button>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</form>
