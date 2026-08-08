@@ -1,44 +1,141 @@
-﻿@* @using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
-@model ProjectPageVm *@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM.ProjectIndexVm
+@using TH.ENTITIES.Enums
 
-<div class="project-filters">
+<form asp-action="Index"
+      method="get">
 
-    <div class="project-search">
+    <div class="project-filters">
 
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <!-- SEARCH -->
 
-        <input type="text"
-               id="projectSearch"
-               placeholder="Search project..." />
+        <div class="project-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   name="search"
+                   value="@Model.Search"
+                   placeholder="Search project..." />
+
+        </div>
+
+
+        <div class="project-filter-group">
+
+            <!-- STATUS -->
+
+            <select name="status"
+                    class="form-select">
+
+                <option value="">
+                    All Status
+                </option>
+
+                @if (Model.Status == DataStatus.Inserted)
+                {
+                    <option value="@DataStatus.Inserted" selected>
+                        Active
+                    </option>
+                }
+                else
+                {
+                    <option value="@DataStatus.Inserted">
+                        Active
+                    </option>
+                }
+
+                @if (Model.Status == DataStatus.Deleted)
+                {
+                    <option value="@DataStatus.Deleted" selected>
+                        Passive
+                    </option>
+                }
+                else
+                {
+                    <option value="@DataStatus.Deleted">
+                        Passive
+                    </option>
+                }
+
+            </select>
+
+
+            <!-- SORT -->
+
+            <select name="sortBy"
+                    class="form-select">
+
+                @if (string.IsNullOrEmpty(Model.SortBy))
+                {
+                    <option value="" selected>
+                        Sort By
+                    </option>
+                }
+                else
+                {
+                    <option value="">
+                        Sort By
+                    </option>
+                }
+
+
+                @if (Model.SortBy == "Name")
+                {
+                    <option value="Name" selected>
+                        Name
+                    </option>
+                }
+                else
+                {
+                    <option value="Name">
+                        Name
+                    </option>
+                }
+
+
+                @if (Model.SortBy == "Date")
+                {
+                    <option value="Date" selected>
+                        Date
+                    </option>
+                }
+                else
+                {
+                    <option value="Date">
+                        Date
+                    </option>
+                }
+
+
+                @if (Model.SortBy == "TaskCount")
+                {
+                    <option value="TaskCount" selected>
+                        Task Count
+                    </option>
+                }
+                else
+                {
+                    <option value="TaskCount">
+                        Task Count
+                    </option>
+                }
+
+            </select>
+
+
+            <!-- FILTER BUTTON -->
+
+            <button type="submit"
+                    class="btn-primary-custom">
+
+                <i class="fa fa-filter"></i>
+
+                Filter
+
+            </button>
+
+        </div>
 
     </div>
 
-    <div class="project-filter-group">
-
-        <select class="form-select">
-
-            <option>All Status</option>
-
-            <option>Active</option>
-
-            <option>Completed</option>
-
-            <option>Passive</option>
-
-        </select>
-
-        <select class="form-select">
-
-            <option>Sort By</option>
-
-            <option>Name</option>
-
-            <option>Date</option>
-
-            <option>Task Count</option>
-
-        </select>
-
-    </div>
-
-</div>
+</form>
