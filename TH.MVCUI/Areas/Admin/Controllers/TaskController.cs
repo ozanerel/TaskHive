@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Managers.Concretes;
+using TH.ENTITIES.Enums;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
 using TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM;
 
@@ -22,13 +23,16 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             _userManager = userManager;
             _projectManager = projectManager;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search,PriorityLevel? priority,bool? isCompleted)
         {
-            var tasks = await _taskManager.GetAllAsync();
+            var tasks = await _taskManager.FilterTasksAsync(search,priority,isCompleted);
 
             TaskIndexVm vm = new()
             {
-                Tasks = tasks
+                Tasks = tasks,
+                Search = search,
+                Priority = priority,
+                IsCompleted = isCompleted
             };
 
             return View(vm);
