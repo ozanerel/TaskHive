@@ -1,4 +1,6 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
+@using TH.ENTITIES.Enums
+
 @model ProjectIndexVm
 
 <div class="project-grid">
@@ -21,13 +23,22 @@
 
                 <div>
 
-                    <h3>@project.ProjectName</h3>
+                    <h3>
+                        @project.ProjectName
+                    </h3>
 
-                    <span class="status-badge active">
-
-                        Active
-
-                    </span>
+                    @if (project.Status == DataStatus.Deleted)
+                    {
+                        <span class="badge bg-danger">
+                            Passive
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">
+                            Active
+                        </span>
+                    }
 
                 </div>
 
@@ -103,13 +114,16 @@
 
                 </a>
 
-                <a asp-action="Delete"
-                   asp-route-id="@project.Id"
-                   class="btn-danger-custom">
+                @if (project.Status != DataStatus.Deleted)
+                {
+                    <a asp-action="Delete"
+                       asp-route-id="@project.Id"
+                       class="btn-danger-custom">
 
-                    Delete
+                        Delete
 
-                </a>
+                    </a>
+                }
 
             </div>
 
