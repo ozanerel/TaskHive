@@ -19,6 +19,51 @@ namespace TH.DAL.Repositories.Concretes
             _context = context;
         }
 
+        public async Task<List<Project>> FilterProjectsAsync(string search, DataStatus? status, string sortBy)
+        {
+            var query = _context.Projects
+         .Include(x => x.Tasks)
+         .AsQueryable();
+
+            // SEARCH
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+
+                query = query.Where(x =>
+                    x.ProjectName.ToLower().Contains(search) ||
+                    x.Description.ToLower().Contains(search));
+            }
+
+            // STATUS
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status);
+            }
+
+            // SORT
+            switch (sortBy)
+            {
+                case "Name":
+                    query = query.OrderBy(x => x.ProjectName);
+                    break;
+
+                case "Date":
+                    query = query.OrderByDescending(x => x.CreatedDate);
+                    break;
+
+                case "TaskCount":
+                    query = query.OrderByDescending(x => x.Tasks.Count);
+                    break;
+
+                default:
+                    query = query.OrderByDescending(x => x.CreatedDate);
+                    break;
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task<List<Project>> GetDashboardProjectsAsync()
         {
             return await _context.Projects
