@@ -59,5 +59,39 @@ namespace TH.DAL.Repositories.Concretes
                 .Include(x => x.TaskComments)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted)
+        {
+            var query = _context.Tasks
+        .Include(x => x.User)
+        .Include(x => x.Project)
+        .AsQueryable();
+
+            // SEARCH
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+
+                query = query.Where(x =>
+                    x.Title.ToLower().Contains(search) ||
+                    x.Description.ToLower().Contains(search));
+            }
+
+            // PRIORITY
+            if (priority.HasValue)
+            {
+                query = query.Where(x => x.Priority == priority);
+            }
+
+            // STATUS
+            if (isCompleted.HasValue)
+            {
+                query = query.Where(x => x.IsCompleted == isCompleted);
+            }
+
+            return await query
+                .OrderBy(x => x.Title)
+                .ToListAsync();
+        }
     }
 }
