@@ -1,57 +1,140 @@
 ﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskIndexVm
-<div class="task-filter-area">
+@using TH.ENTITIES.Enums
 
-    <div class="task-search">
+<form asp-action="Index"
+      method="get">
 
-        <i class="fa-solid fa-magnifying-glass"></i>
+    <div class="task-filter-area">
 
-        <input type="text"
-               placeholder="Search task..." />
+        <!-- SEARCH -->
+
+        <div class="task-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   name="search"
+                   value="@Model.Search"
+                   placeholder="Search task..." />
+
+        </div>
+
+
+        <div class="task-filters">
+
+            <!-- PRIORITY -->
+
+            <select name="priority">
+
+                <option value="">
+                    All Priorities
+                </option>
+
+                @if (Model.Priority == PriorityLevel.Low)
+                {
+                    <option value="@PriorityLevel.Low" selected>
+                        Low
+                    </option>
+                }
+                else
+                {
+                    <option value="@PriorityLevel.Low">
+                        Low
+                    </option>
+                }
+
+                @if (Model.Priority == PriorityLevel.Medium)
+                {
+                    <option value="@PriorityLevel.Medium" selected>
+                        Medium
+                    </option>
+                }
+                else
+                {
+                    <option value="@PriorityLevel.Medium">
+                        Medium
+                    </option>
+                }
+
+                @if (Model.Priority == PriorityLevel.High)
+                {
+                    <option value="@PriorityLevel.High" selected>
+                        High
+                    </option>
+                }
+                else
+                {
+                    <option value="@PriorityLevel.High">
+                        High
+                    </option>
+                }
+
+                @if (Model.Priority == PriorityLevel.Critical)
+                {
+                    <option value="@PriorityLevel.Critical" selected>
+                        Critical
+                    </option>
+                }
+                else
+                {
+                    <option value="@PriorityLevel.Critical">
+                        Critical
+                    </option>
+                }
+
+            </select>
+
+
+            <!-- STATUS -->
+
+            <select name="isCompleted">
+
+                <option value="">
+                    All Status
+                </option>
+
+                @if (Model.IsCompleted == true)
+                {
+                    <option value="true" selected>
+                        Completed
+                    </option>
+                }
+                else
+                {
+                    <option value="true">
+                        Completed
+                    </option>
+                }
+
+                @if (Model.IsCompleted == false)
+                {
+                    <option value="false" selected>
+                        Pending
+                    </option>
+                }
+                else
+                {
+                    <option value="false">
+                        Pending
+                    </option>
+                }
+
+            </select>
+
+
+            <!-- FILTER BUTTON -->
+
+            <button type="submit"
+                    class="btn-primary-custom">
+
+                <i class="fa fa-filter"></i>
+
+                Filter
+
+            </button>
+
+        </div>
 
     </div>
 
-    <div class="task-filters">
-
-        <select>
-
-            <option>
-                All Priorities
-            </option>
-
-            <option>
-                Low
-            </option>
-
-            <option>
-                Medium
-            </option>
-
-            <option>
-                High
-            </option>
-
-            <option>
-                Critical
-            </option>
-
-        </select>
-
-        <select>
-
-            <option>
-                All Status
-            </option>
-
-            <option>
-                Completed
-            </option>
-
-            <option>
-                Pending
-            </option>
-
-        </select>
-
-    </div>
-
-</div>
+</form>
