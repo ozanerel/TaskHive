@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -18,5 +19,6 @@ namespace TH.BLL.Managers.Abstracts
 
         Task AddUserToProjectAsync(int projectId, int userId);
         Task<List<Project>> GetDashboardProjectsAsync();
+        Task<List<Project>> FilterProjectsAsync(string search,DataStatus? status,string sortBy);
     }
 }

@@ -23,13 +23,17 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         // Proje Listesi
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search,DataStatus? status,string sortBy)
         {
-            var projects = await _projectManager.GetProjectsWithTasksAsync();
+            var projects = await _projectManager.FilterProjectsAsync(search,status,sortBy);
 
             ProjectIndexVm vm = new()
             {
-                Projects = projects
+                Projects = projects,
+                Search = search,
+                //Status = status?.ToString(),
+                Status = status,
+                SortBy = sortBy
             };
 
             return View(vm);

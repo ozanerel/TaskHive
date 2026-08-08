@@ -130,5 +130,10 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.GetDashboardProjectsAsync();
         }
+
+        public async Task<List<Project>> FilterProjectsAsync(string search, DataStatus? status, string sortBy)
+        {
+            return await _repository.FilterProjectsAsync(search,status,sortBy);
+        }
     }
 }
