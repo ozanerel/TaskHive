@@ -75,7 +75,7 @@ namespace TH.BLL.Managers.Concretes
             if (entity == null) return;
 
             var original = await _repository.GetByIdAsync(entity.Id);
-            if(original == null) return;
+            if (original == null) return;
 
             original.DeletedDate = DateTime.Now;
             original.Status = DataStatus.Deleted;

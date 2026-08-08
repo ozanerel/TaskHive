@@ -19,11 +19,12 @@ namespace TH.DAL.Repositories.Concretes
             _context = context;
         }
 
-        public async Task<List<Project>> FilterProjectsAsync(string search, DataStatus? status, string sortBy)
+        public async Task<List<Project>> FilterProjectsAsync(string search,DataStatus? status,string sortBy)
         {
             var query = _context.Projects
-         .Include(x => x.Tasks)
-         .AsQueryable();
+                .Include(x => x.Tasks)
+                .Include(x => x.Users)
+                .AsQueryable();
 
             // SEARCH
             if (!string.IsNullOrWhiteSpace(search))

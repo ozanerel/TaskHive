@@ -98,7 +98,7 @@ namespace TH.BLL.Managers.Concretes
                     NotificationType.ProjectDeleted
                 );
             }
-            
+
         }
 
         public async Task<Project> GetProjectDetailsAsync(int projectId)
