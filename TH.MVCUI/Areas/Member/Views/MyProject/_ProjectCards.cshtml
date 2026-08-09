@@ -32,11 +32,22 @@
 
                     </div>
 
-                    <span class="status-badge completed">
+                    @if (project.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                    {
+                        <span class="badge bg-danger">
 
-                        Active
+                            Passive
 
-                    </span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">
+
+                            Active
+
+                        </span>
+                    }
 
                 </div>
 

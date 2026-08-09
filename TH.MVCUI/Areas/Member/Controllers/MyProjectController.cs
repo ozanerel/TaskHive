@@ -43,7 +43,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 ProjectName = x.ProjectName,
                 Description = x.Description,
                 UserCount = x.Users.Count,
-                TaskCount = x.Tasks.Count
+                TaskCount = x.Tasks.Count,
+                Status = x.Status
             }).ToList();
 
             return View(vm);
