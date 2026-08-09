@@ -22,5 +22,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<ENTITIES.Models.Task> GetTaskDetailsAsync(int id);
 
         Task<List<TH.ENTITIES.Models.Task>> FilterTasksAsync(string search,PriorityLevel? priority,bool? isCompleted);
+
+        Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId,int userId);
     }
 }

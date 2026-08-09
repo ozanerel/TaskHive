@@ -168,5 +168,10 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.FilterTasksAsync(search,priority,isCompleted);
         }
+
+        public async Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId, int userId)
+        {
+            return await _repository.GetTaskDetailsByUserAsync(taskId,userId);
+        }
     }
 }

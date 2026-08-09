@@ -34,7 +34,11 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<ENTITIES.Models.Task>> GetTasksByUserAsync(int userId)
         {
             return await _context.Tasks
-                .Where(t => t.UserId == userId)
+                .Include(x => x.Project)
+                .Include(x => x.User)
+                .Where(x => x.UserId == userId)
+                .OrderBy(x => x.Status)
+                .ThenBy(x => x.Title)
                 .ToListAsync();
         }
 
@@ -92,6 +96,18 @@ namespace TH.DAL.Repositories.Concretes
             return await query
                 .OrderBy(x => x.Title)
                 .ToListAsync();
+        }
+
+        public async Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId,int userId)
+        {
+            return await _context.Tasks
+                .Include(x => x.Project)
+                .Include(x => x.User)
+                .Include(x => x.TaskComments)
+                .FirstOrDefaultAsync(x =>
+                    x.Id == taskId &&
+                    x.UserId == userId &&
+                    x.Status == DataStatus.Inserted);
         }
     }
 }
