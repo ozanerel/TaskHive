@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.MyProjectVM;
 
@@ -35,7 +36,11 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var projects = user.Projects;
+            //var projects = user.Projects;
+
+            var projects = user.Projects
+                .Where(x => x.Status != DataStatus.Deleted)
+                .ToList();
 
             List<MyProjectListVm> vm = projects.Select(x => new MyProjectListVm
             {
