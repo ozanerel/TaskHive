@@ -34,33 +34,76 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var task = await _taskManager.GetTaskDetailsAsync(id);
+
+            if (task == null)
+                return NotFound();
+
+            if (task.UserId != user.Id)
+                return Forbid();
+
             TaskDetailPageVm vm = new()
             {
-                Task = await _taskManager.GetByIdAsync(id)
+                Task = task
             };
-
-            if (vm.Task == null)
-                return NotFound();
 
             return View(vm);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var task = await _taskManager.GetByIdAsync(id);
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var task = await _taskManager.GetTaskDetailsByUserAsync(id, user.Id);
 
             if (task == null)
                 return NotFound();
 
-            return View(task);
+            MyTaskUpdateVm vm = new()
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Priority = task.Priority
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TH.ENTITIES.Models.Task task)
+        public async Task<IActionResult> Edit(MyTaskUpdateVm vm)
         {
             if (!ModelState.IsValid)
-                return View(task);
+                return View(vm);
+
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var task = await _taskManager.GetTaskDetailsAsync(vm.Id);
+
+            if (task == null)
+                return NotFound();
+
+            if (task.UserId != user.Id)
+                return Forbid();
+
+            if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                return Forbid();
+
+            task.Title = vm.Title;
+            task.Description = vm.Description;
+            task.Priority = vm.Priority;
 
             await _taskManager.UpdateAsync(task);
 
@@ -69,6 +112,25 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Complete(int id)
         {
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var task = await _taskManager.GetByIdAsync(id);
+
+            if (task == null)
+                return NotFound();
+
+            if (task.UserId != user.Id)
+                return Forbid();
+
+            if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                return Forbid();
+
+            if (task.IsCompleted)
+                return RedirectToAction(nameof(Index));
+
             await _taskManager.CompleteTaskAsync(id);
 
             return RedirectToAction(nameof(Index));
