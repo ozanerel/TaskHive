@@ -70,20 +70,22 @@
 
                         </small>
 
-                        @if (task.IsCompleted)
+                        @if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                        {
+                            <span class="badge bg-danger">
+                                Passive
+                            </span>
+                        }
+                        else if (task.IsCompleted)
                         {
                             <span class="badge bg-success">
-
                                 Completed
-
                             </span>
                         }
                         else
                         {
                             <span class="badge bg-warning text-dark">
-
                                 Waiting
-
                             </span>
                         }
 
@@ -103,19 +105,34 @@
 
                     </a>
 
-                    <a asp-action="Edit"
-                       asp-route-id="@task.Id"
-                       class="btn-warning">
+                    @if (task.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@task.Id"
+                           class="btn-outline-custom"
+                           title="Edit">
 
-                        <i class="fa-solid fa-pen"></i>
+                            <i class="fa-solid fa-pen"></i>
 
-                    </a>
+                        </a>
+                    }
 
-                    @if (!task.IsCompleted)
+                    @if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                    {
+                        <button class="btn btn-danger"
+                                disabled
+                                title="Passive">
+
+                            <i class="fa-solid fa-ban"></i>
+
+                        </button>
+                    }
+                    else if (!task.IsCompleted)
                     {
                         <a asp-action="Complete"
                            asp-route-id="@task.Id"
-                           class="btn-primary-custom">
+                           class="btn-primary-custom"
+                           title="Complete">
 
                             <i class="fa-solid fa-check"></i>
 
@@ -123,7 +140,9 @@
                     }
                     else
                     {
-                        <button class="btn btn-success" disabled>
+                        <button class="btn btn-success"
+                                disabled
+                                title="Completed">
 
                             <i class="fa-solid fa-check"></i>
 

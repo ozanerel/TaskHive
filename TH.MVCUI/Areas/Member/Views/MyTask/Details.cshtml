@@ -71,7 +71,15 @@
 
             </p>
 
-            @if (Model.Task.IsCompleted)
+            @if (Model.Task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+            {
+                <span class="badge bg-danger">
+
+                    Passive
+
+                </span>
+            }
+            else if (Model.Task.IsCompleted)
             {
                 <span class="badge bg-success">
 
@@ -81,7 +89,7 @@
             }
             else
             {
-                <span class="badge bg-warning">
+                <span class="badge bg-warning text-dark">
 
                     Waiting
 
@@ -114,6 +122,19 @@
             Back
 
         </a>
+
+        @if (Model.Task.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
+        {
+            <a asp-action="Edit"
+               asp-route-id="@Model.Task.Id"
+               class="btn-primary-custom">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Edit
+
+            </a>
+        }
 
     </div>
 
