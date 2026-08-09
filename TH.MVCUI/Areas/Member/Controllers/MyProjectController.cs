@@ -56,12 +56,43 @@ namespace TH.MVCUI.Areas.Member.Controllers
         }
 
         // PROJE DETAYI
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    Project project = await _projectManager.GetProjectDetailsAsync(id);
+
+        //    if (project == null)
+        //        return NotFound();
+
+        //    MyProjectDetailsVm vm = new MyProjectDetailsVm
+        //    {
+        //        Id = project.Id,
+        //        ProjectName = project.ProjectName,
+        //        Description = project.Description,
+        //        Users = project.Users.ToList(),
+        //        Tasks = project.Tasks.ToList()
+        //    };
+
+        //    return View(vm);
+        //}
+
         public async Task<IActionResult> Details(int id)
         {
-            Project project = await _projectManager.GetProjectDetailsAsync(id);
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var project = await _projectManager.GetProjectDetailsAsync(id);
 
             if (project == null)
                 return NotFound();
+
+            if (project.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (!project.Users.Any(x => x.Id == user.Id))
+                //Bu kaynak var ama senin erişim yetkin yok, 403 Forbidden döndür
+                return Forbid();
 
             MyProjectDetailsVm vm = new MyProjectDetailsVm
             {
