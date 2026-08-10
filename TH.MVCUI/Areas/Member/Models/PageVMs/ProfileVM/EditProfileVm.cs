@@ -4,7 +4,7 @@ namespace TH.MVCUI.Areas.Member.ViewModels.ProfileVM
 {
     public class EditProfileVm
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
