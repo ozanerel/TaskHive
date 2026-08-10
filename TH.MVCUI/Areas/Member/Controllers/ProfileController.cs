@@ -5,17 +5,22 @@ using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.ProfileVM;
 using TH.MVCUI.Areas.Member.ViewModels.ProfileVM;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
+    [Authorize(Roles = "Member")]
     public class ProfileController : Controller
     {
         private readonly IUserManager _userManager;
         private readonly IUserContext _userContext;
         private readonly IWebHostEnvironment _environment;
 
-        public ProfileController(IUserManager userManager, IUserContext userContext, IWebHostEnvironment environment)
+        public ProfileController(
+            IUserManager userManager,
+            IUserContext userContext,
+            IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _userContext = userContext;
@@ -24,17 +29,12 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //// Şimdilik örnek kullanıcı
-            //int userId = 1;
-
-            //User user = await _userManager.GetByIdAsync(userId);
-
             var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            ProfileVm vm = new ProfileVm
+            ProfileVm vm = new()
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -55,9 +55,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            EditProfileVm vm = new EditProfileVm
+            EditProfileVm vm = new()
             {
-                Id = user.Id,
+                //Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -68,12 +68,13 @@ namespace TH.MVCUI.Areas.Member.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditProfileVm vm)
         {
             if (!ModelState.IsValid)
                 return View(vm);
 
-            User user = await _userManager.GetByIdAsync(vm.Id);
+            var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
@@ -82,17 +83,15 @@ namespace TH.MVCUI.Areas.Member.Controllers
             user.LastName = vm.LastName;
             user.Email = vm.Email;
 
-
             if (user.AppUser == null)
             {
                 TempData["Error"] = "User profile could not be found.";
-
                 return RedirectToAction(nameof(Index));
             }
 
             if (user.AppUser.AppUserProfile == null)
             {
-                user.AppUser.AppUserProfile = new AppUserProfile()
+                user.AppUser.AppUserProfile = new AppUserProfile
                 {
                     AppUserId = user.AppUserId
                 };
@@ -100,53 +99,57 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             if (vm.ImageFile != null)
             {
-
                 string extension =
-       Path.GetExtension(vm.ImageFile.FileName).ToLower();
+                    Path.GetExtension(vm.ImageFile.FileName).ToLower();
 
                 if (!EditProfileVm.AllowedExtensions.Contains(extension))
                 {
-                    ModelState.AddModelError("Image",
+                    ModelState.AddModelError(
+                        "ImageFile",
                         "Only JPG, JPEG, PNG and WEBP files are allowed.");
+
+                    vm.ImageUrl = user.AppUser.AppUserProfile.ImageUrl;
 
                     return View(vm);
                 }
 
                 if (vm.ImageFile.Length > EditProfileVm.MaxFileSize)
                 {
-                    ModelState.AddModelError("Image",
+                    ModelState.AddModelError(
+                        "ImageFile",
                         "Maximum file size is 2 MB.");
+
+                    vm.ImageUrl = user.AppUser.AppUserProfile.ImageUrl;
 
                     return View(vm);
                 }
 
-                string folder =
-                    Path.Combine(_environment.WebRootPath,
-                                 "images",
-                                 "profiles");
+                string folder = Path.Combine(
+                    _environment.WebRootPath,
+                    "images",
+                    "profiles");
 
                 if (!Directory.Exists(folder))
                     Directory.CreateDirectory(folder);
 
-                if (!string.IsNullOrEmpty(user.AppUser?.AppUserProfile?.ImageUrl))
+                if (!string.IsNullOrEmpty(
+                    user.AppUser.AppUserProfile.ImageUrl))
                 {
-                    string oldPath =
-                        Path.Combine(
-                            _environment.WebRootPath,
-                            user.AppUser.AppUserProfile.ImageUrl.TrimStart('/'));
+                    string oldPath = Path.Combine(
+                        _environment.WebRootPath,
+                        user.AppUser.AppUserProfile.ImageUrl.TrimStart('/'));
 
                     if (System.IO.File.Exists(oldPath))
                         System.IO.File.Delete(oldPath);
                 }
 
                 string fileName =
-                    Guid.NewGuid() +
-                    Path.GetExtension(vm.ImageFile.FileName);
+                    Guid.NewGuid() + extension;
 
                 string filePath =
                     Path.Combine(folder, fileName);
 
-                using FileStream stream =
+                await using FileStream stream =
                     new(filePath, FileMode.Create);
 
                 await vm.ImageFile.CopyToAsync(stream);
