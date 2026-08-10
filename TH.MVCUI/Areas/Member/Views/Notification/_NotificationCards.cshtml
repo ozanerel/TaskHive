@@ -33,7 +33,13 @@
 
                         <p class="text-muted">
 
-                            @(notification.Message.Length > 80
+                           @*  @(notification.Message.Length > 80
+                                ? notification.Message.Substring(0, 80) + "..."
+                                : notification.Message) *@
+
+                            @(string.IsNullOrWhiteSpace(notification.Message)
+                                ? "No message"
+                                : notification.Message.Length > 80
                                 ? notification.Message.Substring(0, 80) + "..."
                                 : notification.Message)
 

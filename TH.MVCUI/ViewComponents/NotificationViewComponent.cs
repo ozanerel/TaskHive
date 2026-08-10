@@ -19,26 +19,18 @@ namespace TH.MVCUI.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            int count = 0;
+            //Mevcut kullanıcıyı buluyoruz
+            var user = await _userContext.GetCurrentUserAsync();
 
-            if (User.IsInRole("Admin"))
-            {
-                var notifications = await _notificationManager.GetAllAsync();
+            if (user == null)
+                return View(0);
 
-                count = notifications.Count(x => !x.IsRead);
-            }
-            else
-            {
-                var user = await _userContext.GetCurrentUserAsync();
-
-                if (user != null)
-                {
-                    count = await _notificationManager
-                        .GetUnreadCountAsync(user.Id);
-                }
-            }
+            var count = await _notificationManager
+                .GetUnreadCountAsync(user.Id);
 
             return View(count);
         }
+
+        //Repository'de bulunan filtre sayesinde sadece giriş yapan kullanıcının okunmamış aktif notificationları sayılıyor
     }
 }
