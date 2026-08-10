@@ -49,11 +49,14 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<int> GetUnreadCountAsync(int userId)
         {
+            //return await _repository
+            //    .Where(x => x.UserId == userId &&
+            //                !x.IsRead &&
+            //                x.Status != DataStatus.Deleted)
+            //    .CountAsync();
+
             return await _repository
-                .Where(x => x.UserId == userId &&
-                            !x.IsRead &&
-                            x.Status != DataStatus.Deleted)
-                .CountAsync();
+                .GetUnreadCountAsync(userId);
         }
 
         public async Task<List<Notification>> GetUnreadNotificationsAsync(int userId)
@@ -63,7 +66,7 @@ namespace TH.BLL.Managers.Concretes
             //    .ToList();
 
             return await _repository
-    .GetNotificationsByUserAsync(userId);
+    .GetUnreadNotificationsAsync(userId);
         }
 
         public async System.Threading.Tasks.Task MarkAsReadAsync(int notificationId)

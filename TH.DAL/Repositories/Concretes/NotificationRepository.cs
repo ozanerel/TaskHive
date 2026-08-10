@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TH.DAL.ContextClasses;
 using TH.DAL.Repositories.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.DAL.Repositories.Concretes
@@ -21,7 +22,13 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<Notification>> GetUnreadNotificationsAsync(int userId)
         {
             return await _context.Notifications
-                .Where(x => x.UserId == userId && !x.IsRead)
+                .Where(x =>
+                //Notification kullanıcıya ait olması 
+                    x.UserId == userId &&
+                    //Sadece unread notification'ların görünmesi
+                    !x.IsRead &&
+                    //Passive notification'ın görünmesi
+                    x.Status != DataStatus.Deleted)
                 .OrderByDescending(x => x.NotificationDate)
                 .ToListAsync();
         }
@@ -29,7 +36,9 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<Notification>> GetNotificationsByUserAsync(int userId)
         {
             return await _context.Notifications
-                .Where(x => x.UserId == userId)
+                .Where(x =>
+                    x.UserId == userId &&
+                    x.Status != DataStatus.Deleted)
                 .OrderByDescending(x => x.NotificationDate)
                 .ToListAsync();
         }
@@ -37,7 +46,10 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<int> GetUnreadCountAsync(int userId)
         {
             return await _context.Notifications
-                .CountAsync(x => x.UserId == userId && !x.IsRead);
+                .CountAsync(x =>
+                    x.UserId == userId &&
+                    !x.IsRead &&
+                    x.Status != DataStatus.Deleted);
         }
     }
 }
