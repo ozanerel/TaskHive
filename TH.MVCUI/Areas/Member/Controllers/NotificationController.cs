@@ -14,7 +14,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
         private readonly INotificationManager _notificationManager;
         private readonly IUserContext _userContext;
 
-        public NotificationController(INotificationManager notificationManager,IUserContext userContext)
+        public NotificationController(
+            INotificationManager notificationManager,
+            IUserContext userContext)
         {
             _notificationManager = notificationManager;
             _userContext = userContext;
@@ -24,10 +26,13 @@ namespace TH.MVCUI.Areas.Member.Controllers
         {
             var user = await _userContext.GetCurrentUserAsync();
 
+            if (user == null)
+                return NotFound();
+
             NotificationIndexVm vm = new()
             {
                 Notifications = await _notificationManager
-                    .GetUnreadNotificationsAsync(user.Id)
+                    .GetNotificationsByUserAsync(user.Id)
             };
 
             return View(vm);
@@ -35,15 +40,22 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
             var notification = await _notificationManager.GetByIdAsync(id);
 
             if (notification == null)
                 return NotFound();
 
-            var user = await _userContext.GetCurrentUserAsync();
-
+            //Artık member url'i değiştirip başka bir kullanıcının notifaciton'ını göremeyecek. Sadece kendi notification'ını görebilecek.
             if (notification.UserId != user.Id)
                 return Forbid();
+
+            if (notification.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                return NotFound();
 
             NotificationDetailsVm vm = new()
             {
@@ -60,6 +72,22 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> MarkAsRead(int id)
         {
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var notification = await _notificationManager.GetByIdAsync(id);
+
+            if (notification == null)
+                return NotFound();
+
+            if (notification.UserId != user.Id)
+                return Forbid();
+
+            if (notification.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+                return NotFound();
+
             await _notificationManager.MarkAsReadAsync(id);
 
             return RedirectToAction(nameof(Index));
