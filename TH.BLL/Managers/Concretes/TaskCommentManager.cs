@@ -55,16 +55,12 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<TaskComment>> GetCommentsByTaskAsync(int taskId)
         {
-            return await _repository
-                .Where(x => x.TaskId == taskId)
-                .ToListAsync();
+            return await _repository.Where(x =>x.TaskId == taskId &&x.Status != DataStatus.Deleted).ToListAsync();
         }
 
         public async Task<List<TaskComment>> GetCommentsByUserAsync(int userId)
         {
-            return await _repository
-                .Where(x => x.UserId == userId)
-                .ToListAsync();
+            return await _repository.Where(x =>x.UserId == userId &&x.Status != DataStatus.Deleted).ToListAsync();
         }
     }
 }
