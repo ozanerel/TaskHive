@@ -9,10 +9,10 @@ namespace TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM
         [Required]
         public string Message { get; set; }
 
-        public bool IsRead { get; set; }
+        //public bool IsRead { get; set; }
 
-        public int TaskId { get; set; }
+        //public int TaskId { get; set; }
 
-        public int UserId { get; set; }
+        //public int UserId { get; set; }
     }
 }
