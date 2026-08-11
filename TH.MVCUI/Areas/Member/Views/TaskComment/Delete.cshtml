@@ -79,6 +79,8 @@
     <form asp-action="Delete"
           method="post">
 
+		@Html.AntiForgeryToken()
+
         <input asp-for="Comment.Id"
                type="hidden" />
 

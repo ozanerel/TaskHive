@@ -14,9 +14,7 @@
         <h1>Create Comment</h1>
 
         <p>
-
             Add a new comment to a task.
-
         </p>
 
     </div>
@@ -42,8 +40,7 @@
 
             <textarea asp-for="Message"
                       rows="5"
-                      class="form-control">
-            </textarea>
+                      class="form-control"></textarea>
 
             <span asp-validation-for="Message"
                   class="text-danger">
@@ -51,59 +48,28 @@
 
         </div>
 
-        <div class="row">
+        <div class="mb-4">
 
-            <div class="col-md-6">
+            <label asp-for="TaskId"
+                   class="form-label">
 
-                <div class="mb-4">
+                Task
 
-                    <label class="form-label">
+            </label>
 
-                        Task
+            <select asp-for="TaskId"
+                    asp-items="@(new SelectList(ViewBag.Tasks, "Id", "Title"))"
+                    class="form-select">
 
-                    </label>
+                <option value="">
+                    Select Task
+                </option>
 
-                    <select asp-for="TaskId"
-                            asp-items="@(new SelectList(ViewBag.Tasks,"Id","Title"))"
-                            class="form-select">
+            </select>
 
-                        <option value="">
-
-                            Select Task
-
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <div class="mb-4">
-
-                    <label class="form-label">
-
-                        User
-
-                    </label>
-
-                    <select asp-for="UserId"
-                            asp-items="@(new SelectList(ViewBag.Users,"Id","FirstName"))"
-                            class="form-select">
-
-                        <option value="">
-
-                            Select User
-
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
+            <span asp-validation-for="TaskId"
+                  class="text-danger">
+            </span>
 
         </div>
 
