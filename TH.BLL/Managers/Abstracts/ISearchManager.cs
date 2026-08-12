@@ -4,6 +4,6 @@ namespace TH.BLL.Managers.Abstracts
 {
     public interface ISearchManager
     {
-        Task<SearchResultDto> SearchAsync(string keyword);
+        Task<SearchResultDto> SearchAsync(string keyword,int? userId = null,bool isAdmin = false);
     }
 }

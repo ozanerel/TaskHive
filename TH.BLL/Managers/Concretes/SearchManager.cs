@@ -20,7 +20,10 @@ namespace TH.BLL.Managers.Concretes
             _userRepository = userRepository;
         }
 
-        public async Task<SearchResultDto> SearchAsync(string keyword)
+        public async Task<SearchResultDto> SearchAsync(
+            string keyword,
+            int? userId = null,
+            bool isAdmin = false)
         {
             SearchResultDto dto = new();
 
@@ -29,11 +32,35 @@ namespace TH.BLL.Managers.Concretes
 
             keyword = keyword.Trim();
 
-            dto.Projects = await _projectRepository.SearchProjectsAsync(keyword);
+            if (isAdmin)
+            {
+                dto.Projects =
+                    await _projectRepository.SearchProjectsAsync(keyword);
 
-            dto.Tasks = await _taskRepository.SearchTasksAsync(keyword);
+                dto.Tasks =
+                    await _taskRepository.SearchTasksAsync(keyword);
 
-            dto.Users = await _userRepository.SearchUsersAsync(keyword);
+                dto.Users =
+                    await _userRepository.SearchUsersAsync(keyword);
+            }
+            else if (userId.HasValue)
+            {
+                dto.Projects =
+                    await _projectRepository
+                        .SearchProjectsByUserAsync(
+                            keyword,
+                            userId.Value);
+
+                dto.Tasks =
+                    await _taskRepository
+                        .SearchTasksByUserAsync(
+                            keyword,
+                            userId.Value);
+
+                // Member kullanıcı aramasında sadece aktif kullanıcıları göstereceğiz.
+                dto.Users =
+                    await _userRepository.SearchUsersAsync(keyword);
+            }
 
             return dto;
         }
