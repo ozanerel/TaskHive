@@ -25,12 +25,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                var result = await _searchManager.SearchAsync(keyword);
+                var result = await _searchManager.SearchAsync(
+                    keyword,
+                    null,
+                    true);
 
                 vm.Projects = result.Projects;
-
                 vm.Tasks = result.Tasks;
-
                 vm.Users = result.Users;
             }
 
