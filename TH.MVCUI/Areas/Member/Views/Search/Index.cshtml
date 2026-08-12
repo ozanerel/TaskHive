@@ -5,50 +5,38 @@
     Layout = "~/Views/Shared/_AreaLayout.cshtml";
 }
 
-@if (!string.IsNullOrWhiteSpace(Model.Keyword))
-{
-    <div class="dashboard-header">
-
-        <div class="dashboard-title">
-
-            <h2>
-
-                Search Results
-
-            </h2>
-
-            <p>
-
-                "@Model.Keyword" için
-                <strong>@Model.TotalResultCount</strong>
-                sonuç bulundu.
-
-            </p>
-
-        </div>
-
-    </div>
-}
-
 <div class="dashboard-header">
 
     <div class="dashboard-title">
 
         <h1>Search Results</h1>
 
-        <p>
-
-            Results for "<strong>@Model.Keyword</strong>"
-
-        </p>
+        @if (!string.IsNullOrWhiteSpace(Model.Keyword))
+        {
+            <p>
+                Results for
+                "<strong>@Model.Keyword</strong>"
+                -
+                <strong>@Model.TotalResultCount</strong>
+                results found.
+            </p>
+        }
+        else
+        {
+            <p>
+                Search projects, tasks and users.
+            </p>
+        }
 
     </div>
 
 </div>
 
-@if (!Model.Projects.Any() &&
-    !Model.Tasks.Any() &&
-    !Model.Users.Any())
+
+@if (!string.IsNullOrWhiteSpace(Model.Keyword) &&
+   !Model.Projects.Any() &&
+   !Model.Tasks.Any() &&
+   !Model.Users.Any())
 {
     <div class="dashboard-card text-center py-5">
 
@@ -57,248 +45,190 @@
         <h4>No results found</h4>
 
         <p class="text-muted">
-
             Try another keyword.
-
         </p>
 
     </div>
 }
 else
 {
-
-    <!-- Projects -->
+    <!-- PROJECTS -->
     @if (Model.Projects.Any())
     {
-        <div class="search-section">
+        <div class="search-section mb-4">
 
             <h4>Projects</h4>
 
-            <table class="table">
+            <div class="dashboard-card">
 
-                <thead>
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Description</th>
-                        <th></th>
-                    </tr>
-                </thead>
+                <div class="table-responsive">
 
-                <tbody>
+                    <table class="table">
 
-                    @foreach (var item in Model.Projects)
-                    {
-                        <tr>
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Description</th>
+                                <th></th>
+                            </tr>
+                        </thead>
 
-                            <td>
-                                @item.ProjectName
-                            </td>
+                        <tbody>
 
-                            <td>
-                                @item.Description
-                            </td>
+                            @foreach (var item in Model.Projects)
+                            {
+                                <tr>
 
-                            <td>
+                                    <td>
+                                        @item.ProjectName
+                                    </td>
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-area="Admin"
-                                       asp-controller="Project"
-                                       asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-primary">
+                                    <td>
+                                        @item.Description
+                                    </td>
 
-                                        View
+                                    <td>
 
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a asp-area="Member"
-                                       asp-controller="MyProject"
-                                       asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-primary">
+                                        <a asp-area="Member"
+                                           asp-controller="MyProject"
+                                           asp-action="Details"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-primary">
 
-                                        View
+                                            View
 
-                                    </a>
-                                }
+                                        </a>
 
-                            </td>
+                                    </td>
 
-                        </tr>
-                    }
+                                </tr>
+                            }
 
-                </tbody>
+                        </tbody>
 
-            </table>
+                    </table>
+
+                </div>
+
+            </div>
 
         </div>
     }
 
-    <!-- Tasks -->
+
+    <!-- TASKS -->
     @if (Model.Tasks.Any())
     {
-        <div class="search-section">
+        <div class="search-section mb-4">
 
             <h4>Tasks</h4>
 
-            <table class="table">
+            <div class="dashboard-card">
 
-                <thead>
+                <div class="table-responsive">
 
-                    <tr>
-                        <th>Task</th>
-                        <th>Priority</th>
-                        <th></th>
-                    </tr>
+                    <table class="table">
 
-                </thead>
+                        <thead>
 
-                <tbody>
+                            <tr>
+                                <th>Task</th>
+                                <th>Priority</th>
+                                <th></th>
+                            </tr>
 
-                    @foreach (var item in Model.Tasks)
-                    {
-                        <tr>
+                        </thead>
 
-                            <td>
-                                @item.Title
-                            </td>
+                        <tbody>
 
-                            <td>
-                                @item.Priority
-                            </td>
+                            @foreach (var item in Model.Tasks)
+                            {
+                                <tr>
 
-                            <td>
+                                    <td>
+                                        @item.Title
+                                    </td>
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-area="Admin"
-                                       asp-controller="Task"
-                                       asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-primary">
+                                    <td>
+                                        @item.Priority
+                                    </td>
 
-                                        View
+                                    <td>
 
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a asp-area="Member"
-                                       asp-controller="MyTask"
-                                       asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-primary">
+                                        <a asp-area="Member"
+                                           asp-controller="MyTask"
+                                           asp-action="Details"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-primary">
 
-                                        View
+                                            View
 
-                                    </a>
-                                }
+                                        </a>
 
-                            </td>
+                                    </td>
 
-                        </tr>
-                    }
+                                </tr>
+                            }
 
-                </tbody>
+                        </tbody>
 
-            </table>
+                    </table>
+
+                </div>
+
+            </div>
 
         </div>
     }
 
-    <!-- Users -->
+
+    <!-- USERS -->
     @if (Model.Users.Any())
     {
-        <div class="search-section">
+        <div class="search-section mb-4">
 
             <h4>Users</h4>
 
-            <table class="table">
+            <div class="dashboard-card">
 
-                <thead>
+                <div class="table-responsive">
 
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th></th>
-                    </tr>
+                    <table class="table">
 
-                </thead>
+                        <thead>
 
-                <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
 
-                    @foreach (var item in Model.Users)
-                    {
-                        <tr>
+                        </thead>
 
-                            <td>
-                                @item.FirstName @item.LastName
-                            </td>
+                        <tbody>
 
-                            <td>
-                                @item.Email
-                            </td>
+                            @foreach (var item in Model.Users)
+                            {
+                                <tr>
 
-                            <td>
+                                    <td>
+                                        @item.FirstName
+                                        @item.LastName
+                                    </td>
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-area="Admin"
-                                       asp-controller="User"
-                                       asp-action="Details"
-                                       asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-primary">
+                                    <td>
+                                        @item.Email
+                                    </td>
 
-                                        View
+                                </tr>
+                            }
 
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a asp-area="Member"
-                                       asp-controller="Profile"
-                                       asp-action="Index"
-                                       class="btn btn-sm btn-primary">
+                        </tbody>
 
-                                        View
+                    </table>
 
-                                    </a>
-                                }
+                </div>
 
-                            </td>
-
-                        </tr>
-                    }
-
-                </tbody>
-
-            </table>
-
-        </div>
-    }
-
-    @if (!Model.Projects.Any()
-      && !Model.Tasks.Any()
-      && !Model.Users.Any())
-    {
-        <div class="search-empty">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <h3>
-
-                Sonuç Bulunamadı!
-
-            </h3>
-
-            <p>
-
-                Aramanızla eşleşen hiçbir şey bulunamadı
-
-            </p>
+            </div>
 
         </div>
     }
