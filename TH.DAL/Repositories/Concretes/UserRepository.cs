@@ -76,10 +76,7 @@ namespace TH.DAL.Repositories.Concretes
             keyword = keyword.Trim().ToLower();
 
             return await _context.Users
-                .Where(x =>
-                    x.FirstName.Contains(keyword) ||
-                    x.LastName.Contains(keyword) ||
-                    x.Email.Contains(keyword))
+                .Where(x =>x.FirstName.ToLower().Contains(keyword) || x.LastName.ToLower().Contains(keyword) ||x.Email.ToLower().Contains(keyword))
                 .OrderBy(x => x.FirstName)
                 .Take(10)
                 .ToListAsync();

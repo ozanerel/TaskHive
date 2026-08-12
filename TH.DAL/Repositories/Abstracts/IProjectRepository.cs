@@ -13,6 +13,7 @@ namespace TH.DAL.Repositories.Abstracts
         Task<List<Project>> GetProjectsWithTasksAsync();
         Task<Project> GetProjectDetailsAsync(int id);
         Task<List<Project>> SearchProjectsAsync(string keyword);
+        Task<List<Project>> SearchProjectsByUserAsync(string keyword,int userId);
         Task<List<Project>> GetDashboardProjectsAsync();
         Task<List<Project>> FilterProjectsAsync(string search, DataStatus? status, string sortBy);
     }

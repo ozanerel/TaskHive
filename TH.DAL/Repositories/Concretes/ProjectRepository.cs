@@ -112,11 +112,19 @@ namespace TH.DAL.Repositories.Concretes
                 //.Where(x =>
                 //    x.ProjectName.Contains(keyword) ||
                 //    x.Description.Contains(keyword))
-                .Where(x =>
-                x.Status != DataStatus.Deleted &&
-                (
-                x.ProjectName.Contains(keyword) ||x.Description.Contains(keyword)
-                ))
+                .Where(x =>x.ProjectName.Contains(keyword) ||x.Description.Contains(keyword))
+                .OrderBy(x => x.ProjectName)
+                .Take(10)
+                .ToListAsync();
+        }
+
+        public async Task<List<Project>> SearchProjectsByUserAsync(string keyword,int userId)
+        {
+            keyword = keyword.Trim().ToLower();
+
+            return await _context.Projects
+                .Include(x => x.Users)
+                .Where(x =>x.ProjectName.ToLower().Contains(keyword) ||x.Description.ToLower().Contains(keyword))
                 .OrderBy(x => x.ProjectName)
                 .Take(10)
                 .ToListAsync();
