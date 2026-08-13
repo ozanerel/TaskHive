@@ -15,13 +15,15 @@
         ? 0
         : (completedTask * 100) / totalTask;
 
-        <a asp-action="Details"
-           asp-route-id="@project.Id"
-           class="project-card">
+        <div class="project-card"
+             role="button"
+             tabindex="0"
+             data-details-url="@Url.Action("Details", new { id = project.Id })">
 
+            <!-- CARD HEADER -->
             <div class="project-card-header">
 
-                <div>
+                <div class="project-card-title">
 
                     <h3>
                         @project.ProjectName
@@ -42,19 +44,97 @@
 
                 </div>
 
-                <div class="project-menu">
 
-                    <i class="fa-solid fa-ellipsis"></i>
+                <!-- THREE DOT MENU -->
+                <div class="project-menu dropdown">
+
+                    <button type="button"
+                            class="project-menu-button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            aria-label="Project actions">
+
+                        <i class="fa-solid fa-ellipsis"></i>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        <!-- DETAILS -->
+
+                        <li>
+
+                            <a asp-action="Details"
+                               asp-route-id="@project.Id"
+                               class="dropdown-item">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                                <span>Details</span>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- EDIT -->
+
+                        <li>
+
+                            <a asp-action="Update"
+                               asp-route-id="@project.Id"
+                               class="dropdown-item">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                <span>Edit</span>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- DELETE -->
+                        @if (project.Status != DataStatus.Deleted)
+                        {
+                            <li>
+
+                                <hr class="dropdown-divider" />
+
+                            </li>
+
+                            <li>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@project.Id"
+                                   class="dropdown-item text-danger">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                    <span>Delete</span>
+
+                                </a>
+
+                            </li>
+                        }
+
+                    </ul>
 
                 </div>
 
             </div>
+
+
+            <!-- DESCRIPTION -->
 
             <p class="project-description">
 
                 @project.Description
 
             </p>
+
+
+            <!-- PROGRESS -->
 
             <div class="progress-section">
 
@@ -76,6 +156,9 @@
 
             </div>
 
+
+            <!-- STATS -->
+
             <div class="project-stats">
 
                 <div>
@@ -96,38 +179,59 @@
 
             </div>
 
-            <div class="project-actions">
-
-                <a asp-action="Details"
-                   asp-route-id="@project.Id"
-                   class="btn-outline-custom">
-
-                    Details
-
-                </a>
-
-                <a asp-action="Update"
-                   asp-route-id="@project.Id"
-                   class="btn-outline-custom">
-
-                    Edit
-
-                </a>
-
-                @if (project.Status != DataStatus.Deleted)
-                {
-                    <a asp-action="Delete"
-                       asp-route-id="@project.Id"
-                       class="btn-danger-custom">
-
-                        Delete
-
-                    </a>
-                }
-
-            </div>
-
-        </a>
+        </div>
     }
 
 </div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.querySelectorAll(".project-card").forEach(card => {
+
+            card.addEventListener("click", function (event) {
+
+                // Dropdown/menu içerisindeki tıklamalar
+                // kartın Details sayfasına gitmesini engeller.
+
+                if (event.target.closest(".project-menu")) {
+                    return;
+                }
+
+                const detailsUrl = card.dataset.detailsUrl;
+
+                if (detailsUrl) {
+                    window.location.href = detailsUrl;
+                }
+
+            });
+
+
+            // Klavye ile kart açabilmek için
+            card.addEventListener("keydown", function (event) {
+
+                if (event.key === "Enter" || event.key === " ") {
+
+                    if (event.target.closest(".project-menu")) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    const detailsUrl = card.dataset.detailsUrl;
+
+                    if (detailsUrl) {
+                        window.location.href = detailsUrl;
+                    }
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+}
