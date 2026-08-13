@@ -70,6 +70,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsRead(int id)
         {
             var user = await _userContext.GetCurrentUserAsync();

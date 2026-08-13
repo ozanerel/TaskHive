@@ -102,13 +102,19 @@
 
                     @if (!notification.IsRead)
                     {
-                        <a asp-action="MarkAsRead"
-                           asp-route-id="@notification.Id"
-                           class="btn-primary-custom">
+                        <form asp-action="MarkAsRead"
+                              asp-route-id="@notification.Id"
+                              method="post"
+                              class="d-inline">
 
-                            <i class="fa-solid fa-check"></i>
+                            <button type="submit"
+                                    class="btn-primary-custom">
 
-                        </a>
+                                <i class="fa-solid fa-check"></i>
+
+                            </button>
+
+                        </form>
                     }
                     else
                     {

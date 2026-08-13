@@ -27,7 +27,7 @@ namespace TH.DAL.Repositories.Concretes
                     x.UserId == userId &&
                     //Sadece unread notification'ların görünmesi
                     !x.IsRead &&
-                    //Passive notification'ın görünmesi
+                    //Deleted notification'ların görünmemesi
                     x.Status != DataStatus.Deleted)
                 .OrderByDescending(x => x.NotificationDate)
                 .ToListAsync();
