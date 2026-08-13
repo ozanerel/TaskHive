@@ -11,3 +11,51 @@
 @await Html.PartialAsync("_ProjectFilters", Model)
 
 @await Html.PartialAsync("_ProjectCards", Model)
+
+
+@section Scripts {
+
+    <script>
+
+        document.querySelectorAll(".project-card").forEach(card => {
+
+            card.addEventListener("click", function (event) {
+
+                if (event.target.closest(".project-menu")) {
+                    return;
+                }
+
+                const detailsUrl = card.dataset.detailsUrl;
+
+                if (detailsUrl) {
+                    window.location.href = detailsUrl;
+                }
+
+            });
+
+
+            card.addEventListener("keydown", function (event) {
+
+                if (event.key === "Enter" || event.key === " ") {
+
+                    if (event.target.closest(".project-menu")) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    const detailsUrl = card.dataset.detailsUrl;
+
+                    if (detailsUrl) {
+                        window.location.href = detailsUrl;
+                    }
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+}
