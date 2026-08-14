@@ -1,4 +1,5 @@
-﻿using TH.ENTITIES.Models;
+﻿using TH.ENTITIES.Enums;
+using TH.ENTITIES.Models;
 
 namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
 {
@@ -25,6 +26,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
         public List<User> Users { get; set; } = new();
 
         public DateTime CreatedDate { get; set; }
+
+        public DataStatus Status { get; set; }
 
         public int TaskCount => Tasks.Count;
 

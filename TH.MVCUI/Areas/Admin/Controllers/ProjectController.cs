@@ -54,7 +54,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Description = project.Description,
                 Tasks = project.Tasks?.ToList() ?? new(),
                 Users = project.Users?.ToList() ?? new(),
-                CreatedDate = project.CreatedDate
+                CreatedDate = project.CreatedDate,
+                Status = project.Status
             };
 
             return View(vm);

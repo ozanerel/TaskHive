@@ -1,12 +1,12 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
+@using TH.ENTITIES.Enums
+
 @model ProjectDetailsVm
 
 <div class="dashboard-card">
 
     <h3>
-
         Quick Actions
-
     </h3>
 
     <div class="d-grid gap-3">
@@ -21,15 +21,18 @@
 
         </a>
 
-        <a asp-action="Delete"
-           asp-route-id="@Model.Id"
-           class="btn-danger-custom">
+        @if (Model.Status != DataStatus.Deleted)
+        {
+            <a asp-action="Delete"
+               asp-route-id="@Model.Id"
+               class="btn-danger-custom">
 
-            <i class="fa fa-trash"></i>
+                <i class="fa fa-trash"></i>
 
-            Delete Project
+                Delete Project
 
-        </a>
+            </a>
+        }
 
     </div>
 

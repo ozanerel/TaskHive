@@ -1,4 +1,6 @@
 ﻿@using TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
+@using TH.ENTITIES.Enums
+
 @model ProjectDetailsVm
 
 @{
@@ -13,44 +15,62 @@
 
 <div class="project-details-header">
 
-    <div>
+    <div class="project-details-main">
 
         <a asp-action="Index"
-           class="btn-outline-custom">
+           class="btn-outline-custom project-back-button">
 
-            <i class="fa fa-arrow-left"></i>
+            <i class="fa-solid fa-arrow-left"></i>
 
             Back
 
         </a>
 
-        <h1>
+        <div class="project-details-title">
 
-            @Model.ProjectName
+            <div class="d-flex align-items-center gap-3">
 
-        </h1>
+                <h1>
+                    @Model.ProjectName
+                </h1>
 
-        <p>
+                @if (Model.Status == DataStatus.Deleted)
+                {
+                    <span class="status-badge passive">
+                        Passive
+                    </span>
+                }
+                else
+                {
+                    <span class="status-badge active">
+                        Active
+                    </span>
+                }
 
-            @Model.Description
+            </div>
 
-        </p>
+            <p>
+                @Model.Description
+            </p>
+
+        </div>
 
     </div>
 
-    <div>
 
-        <span class="status-badge active">
+    <div class="project-details-progress">
 
-            Active
+        <div class="project-progress-circle">
 
-        </span>
-
-        <div class="project-progress-text">
-
-            @progress%
+            <span>
+                @progress%
+            </span>
 
         </div>
+
+        <small>
+            Project Progress
+        </small>
 
     </div>
 
