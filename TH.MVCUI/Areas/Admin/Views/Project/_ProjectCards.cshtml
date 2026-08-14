@@ -16,11 +16,9 @@
         : (completedTask * 100) / totalTask;
 
         <div class="project-card"
-             role="button"
-             tabindex="0"
-             data-details-url="@Url.Action("Details", new { id = project.Id })">
+             onclick="window.location.href='@Url.Action("Details", "Project", new { id = project.Id })'">
 
-            <!-- CARD HEADER -->
+            <!-- HEADER -->
             <div class="project-card-header">
 
                 <div class="project-card-title">
@@ -31,13 +29,13 @@
 
                     @if (project.Status == DataStatus.Deleted)
                     {
-                        <span class="badge bg-danger">
+                        <span class="status-badge passive">
                             Passive
                         </span>
                     }
                     else
                     {
-                        <span class="badge bg-success">
+                        <span class="status-badge active">
                             Active
                         </span>
                     }
@@ -45,14 +43,14 @@
                 </div>
 
 
-                <!-- THREE DOT MENU -->
-                <div class="project-menu dropdown">
+                <!-- MENU -->
+                <div class="project-menu"
+                     onclick="event.stopPropagation();">
 
                     <button type="button"
                             class="project-menu-button"
                             data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                            aria-label="Project actions">
+                            aria-expanded="false">
 
                         <i class="fa-solid fa-ellipsis"></i>
 
@@ -60,13 +58,11 @@
 
                     <ul class="dropdown-menu dropdown-menu-end">
 
-                        <!-- DETAILS -->
-
                         <li>
 
-                            <a asp-action="Details"
-                               asp-route-id="@project.Id"
-                               class="dropdown-item">
+                            <a class="dropdown-item"
+                               asp-action="Details"
+                               asp-route-id="@project.Id">
 
                                 <i class="fa-solid fa-eye"></i>
 
@@ -76,14 +72,11 @@
 
                         </li>
 
-
-                        <!-- EDIT -->
-
                         <li>
 
-                            <a asp-action="Update"
-                               asp-route-id="@project.Id"
-                               class="dropdown-item">
+                            <a class="dropdown-item"
+                               asp-action="Update"
+                               asp-route-id="@project.Id">
 
                                 <i class="fa-solid fa-pen"></i>
 
@@ -93,8 +86,6 @@
 
                         </li>
 
-
-                        <!-- DELETE -->
                         @if (project.Status != DataStatus.Deleted)
                         {
                             <li>
@@ -105,9 +96,9 @@
 
                             <li>
 
-                                <a asp-action="Delete"
-                                   asp-route-id="@project.Id"
-                                   class="dropdown-item text-danger">
+                                <a class="dropdown-item text-danger"
+                                   asp-action="Delete"
+                                   asp-route-id="@project.Id">
 
                                     <i class="fa-solid fa-trash"></i>
 
@@ -126,7 +117,6 @@
 
 
             <!-- DESCRIPTION -->
-
             <p class="project-description">
 
                 @project.Description
@@ -135,7 +125,6 @@
 
 
             <!-- PROGRESS -->
-
             <div class="progress-section">
 
                 <div class="progress-info">
@@ -158,14 +147,15 @@
 
 
             <!-- STATS -->
-
             <div class="project-stats">
 
                 <div>
 
                     <i class="fa-solid fa-users"></i>
 
-                    @(project.Users?.Count ?? 0) Members
+                    <span>
+                        @(project.Users?.Count ?? 0) Members
+                    </span>
 
                 </div>
 
@@ -173,7 +163,9 @@
 
                     <i class="fa-solid fa-list-check"></i>
 
-                    @totalTask Tasks
+                    <span>
+                        @totalTask Tasks
+                    </span>
 
                 </div>
 
@@ -183,55 +175,3 @@
     }
 
 </div>
-
-
-@section Scripts {
-
-    <script>
-
-        document.querySelectorAll(".project-card").forEach(card => {
-
-            card.addEventListener("click", function (event) {
-
-                // Dropdown/menu içerisindeki tıklamalar
-                // kartın Details sayfasına gitmesini engeller.
-
-                if (event.target.closest(".project-menu")) {
-                    return;
-                }
-
-                const detailsUrl = card.dataset.detailsUrl;
-
-                if (detailsUrl) {
-                    window.location.href = detailsUrl;
-                }
-
-            });
-
-
-            // Klavye ile kart açabilmek için
-            card.addEventListener("keydown", function (event) {
-
-                if (event.key === "Enter" || event.key === " ") {
-
-                    if (event.target.closest(".project-menu")) {
-                        return;
-                    }
-
-                    event.preventDefault();
-
-                    const detailsUrl = card.dataset.detailsUrl;
-
-                    if (detailsUrl) {
-                        window.location.href = detailsUrl;
-                    }
-
-                }
-
-            });
-
-        });
-
-    </script>
-
-}
