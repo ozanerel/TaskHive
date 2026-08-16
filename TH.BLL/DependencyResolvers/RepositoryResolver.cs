@@ -21,6 +21,9 @@ namespace TH.BLL.DependencyResolvers
             services.AddScoped<ITaskCommentRepository,TaskCommentRepository>();
             services.AddScoped<ITaskRepository,TaskRepository>();
             services.AddScoped<IUserRepository,UserRepository>();
+            
+            services.AddScoped<ITeamRepository,TeamRepository>();
+            services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
         }
     }
 }
