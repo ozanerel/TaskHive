@@ -1,0 +1,209 @@
+﻿@model TH.MVCUI.Models.ViewModels.AppUserViewModels.RegisterViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<div class="container mt-5" style="max-width:420px;">
+
+    <h3 class="mb-4 text-center">
+        TaskHive Kayıt Ol
+    </h3>
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger">
+    </div>
+
+    <form asp-controller="Account"
+          asp-action="Register"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <!-- Ad -->
+
+        <div class="mb-3">
+
+            <label asp-for="FirstName">
+                Ad
+            </label>
+
+            <input asp-for="FirstName"
+                   class="form-control"
+                   placeholder="Adınız" />
+
+            <span asp-validation-for="FirstName"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Soyad -->
+
+        <div class="mb-3">
+
+            <label asp-for="LastName">
+                Soyad
+            </label>
+
+            <input asp-for="LastName"
+                   class="form-control"
+                   placeholder="Soyadınız" />
+
+            <span asp-validation-for="LastName"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Kullanıcı Adı -->
+
+        <div class="mb-3">
+
+            <label asp-for="UserName">
+                Kullanıcı Adı
+            </label>
+
+            <input asp-for="UserName"
+                   class="form-control"
+                   placeholder="Kullanıcı adınız"
+                   autocomplete="username" />
+
+            <span asp-validation-for="UserName"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Email -->
+
+        <div class="mb-3">
+
+            <label asp-for="Email">
+                Email
+            </label>
+
+            <input asp-for="Email"
+                   type="email"
+                   class="form-control"
+                   placeholder="ornek@email.com"
+                   autocomplete="email" />
+
+            <span asp-validation-for="Email"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Rol -->
+
+        <div class="mb-3">
+
+            <label asp-for="RoleId">
+                Mesleki Rol
+            </label>
+
+            <select asp-for="RoleId"
+                    class="form-select">
+
+                <option value="">
+                    Rolünüzü seçin
+                </option>
+
+                @foreach (var role in Model.Roles)
+                {
+                    <option value="@role.Id">
+                        @role.Name
+                    </option>
+                }
+
+            </select>
+
+            <span asp-validation-for="RoleId"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Şifre -->
+
+        <div class="mb-3">
+
+            <label asp-for="Password">
+                Şifre
+            </label>
+
+            <input asp-for="Password"
+                   type="password"
+                   class="form-control"
+                   placeholder="En az 6 karakter"
+                   autocomplete="new-password" />
+
+            <span asp-validation-for="Password"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Şifre Tekrar -->
+
+        <div class="mb-3">
+
+            <label asp-for="ConfirmPassword">
+                Şifre Tekrar
+            </label>
+
+            <input asp-for="ConfirmPassword"
+                   type="password"
+                   class="form-control"
+                   placeholder="Şifrenizi tekrar girin"
+                   autocomplete="new-password" />
+
+            <span asp-validation-for="ConfirmPassword"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- Register -->
+
+        <button type="submit"
+                class="btn btn-primary w-100">
+
+            Kayıt Ol
+
+        </button>
+
+    </form>
+
+
+    <!-- Login Link -->
+
+    <div class="text-center mt-3">
+
+        Zaten hesabınız var mı?
+
+        <a asp-controller="Account"
+           asp-action="Login">
+
+            Giriş Yap
+
+        </a>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}
