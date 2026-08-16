@@ -12,6 +12,8 @@ namespace TH.BLL.Managers.Abstracts
     {
         //Admin için yeni kullanıcı oluşturma ve rol atama
         Task<AppUser> CreateUserWithRoleAsync(string username, string email, string password, string rolename);
+        //Public register işlemi
+        Task<AppUser> RegisterAsync(string username,string firstName,string lastName,string email,string password);
         //Kullanıcı adı ile kullanıcıyı getirme
         Task<List<AppUser>> GetUsersByRoleAsync(string roleName);
         //Kullanıcı rolünü değiştirme

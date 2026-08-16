@@ -99,5 +99,147 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.GetUserByRoleAsync(roleName);
         }
+
+        public async Task<AppUser> RegisterAsync(string username, string firstName, string lastName, string email, string password)
+        {
+            //==============================================
+            // 1. Username kontrolü
+            //==============================================
+
+            var existingUser =
+                await _userManager.FindByNameAsync(username);
+
+            if (existingUser != null)
+            {
+                throw new Exception(
+                    "Bu kullanıcı adı zaten mevcut.");
+            }
+
+
+            //==============================================
+            // 2. Email kontrolü
+            //==============================================
+
+            var existingEmail =
+                await _userManager.FindByEmailAsync(email);
+
+            if (existingEmail != null)
+            {
+                throw new Exception(
+                    "Bu email zaten kayıtlı.");
+            }
+
+
+            //==============================================
+            // 3. AppUser oluştur
+            //==============================================
+
+            var newUser = new AppUser
+            {
+                UserName = username,
+                Email = email,
+
+                CreatedDate = DateTime.Now,
+
+                SecurityStamp =
+                    Guid.NewGuid().ToString(),
+
+                ActivationCode = Guid.NewGuid(),
+
+                Status = DataStatus.Inserted,
+
+                EmailConfirmed = true
+            };
+
+
+            //==============================================
+            // 4. Identity kullanıcı oluştur
+            //==============================================
+
+            var createResult =
+                await _userManager.CreateAsync(
+                    newUser,
+                    password);
+
+            if (!createResult.Succeeded)
+            {
+                var errors = string.Join(
+                    " | ",
+                    createResult.Errors
+                        .Select(e => e.Description));
+
+                throw new Exception(
+                    "Kullanıcı oluşturulamadı: " + errors);
+            }
+
+
+            //==============================================
+            // 5. Member Identity Role kontrolü
+            //==============================================
+
+            const string memberRole = "Member";
+
+            if (!await _roleManager.RoleExistsAsync(memberRole))
+            {
+                var roleResult =
+                    await _roleManager.CreateAsync(
+                        new IdentityRole<int>(memberRole));
+
+                if (!roleResult.Succeeded)
+                {
+                    // AppUser oluşturuldu fakat rol oluşturulamadı.
+                    // Kullanıcıyı geri siliyoruz.
+                    await _userManager.DeleteAsync(newUser);
+
+                    var errors = string.Join(
+                        " | ",
+                        roleResult.Errors
+                            .Select(e => e.Description));
+
+                    throw new Exception(
+                        "Member rolü oluşturulamadı: " + errors);
+                }
+            }
+
+
+            //==============================================
+            // 6. Member rolünü kullanıcıya ata
+            //==============================================
+
+            var addRoleResult =
+                await _userManager.AddToRoleAsync(
+                    newUser,
+                    memberRole);
+
+            if (!addRoleResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(newUser);
+
+                var errors = string.Join(
+                    " | ",
+                    addRoleResult.Errors
+                        .Select(e => e.Description));
+
+                throw new Exception(
+                    "Kullanıcı rolü atanamadı: " + errors);
+            }
+
+
+            //==============================================
+            // 7. TaskHive User kaydı
+            //==============================================
+
+            // Burada User entity'sinin RoleId'sini
+            // bulmamız gerekiyor.
+            //
+            // Bu nedenle Role tablosundan Member rolünü
+            // alıyoruz.
+
+            // NOT:
+            // IdentityRole<int> ile TH.ENTITIES.Models.Role
+            // birbirinden farklı tablolardır.
+
+            throw new NotImplementedException();
+        }
     }
 }
