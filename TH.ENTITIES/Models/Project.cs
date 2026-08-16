@@ -11,10 +11,13 @@ namespace TH.ENTITIES.Models
         public string ProjectName { get; set; }
         public string Description { get; set; }
 
+        public int TeamId { get; set; }
+
 
         //Relational Properties
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<Role> Roles { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
+        public virtual Team Team { get; set; }
     }
 }

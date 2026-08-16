@@ -21,6 +21,13 @@ namespace TH.CONF.Options
                 .HasMaxLength(250);
             builder.HasMany(p => p.Users)
                    .WithMany(u => u.Projects); //Many-to-Many ilişki
+
+            builder.HasOne(p => p.Team)
+                   .WithMany(t => t.Projects)
+                   .HasForeignKey(p => p.TeamId)
+                   .OnDelete(
+                   Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict
+                   );
         }
     }
 }
