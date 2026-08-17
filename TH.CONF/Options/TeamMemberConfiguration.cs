@@ -26,6 +26,10 @@ namespace TH.CONF.Options
                 tm.UserId
             })
             .IsUnique();//Aynı kullanıcı aynı Team'e iki kere eklenemeyecek
+
+            builder.Property(tm => tm.TeamRole)
+                   .IsRequired()
+                   .HasConversion<int>();
         }
     }
 }
