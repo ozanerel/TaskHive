@@ -14,5 +14,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<Team>> GetTeamsByUserAsync(int userId);
 
         Task<List<Team>> SearchTeamsAsync(string keyword);
+
+        System.Threading.Tasks.Task CreateTeamWithAdminAsync(Team team, int userId);
     }
 }
