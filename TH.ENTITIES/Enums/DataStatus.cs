@@ -56,5 +56,12 @@ namespace TH.ENTITIES.Enums
         UserDeleted = 12
     }
 
+    public enum TeamRole
+    {
+        //Member default olarak gelsin diye 1 yazdık başka türlü bir anlamı veya farkı yok
+        Member = 1,
+        Admin = 2
+    }
+
 
 }
