@@ -117,5 +117,10 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.FilterUsersAsync(search,roleId,status);
         }
+
+        public async Task<User> GetByAppUserIdAsync(int appUserId)
+        {
+            return await _repository.GetByAppUserIdAsync(appUserId);
+        }
     }
 }

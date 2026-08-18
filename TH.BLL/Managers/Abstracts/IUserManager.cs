@@ -17,5 +17,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<User>> GetAdminsAsync();
 
         Task<List<User>> FilterUsersAsync(string search,int? roleId,DataStatus? status);
+
+        Task<User> GetByAppUserIdAsync(int appUserId);
     }
 }

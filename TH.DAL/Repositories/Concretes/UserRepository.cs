@@ -64,6 +64,12 @@ namespace TH.DAL.Repositories.Concretes
                 .ToListAsync();
         }
 
+        public async Task<User> GetByAppUserIdAsync(int appUserId)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(x => x.AppUserId == appUserId);
+        }
+
         public async Task<User> GetUserWithTasksAsync(int id)
         {
             return await _context.Users
