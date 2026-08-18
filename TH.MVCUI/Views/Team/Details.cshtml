@@ -1,0 +1,188 @@
+﻿@model TH.MVCUI.Models.ViewModels.TeamViewModels.TeamDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2>@Model.Name</h2>
+
+            <p class="text-muted mb-0">
+                @Model.Description
+            </p>
+
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Takımlara Dön
+
+        </a>
+
+    </div>
+
+
+    <!-- Members -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-users me-2"></i>
+                Takım Üyeleri
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.Members.Any())
+            {
+                <p class="text-muted mb-0">
+                    Takımda henüz üye bulunmuyor.
+                </p>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Ad Soyad</th>
+                                <th>Email</th>
+                                <th>Mesleki Rol</th>
+                                <th>Takım Rolü</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var member in Model.Members)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @member.FirstName
+                                        @member.LastName
+                                    </td>
+
+                                    <td>
+                                        @member.Email
+                                    </td>
+
+                                    <td>
+                                        @member.RoleName
+                                    </td>
+
+                                    <td>
+
+                                        @if (member.TeamRole == TH.ENTITIES.Enums.TeamRole.Admin)
+                                        {
+                                            <span class="badge bg-primary">
+                                                Admin
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Member
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- Projects -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-folder me-2"></i>
+                Takım Projeleri
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.Projects.Any())
+            {
+                <p class="text-muted mb-0">
+                    Bu takıma bağlı henüz bir proje bulunmuyor.
+                </p>
+            }
+            else
+            {
+                <div class="row">
+
+                    @foreach (var project in Model.Projects)
+                    {
+                        <div class="col-md-6 mb-3">
+
+                            <div class="border rounded p-3">
+
+                                <h5>
+                                    @project.ProjectName
+                                </h5>
+
+                                <p class="text-muted">
+                                    @project.Description
+                                </p>
+
+                                <small class="text-muted">
+
+                                    <i class="fa-solid fa-list-check me-1"></i>
+
+                                    @project.TaskCount görev
+
+                                </small>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

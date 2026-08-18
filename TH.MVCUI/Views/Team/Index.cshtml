@@ -1,0 +1,88 @@
+﻿@model List<TH.MVCUI.Models.ViewModels.TeamViewModels.TeamListViewModel>
+
+@{
+    ViewData["Title"] = "Takımlarım";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2>Takımlarım</h2>
+            <p class="text-muted">
+                Dahil olduğunuz takımları görüntüleyin.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="fa-solid fa-plus me-2"></i>
+            Yeni Takım
+
+        </a>
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+
+            Henüz herhangi bir takıma dahil değilsiniz.
+
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var team in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                @team.Name
+                            </h5>
+
+                            <p class="card-text text-muted">
+                                @team.Description
+                            </p>
+
+                            <div class="d-flex gap-3 mb-3">
+
+                                <span>
+                                    <i class="fa-solid fa-users"></i>
+                                    @team.MemberCount Üye
+                                </span>
+
+                                <span>
+                                    <i class="fa-solid fa-folder"></i>
+                                    @team.ProjectCount Proje
+                                </span>
+
+                            </div>
+
+                            <a asp-action="Details"
+                               asp-route-id="@team.Id"
+                               class="btn btn-outline-primary w-100">
+
+                                Takımı Görüntüle
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
