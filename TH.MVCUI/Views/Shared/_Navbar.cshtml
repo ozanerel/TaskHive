@@ -3,24 +3,24 @@
 @inject UserManager<AppUser> UserManager
 
 @{
-    var currentUser = await UserManager.GetUserAsync(User);
+	var currentUser = await UserManager.GetUserAsync(User);
 }
 
 @{
-    var profilePhoto = currentUser?.AppUserProfile?.ImageUrl;
+	var profilePhoto = currentUser?.AppUserProfile?.ImageUrl;
 }
 
 <nav class="th-navbar">
 
-    <div class="th-navbar-left">
+	<div class="th-navbar-left">
 
-        <button class="th-menu-btn" id="sidebarToggle">
+		<button class="th-menu-btn" id="sidebarToggle">
 
-            <i class="fa-solid fa-bars"></i>
+			<i class="fa-solid fa-bars"></i>
 
-        </button>
+		</button>
 
-        @* <div class="th-search">
+		@* <div class="th-search">
 
             <i class="fa-solid fa-magnifying-glass"></i>
 
@@ -29,43 +29,43 @@
 
         </div> *@
 
-        <form asp-controller="Search"
-              asp-action="Index"
-              method="get"
-              class="th-search">
+		<form asp-controller="Search"
+			  asp-action="Index"
+			  method="get"
+			  class="th-search">
 
-            <i class="fa-solid fa-magnifying-glass"></i>
+			<i class="fa-solid fa-magnifying-glass"></i>
 
-            <input type="search"
-                   name="keyword"
-                   value="@Context.Request.Query["keyword"]"
-                   placeholder="Search project, task or user..."
-                   autocomplete="off" />
+			<input type="search"
+				   name="keyword"
+				   value="@Context.Request.Query["keyword"]"
+				   placeholder="Search project, task or user..."
+				   autocomplete="off" />
 
-            @* <span class="search-shortcut">
+			@* <span class="search-shortcut">
                 Enter
             </span> *@
 
-        </form>
+		</form>
 
-    </div>
+	</div>
 
-    <div class="th-navbar-right">
+	<div class="th-navbar-right">
 
-        <!-- Notification -->
+		<!-- Notification -->
 
-        @* <div class="th-navbar-icon">
+		@* <div class="th-navbar-icon">
 
             <i class="fa-regular fa-bell"></i>
 
             <span class="th-badge">3</span>
 
         </div> *@
-        @await Component.InvokeAsync("Notification")
+		@await Component.InvokeAsync("Notification")
 
-        <!-- Message -->
+		<!-- Message -->
 
-        @* <div class="th-navbar-icon">
+		@* <div class="th-navbar-icon">
 
             <i class="fa-regular fa-envelope"></i>
 
@@ -73,127 +73,128 @@
 
         </div> *@
 
-        <!-- Comming Soon -->
-        <div class="th-navbar-icon disabled">
+		<!-- Comming Soon -->
+		<div class="th-navbar-icon disabled">
 
-            <i class="fa-regular fa-envelope"></i>
+			<i class="fa-regular fa-envelope"></i>
 
-        </div>
+		</div>
 
-        <!-- User -->
+		<!-- User -->
 
-        <div class="dropdown">
+		<div class="dropdown">
 
-            <button class="th-user-button"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
+			<button class="th-user-button"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false">
 
-                <div class="th-user-avatar">
+				<div class="th-user-avatar">
 
-                    @if (!string.IsNullOrEmpty(profilePhoto))
-                    {
-                        <img src="@profilePhoto" 
-                            alt="Profile Photo" />
-                    }
-                    else
-                    {
-                        @User.Identity?.Name?.Substring(0, 1).ToUpper()
-                    }
+					@if (!string.IsNullOrEmpty(profilePhoto))
+					{
+						<img src="@profilePhoto"
+							 alt="Profile Photo" />
+					}
+					else
+					{
+						@User.Identity?.Name?.Substring(0, 1).ToUpper()
+					}
 
-                </div>
+				</div>
 
-                <div class="th-user-info">
+				<div class="th-user-info">
 
-                    <h6>
+					<h6>
 
-                        @User.Identity?.Name
+						@User.Identity?.Name
 
-                    </h6>
+					</h6>
 
-                    <span>
+					<span>
 
-                        @(User.IsInRole("Admin") ? "Administrator" : "Member")
+						@(User.IsInRole("Admin") ? "Administrator" : "Member")
 
-                    </span>
+					</span>
 
-                </div>
+				</div>
 
-                <i class="fa-solid fa-chevron-down"></i>
+				<i class="fa-solid fa-chevron-down"></i>
 
-            </button>
+			</button>
 
-            <ul class="dropdown-menu dropdown-menu-end">
+			<ul class="dropdown-menu dropdown-menu-end">
 
-                @if (User.IsInRole("Admin"))
-                {
-                    <li>
+				@if (User.IsInRole("Admin"))
+				{
+					<li>
 
-                        <a class="dropdown-item"
-                           asp-area="Admin"
-                           asp-controller="Dashboard"
-                           asp-action="Index">
+						<a class="dropdown-item"
+						   asp-area="Admin"
+						   asp-controller="Dashboard"
+						   asp-action="Index">
 
-                            Dashboard
+							Dashboard
 
-                        </a>
+						</a>
 
-                    </li>
-                }
-                else
-                {
-                    <li>
+					</li>
+				}
+				else
+				{
+					<li>
 
-                        <a class="dropdown-item"
-                           asp-area="Member"
-                           asp-controller="Profile"
-                           asp-action="Index">
+						<a class="dropdown-item"
+						   asp-area="Member"
+						   asp-controller="Profile"
+						   asp-action="Index">
 
-                            My Profile
+							My Profile
 
-                        </a>
+						</a>
 
-                    </li>
-                }
+					</li>
+				}
 
-                <li>
-                    <a class="dropdown-item"
-                       asp-controller="Team"
-                       asp-action="Index">
+				<li>
+					<a class="dropdown-item"
+					   asp-area=""
+					   asp-controller="Team"
+					   asp-action="Index">
 
-                        <i class="fa-solid fa-users me-2"></i>
-                        Takımlarım
+						<i class="fa-solid fa-users me-2"></i>
+						Takımlarım
 
-                    </a>
-                </li>
+					</a>
+				</li>
 
-                <li>
+				<li>
 
-                    <hr class="dropdown-divider" />
+					<hr class="dropdown-divider" />
 
-                </li>
+				</li>
 
-                <li>
+				<li>
 
-                    <form asp-controller="Account"
-                          asp-action="Logout"
-                          asp-area=""
-                          method="post">
+					<form asp-controller="Account"
+						  asp-action="Logout"
+						  asp-area=""
+						  method="post">
 
-                        <button class="dropdown-item">
+						<button class="dropdown-item">
 
-                            Logout
+							Logout
 
-                        </button>
+						</button>
 
-                    </form>
+					</form>
 
-                </li>
+				</li>
 
-            </ul>
+			</ul>
 
-        </div>
+		</div>
 
-    </div>
+	</div>
 
 </nav>
