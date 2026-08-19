@@ -16,7 +16,8 @@ namespace TH.DAL.BogusHandling
             {
                 Id = 1,
                 ProjectName = "TaskHive",
-                Description = "Project Management System"
+                Description = "Project Management System",
+                TeamId = 1
             };
             //Project project2 = new()
             //{
