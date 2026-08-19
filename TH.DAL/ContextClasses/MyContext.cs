@@ -42,6 +42,8 @@ namespace TH.DAL.ContextClasses
             TaskCommentSeed.SeedTaskComments(modelBuilder);
             TaskSeed.SeedTasks(modelBuilder);
             UserSeed.SeedUsers(modelBuilder);
+            TeamSeed.SeedTeams(modelBuilder);
+            TeamMemberSeed.SeedTeamMembers(modelBuilder);
         }
 
         public DbSet<AppUser> AppUsers { get; set; }
