@@ -22,10 +22,10 @@ namespace TH.CONF.Options
                    .HasForeignKey(tm => tm.TeamId)
                    .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict);
 
-            builder.HasMany(t => t.Projects)
-                   .WithOne()
-                   .HasForeignKey("TeamId")
-                   .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict);
+            //builder.HasMany(t => t.Projects)
+            //       .WithOne()
+            //       .HasForeignKey("TeamId")
+            //       .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict);
         }
     }
 }
