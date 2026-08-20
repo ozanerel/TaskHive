@@ -75,6 +75,16 @@
 
                         <tbody>
 
+                            <a asp-action="AddMember"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-primary">
+
+                                <i class="fa-solid fa-user-plus me-2"></i>
+
+                                Üye Ekle
+
+                            </a>
+
                             @foreach (var member in Model.Members)
                             {
                                 <tr>
