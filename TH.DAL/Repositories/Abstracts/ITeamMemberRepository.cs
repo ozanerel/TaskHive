@@ -16,5 +16,7 @@ namespace TH.DAL.Repositories.Abstracts
         Task<TeamMember> GetTeamMemberAsync(int teamId, int userId);
 
         Task<bool> IsUserInTeamAsync(int teamId, int userId);
+
+        Task<List<int>> GetTeamMemberUserIdsAsync(int teamId);
     }
 }

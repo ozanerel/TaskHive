@@ -42,7 +42,8 @@ namespace TH.DAL.Repositories.Concretes
                     .ThenInclude(x => x.Role)
                 .FirstOrDefaultAsync(x =>
                     x.TeamId == teamId &&
-                    x.UserId == userId);
+                    x.UserId == userId &&
+                    x.Status != ENTITIES.Enums.DataStatus.Deleted);
         }
 
         public async Task<bool> IsUserInTeamAsync(int teamId, int userId)
@@ -52,6 +53,16 @@ namespace TH.DAL.Repositories.Concretes
                     x.TeamId == teamId &&
                     x.UserId == userId &&
                     x.Status != TH.ENTITIES.Enums.DataStatus.Deleted);
+        }
+
+        public async Task<List<int>> GetTeamMemberUserIdsAsync(int teamId)
+        {
+            return await _context.TeamMembers
+                .Where(x =>
+                    x.TeamId == teamId &&
+                    x.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
+                .Select(x => x.UserId)
+                .ToListAsync();
         }
     }
 }
