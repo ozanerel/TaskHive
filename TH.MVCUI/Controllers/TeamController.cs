@@ -41,6 +41,11 @@ namespace TH.MVCUI.Controllers
             if (user == null)
                 return NotFound();
 
+            // GEÇİCİ TEST
+            Console.WriteLine($"AppUser.Id = {appUser.Id}");
+            Console.WriteLine($"User.Id = {user.Id}");
+            Console.WriteLine($"User.AppUserId = {user.AppUserId}");
+
             var teams = await _teamManager.GetTeamsByUserAsync(user.Id);
 
             var model = teams.Select(team => new TeamListViewModel
@@ -157,6 +162,122 @@ namespace TH.MVCUI.Controllers
             };
 
             return View(model);
+        }
+
+        // GET: /Team/AddMember/5
+        [HttpGet]
+        public async Task<IActionResult> AddMember(int id)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var user = await _userManager.GetByAppUserIdAsync(appUser.Id);
+
+            if (user == null)
+                return NotFound();
+
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(id, user.Id);
+
+            if (teamMember == null || teamMember.TeamRole != TeamRole.Admin)
+                return Forbid();
+
+            var team = await _teamManager.GetByIdAsync(id);
+
+            if (team == null)
+                return NotFound();
+
+            var users =
+                await _userManager.GetAvailableUsersForTeamAsync(id);
+
+            var model = new TeamAddMemberViewModel
+            {
+                TeamId = team.Id,
+                TeamName = team.Name,
+
+                Users = users.Select(x => new TeamUserSelectViewModel
+                {
+                    Id = x.Id,
+                    FullName = $"{x.FirstName} {x.LastName}",
+                    Email = x.Email
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+        // POST: /Team/AddMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddMember(
+            TeamAddMemberViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    model.TeamId,
+                    currentUser.Id);
+
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager
+                .GetByIdAsync(model.TeamId);
+
+            if (team == null)
+                return NotFound();
+
+            var existingMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    model.TeamId,
+                    model.UserId);
+
+            if (existingMember != null &&
+                existingMember.Status != DataStatus.Deleted)
+            {
+                ModelState.AddModelError(
+                    "UserId",
+                    "Bu kullanıcı zaten takımın üyesi."
+                );
+
+                model.TeamName = team.Name;
+
+                return View(model);
+            }
+
+            var teamMember = new TeamMember
+            {
+                TeamId = model.TeamId,
+                UserId = model.UserId,
+                TeamRole = TeamRole.Member
+            };
+
+            await _teamMemberManager.CreateAsync(teamMember);
+
+            TempData["Success"] =
+                "Kullanıcı takıma başarıyla eklendi.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = model.TeamId });
         }
     }
 }
