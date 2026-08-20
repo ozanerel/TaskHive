@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
+using TH.DAL.Repositories.Concretes;
 using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
@@ -15,12 +16,14 @@ namespace TH.BLL.Managers.Concretes
     {
         private readonly IUserRepository _repository;
         private readonly INotificationManager _notificationManager;
+        private readonly ITeamMemberRepository _teamMemberRepository;
 
-        public UserManager(IUserRepository repository, INotificationManager notificationManager)
+        public UserManager(IUserRepository repository, INotificationManager notificationManager,ITeamMemberRepository teamMemberRepository)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
+            _teamMemberRepository = teamMemberRepository;
         }
 
         public override async Task CreateAsync(User user)
@@ -121,6 +124,23 @@ namespace TH.BLL.Managers.Concretes
         public async Task<User> GetByAppUserIdAsync(int appUserId)
         {
             return await _repository.GetByAppUserIdAsync(appUserId);
+        }
+
+        public async Task<List<User>> GetAvailableUsersForTeamAsync(int teamId)
+        {
+            var users = await _repository
+            .GetAllAsync();
+
+            var teamMemberIds = await _teamMemberRepository
+                .GetTeamMemberUserIdsAsync(teamId);
+
+            return users
+                .Where(x =>
+                    x.Status != DataStatus.Deleted &&
+                    !teamMemberIds.Contains(x.Id))
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ToList();
         }
     }
 }
