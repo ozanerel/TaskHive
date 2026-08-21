@@ -6,7 +6,7 @@ namespace TH.MVCUI.Models.ViewModels.TeamViewModels
     {
         public int TeamId { get; set; }
 
-        public string TeamName { get; set; }
+        public string? TeamName { get; set; }
 
         [Required(ErrorMessage = "Kullanıcı seçmelisiniz.")]
         public int UserId { get; set; }
