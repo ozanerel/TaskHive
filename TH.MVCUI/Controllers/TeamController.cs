@@ -367,5 +367,71 @@ namespace TH.MVCUI.Controllers
                 nameof(Details),
                 new { id = teamId });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeRole(TeamChangeRoleViewModel model)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    model.TeamId,
+                    currentUser.Id);
+
+            //Burada yaptığımız işlem ile normal Member bu endpoint'i manuel olarak çağırsa bile rol değiştiremez
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var targetMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    model.TeamId,
+                    model.UserId);
+
+            if (targetMember == null)
+                return NotFound();
+
+            // Son Admin'in yetkisini kaldırmayı engelle
+            if (targetMember.TeamRole == TeamRole.Admin &&
+                model.TeamRole == TeamRole.Member)
+            {
+                var adminCount = await _teamMemberManager
+                    .GetAdminCountAsync(model.TeamId);
+
+                if (adminCount <= 1)
+                {
+                    TempData["Error"] =
+                        "Takımda en az bir Admin bulunmalıdır.";
+
+                    return RedirectToAction(
+                        nameof(Details),
+                        new { id = model.TeamId });
+                }
+            }
+
+            await _teamMemberManager.UpdateTeamRoleAsync(
+                model.TeamId,
+                model.UserId,
+                model.TeamRole);
+
+            TempData["Success"] =
+                "Takım üyesinin rolü başarıyla güncellendi.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = model.TeamId });
+        }
     }
 }
