@@ -1,232 +1,301 @@
 ﻿@model TH.MVCUI.Models.ViewModels.TeamViewModels.TeamDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Name;
+	ViewData["Title"] = Model.Name;
 }
 
 <div class="container mt-4">
 
-    <!-- Header -->
+	<!-- Header -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+	<div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div>
+		<div>
 
-            <h2>@Model.Name</h2>
+			<h2>@Model.Name</h2>
 
-            <p class="text-muted mb-0">
-                @Model.Description
-            </p>
+			<p class="text-muted mb-0">
+				@Model.Description
+			</p>
 
-        </div>
+		</div>
 
-        <a asp-action="Index"
-           class="btn btn-outline-secondary">
+		<a asp-action="Index"
+		   class="btn btn-outline-secondary">
 
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Takımlara Dön
+			<i class="fa-solid fa-arrow-left me-2"></i>
+			Takımlara Dön
 
-        </a>
+		</a>
 
-    </div>
+	</div>
 
 
-    <!-- Members -->
+	<!-- Members -->
 
-    <div class="card shadow-sm mb-4">
+	<div class="card shadow-sm mb-4">
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+		<div class="card-header d-flex justify-content-between align-items-center">
 
-            <h5 class="mb-0">
+			<h5 class="mb-0">
 
-                <i class="fa-solid fa-users me-2"></i>
-                Takım Üyeleri
+				<i class="fa-solid fa-users me-2"></i>
+				Takım Üyeleri
 
-            </h5>
+			</h5>
 
-            <a asp-action="AddMember"
-               asp-route-id="@Model.Id"
-               class="btn btn-primary">
+			<a asp-action="AddMember"
+			   asp-route-id="@Model.Id"
+			   class="btn btn-primary">
 
-                <i class="fa-solid fa-user-plus me-2"></i>
+				<i class="fa-solid fa-user-plus me-2"></i>
 
-                Üye Ekle
+				Üye Ekle
 
-            </a>
+			</a>
 
-        </div>
+		</div>
 
-        <div class="card-body">
+		<div class="card-body">
 
-            @if (!Model.Members.Any())
-            {
-                <p class="text-muted mb-0">
-                    Takımda henüz üye bulunmuyor.
-                </p>
-            }
-            else
-            {
-                <div class="table-responsive">
+			@if (!Model.Members.Any())
+			{
+				<p class="text-muted mb-0">
+					Takımda henüz üye bulunmuyor.
+				</p>
+			}
+			else
+			{
+				<div class="table-responsive">
 
-                    <table class="table align-middle">
+					<table class="table align-middle">
 
-                        <thead>
+						<thead>
 
-                            <tr>
+							<tr>
 
-                                <th>Ad Soyad</th>
-                                <th>Email</th>
-                                <th>Mesleki Rol</th>
-                                <th>Takım Rolü</th>
-                                <th>İşlemler</th>
+								<th>Ad Soyad</th>
+								<th>Email</th>
+								<th>Mesleki Rol</th>
+								<th>Takım Rolü</th>
+								<th>İşlemler</th>
 
-                            </tr>
+							</tr>
 
-                        </thead>
+						</thead>
 
-                        <tbody>
+						<tbody>
 
-                            @foreach (var member in Model.Members)
-                            {
-                                <tr>
+							@foreach (var member in Model.Members)
+							{
+								<tr>
 
-                                    <td>
-                                        @member.FirstName
-                                        @member.LastName
-                                    </td>
+									<td>
+										@member.FirstName
+										@member.LastName
+									</td>
 
-                                    <td>
-                                        @member.Email
-                                    </td>
+									<td>
+										@member.Email
+									</td>
 
-                                    <td>
-                                        @member.RoleName
-                                    </td>
+									<td>
+										@member.RoleName
+									</td>
 
-                                    <td>
+									<td>
 
-                                        @if (member.TeamRole == TH.ENTITIES.Enums.TeamRole.Admin)
-                                        {
-                                            <span class="badge bg-primary">
-                                                Admin
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">
-                                                Member
-                                            </span>
-                                        }
+										@if (member.TeamRole == TH.ENTITIES.Enums.TeamRole.Admin)
+										{
+											<span class="badge bg-primary">
+												Admin
+											</span>
+										}
+										else
+										{
+											<span class="badge bg-secondary">
+												Member
+											</span>
+										}
 
-                                    </td>
+									</td>
 
-                                    <td>
+									<td>
 
-                                        @if (member.TeamRole != TH.ENTITIES.Enums.TeamRole.Admin)
-                                        {
-                                            <form asp-action="RemoveMember"
-                                                  method="post"
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Bu kullanıcıyı takımdan çıkarmak istediğinize emin misiniz?');">
+										@if (member.TeamRole == TH.ENTITIES.Enums.TeamRole.Admin)
+										{
+											<form asp-action="ChangeRole"
+												  method="post"
+												  class="d-inline"
+												  onsubmit="return confirm('Bu kullanıcıyı Member yapmak istediğinize emin misiniz?');">
 
-                                                @Html.AntiForgeryToken()
+												@Html.AntiForgeryToken()
 
-                                                <input type="hidden"
-                                                       name="teamId"
-                                                       value="@Model.Id" />
+												<input type="hidden"
+													   name="TeamId"
+													   value="@Model.Id" />
 
-                                                <input type="hidden"
-                                                       name="userId"
-                                                       value="@member.UserId" />
+												<input type="hidden"
+													   name="UserId"
+													   value="@member.UserId" />
 
-                                                <button type="submit"
-                                                        class="btn btn-sm btn-danger">
+												<input type="hidden"
+													   name="TeamRole"
+													   value="@TH.ENTITIES.Enums.TeamRole.Member" />
 
-                                                    <i class="fa-solid fa-user-minus me-1"></i>
+												<button type="submit"
+														class="btn btn-sm btn-warning">
 
-                                                    Kaldır
+													<i class="fa-solid fa-user-minus me-1"></i>
 
-                                                </button>
+													Member Yap
 
-                                            </form>
-                                        }
+												</button>
 
-                                    </td>
+											</form>
+										}
+										else
+										{
+											<form asp-action="ChangeRole"
+												  method="post"
+												  class="d-inline"
+												  onsubmit="return confirm('Bu kullanıcıyı Admin yapmak istediğinize emin misiniz?');">
 
-                                </tr>
-                            }
+												@Html.AntiForgeryToken()
 
-                        </tbody>
+												<input type="hidden"
+													   name="TeamId"
+													   value="@Model.Id" />
 
-                    </table>
+												<input type="hidden"
+													   name="UserId"
+													   value="@member.UserId" />
 
-                </div>
-            }
+												<input type="hidden"
+													   name="TeamRole"
+													   value="@TH.ENTITIES.Enums.TeamRole.Admin" />
 
-        </div>
+												<button type="submit"
+														class="btn btn-sm btn-primary">
 
-    </div>
+													<i class="fa-solid fa-user-shield me-1"></i>
 
+													Admin Yap
 
-    <!-- Projects -->
+												</button>
 
-    <div class="card shadow-sm">
+											</form>
+										}
 
-        <div class="card-header">
+									</td>
 
-            <h5 class="mb-0">
+									<td>
 
-                <i class="fa-solid fa-folder me-2"></i>
-                Takım Projeleri
+										@if (member.TeamRole != TH.ENTITIES.Enums.TeamRole.Admin)
+										{
+											<form asp-action="RemoveMember"
+												  method="post"
+												  class="d-inline"
+												  onsubmit="return confirm('Bu kullanıcıyı takımdan çıkarmak istediğinize emin misiniz?');">
 
-            </h5>
+												@Html.AntiForgeryToken()
 
-        </div>
+												<input type="hidden"
+													   name="teamId"
+													   value="@Model.Id" />
 
-        <div class="card-body">
+												<input type="hidden"
+													   name="userId"
+													   value="@member.UserId" />
 
-            @if (!Model.Projects.Any())
-            {
-                <p class="text-muted mb-0">
-                    Bu takıma bağlı henüz bir proje bulunmuyor.
-                </p>
-            }
-            else
-            {
-                <div class="row">
+												<button type="submit"
+														class="btn btn-sm btn-danger">
 
-                    @foreach (var project in Model.Projects)
-                    {
-                        <div class="col-md-6 mb-3">
+													<i class="fa-solid fa-user-minus me-1"></i>
 
-                            <div class="border rounded p-3">
+													Kaldır
 
-                                <h5>
-                                    @project.ProjectName
-                                </h5>
+												</button>
 
-                                <p class="text-muted">
-                                    @project.Description
-                                </p>
+											</form>
+										}
 
-                                <small class="text-muted">
+									</td>
 
-                                    <i class="fa-solid fa-list-check me-1"></i>
+								</tr>
+							}
 
-                                    @project.TaskCount görev
+						</tbody>
 
-                                </small>
+					</table>
 
-                            </div>
+				</div>
+			}
 
-                        </div>
-                    }
+		</div>
 
-                </div>
-            }
+	</div>
 
-        </div>
 
-    </div>
+	<!-- Projects -->
+
+	<div class="card shadow-sm">
+
+		<div class="card-header">
+
+			<h5 class="mb-0">
+
+				<i class="fa-solid fa-folder me-2"></i>
+				Takım Projeleri
+
+			</h5>
+
+		</div>
+
+		<div class="card-body">
+
+			@if (!Model.Projects.Any())
+			{
+				<p class="text-muted mb-0">
+					Bu takıma bağlı henüz bir proje bulunmuyor.
+				</p>
+			}
+			else
+			{
+				<div class="row">
+
+					@foreach (var project in Model.Projects)
+					{
+						<div class="col-md-6 mb-3">
+
+							<div class="border rounded p-3">
+
+								<h5>
+									@project.ProjectName
+								</h5>
+
+								<p class="text-muted">
+									@project.Description
+								</p>
+
+								<small class="text-muted">
+
+									<i class="fa-solid fa-list-check me-1"></i>
+
+									@project.TaskCount görev
+
+								</small>
+
+							</div>
+
+						</div>
+					}
+
+				</div>
+			}
+
+		</div>
+
+	</div>
 
 </div>
