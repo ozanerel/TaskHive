@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TH.DAL.ContextClasses;
 using TH.DAL.Repositories.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.DAL.Repositories.Concretes
@@ -74,6 +75,31 @@ namespace TH.DAL.Repositories.Concretes
                 .FirstOrDefaultAsync(x =>
                     x.TeamId == teamId &&
                     x.UserId == userId);
+        }
+
+        public async Task<int> GetAdminCountAsync(int teamId)
+        {
+            return await _context.TeamMembers
+                .CountAsync(x =>
+                x.TeamId == teamId &&
+                x.TeamRole == TH.ENTITIES.Enums.TeamRole.Admin &&
+                x.Status != TH.ENTITIES.Enums.DataStatus.Deleted);
+        }
+
+        public async System.Threading.Tasks.Task UpdateTeamRoleAsync(int teamId, int userId, TeamRole teamRole)
+        {
+            var teamMember = await _context.TeamMembers
+                .FirstOrDefaultAsync(x =>
+                x.TeamId == teamId &&
+                x.UserId == userId &&
+                x.Status != DataStatus.Deleted);
+
+            if (teamMember == null)
+                return;
+
+            teamMember.TeamRole = teamRole;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

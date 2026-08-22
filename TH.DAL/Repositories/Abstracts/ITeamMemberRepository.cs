@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.DAL.Repositories.Abstracts
@@ -20,5 +21,9 @@ namespace TH.DAL.Repositories.Abstracts
         Task<List<int>> GetTeamMemberUserIdsAsync(int teamId);
 
         Task<TeamMember> GetTeamMemberIncludingDeletedAsync(int teamId, int userId);
+
+        Task<int> GetAdminCountAsync(int teamId);
+
+        System.Threading.Tasks.Task UpdateTeamRoleAsync(int teamId, int userId, TeamRole teamRole);
     }
 }
