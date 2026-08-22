@@ -16,5 +16,9 @@ namespace TH.BLL.Managers.Abstracts
         Task<TeamMember> GetTeamMemberAsync(int teamId, int userId);
 
         Task<bool> IsUserInTeamAsync(int teamId, int userId);
+
+        System.Threading.Tasks.Task RemoveMemberAsync(int teamId, int userId);
+
+        Task<TeamMember> GetTeamMemberIncludingDeletedAsync(int teamId,int userId);
     }
 }
