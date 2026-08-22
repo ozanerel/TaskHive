@@ -245,22 +245,51 @@ namespace TH.MVCUI.Controllers
             if (team == null)
                 return NotFound();
 
-            var existingMember = await _teamMemberManager
-                .GetTeamMemberAsync(
-                    model.TeamId,
-                    model.UserId);
+            //var existingMember = await _teamMemberManager
+            //    .GetTeamMemberAsync(
+            //        model.TeamId,
+            //        model.UserId);
 
-            if (existingMember != null &&
-                existingMember.Status != DataStatus.Deleted)
+            //if (existingMember != null &&
+            //    existingMember.Status != DataStatus.Deleted)
+            //{
+            //    ModelState.AddModelError(
+            //        "UserId",
+            //        "Bu kullanıcı zaten takımın üyesi."
+            //    );
+
+            //    model.TeamName = team.Name;
+
+            //    return View(model);
+            //}
+
+            var existingMember = await _teamMemberManager.GetTeamMemberIncludingDeletedAsync(model.TeamId,model.UserId);
+
+            if (existingMember != null)
             {
-                ModelState.AddModelError(
-                    "UserId",
-                    "Bu kullanıcı zaten takımın üyesi."
-                );
+                if (existingMember.Status != DataStatus.Deleted)
+                {
+                    ModelState.AddModelError(
+                        "UserId",
+                        "Bu kullanıcı zaten takımın üyesi."
+                    );
 
-                model.TeamName = team.Name;
+                    model.TeamName = team.Name;
 
-                return View(model);
+                    return View(model);
+                }
+
+                existingMember.Status = DataStatus.Inserted;
+                existingMember.TeamRole = TeamRole.Member;
+
+                await _teamMemberManager.UpdateAsync(existingMember);
+
+                TempData["Success"] =
+                    "Kullanıcı tekrar takıma başarıyla eklendi.";
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id = model.TeamId });
             }
 
             var teamMember = new TeamMember
@@ -278,6 +307,65 @@ namespace TH.MVCUI.Controllers
             return RedirectToAction(
                 nameof(Details),
                 new { id = model.TeamId });
+        }
+
+        // POST: /Team/RemoveMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveMember(
+            int teamId,
+            int userId)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(teamId, currentUser.Id);
+
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager.GetByIdAsync(teamId);
+
+            if (team == null)
+                return NotFound();
+
+            var memberToRemove = await _teamMemberManager
+                .GetTeamMemberAsync(teamId, userId);
+
+            if (memberToRemove == null)
+                return NotFound();
+
+            // Admin kendisini takımdan çıkaramasın
+            if (memberToRemove.UserId == currentUser.Id)
+            {
+                TempData["Error"] =
+                    "Takım yöneticisi kendisini takımdan çıkaramaz.";
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id = teamId });
+            }
+
+            await _teamMemberManager.RemoveMemberAsync(teamId,userId);
+
+            TempData["Success"] =
+                "Kullanıcı takımdan başarıyla çıkarıldı.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = teamId });
         }
     }
 }
