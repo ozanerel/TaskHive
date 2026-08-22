@@ -64,5 +64,16 @@ namespace TH.DAL.Repositories.Concretes
                 .Select(x => x.UserId)
                 .ToListAsync();
         }
+
+        public async Task<TeamMember> GetTeamMemberIncludingDeletedAsync(int teamId,int userId)
+        {
+            return await _context.TeamMembers
+                .Include(x => x.Team)
+                .Include(x => x.User)
+                    .ThenInclude(x => x.Role)
+                .FirstOrDefaultAsync(x =>
+                    x.TeamId == teamId &&
+                    x.UserId == userId);
+        }
     }
 }
