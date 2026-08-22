@@ -53,5 +53,15 @@ namespace TH.BLL.Managers.Concretes
                 teamId,
                 userId);
         }
+
+        public async Task<int> GetAdminCountAsync(int teamId)
+        {
+            return await _repository.GetAdminCountAsync(teamId);
+        }
+
+        public async System.Threading.Tasks.Task UpdateTeamRoleAsync(int teamId, int userId, TeamRole teamRole)
+        {
+            await _repository.UpdateTeamRoleAsync(teamId,userId,teamRole);
+        }
     }
 }
