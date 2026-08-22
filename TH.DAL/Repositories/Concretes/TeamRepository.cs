@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TH.DAL.ContextClasses;
 using TH.DAL.Repositories.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.DAL.Repositories.Concretes
@@ -15,23 +16,36 @@ namespace TH.DAL.Repositories.Concretes
             _context = context;
         }
 
+        //public async Task<Team> GetTeamDetailsAsync(int teamId)
+        //{
+        //    return await _context.Teams
+        //        .Include(x => x.TeamMembers)
+        //            .ThenInclude(x => x.User)//Buranın amacı ileride Team detayında bulunan üyeleri gösterebilmek.
+        //                .ThenInclude(x => x.Role)//Bununla birlikte rolünü de elde ediyoruz
+        //        .Include(x => x.Projects)
+        //            .ThenInclude(x => x.Tasks)
+        //        .FirstOrDefaultAsync(x => x.Id == teamId);
+        //}
+
         public async Task<Team> GetTeamDetailsAsync(int teamId)
         {
             return await _context.Teams
-                .Include(x => x.TeamMembers)
-                    .ThenInclude(x => x.User)//Buranın amacı ileride Team detayında bulunan üyeleri gösterebilmek.
-                        .ThenInclude(x => x.Role)//Bununla birlikte rolünü de elde ediyoruz
+                .Include(x => x.TeamMembers
+                .Where(tm => tm.Status != DataStatus.Deleted))
+                .ThenInclude(x => x.User)
+                .ThenInclude(x => x.Role)
                 .Include(x => x.Projects)
-                    .ThenInclude(x => x.Tasks)
+                .ThenInclude(x => x.Tasks)
                 .FirstOrDefaultAsync(x => x.Id == teamId);
         }
 
         public async Task<List<Team>> GetTeamsByUserAsync(int userId)
         {
             return await _context.Teams
-                .Include(x => x.TeamMembers)
-                .Where(x => x.TeamMembers.Any(tm => tm.UserId == userId))
-                .Where(x => x.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
+                .Include(x => x.TeamMembers
+                .Where(tm => tm.Status != DataStatus.Deleted))
+                .Where(x => x.TeamMembers.Any(tm =>tm.UserId == userId &&tm.Status != DataStatus.Deleted))
+                .Where(x => x.Status != DataStatus.Deleted)
                 .OrderBy(x => x.Name)
                 .ToListAsync();
         }
