@@ -433,5 +433,90 @@ namespace TH.MVCUI.Controllers
                 nameof(Details),
                 new { id = model.TeamId });
         }
+
+        // GET:
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(id, currentUser.Id);
+
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager.GetByIdAsync(id);
+
+            if (team == null)
+                return NotFound();
+
+            var model = new TeamEditViewModel
+            {
+                Id = team.Id,
+                Name = team.Name,
+                Description = team.Description
+            };
+
+            return View(model);
+        }
+
+        // POST:
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(TeamEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(model.Id, currentUser.Id);
+
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager.GetByIdAsync(model.Id);
+
+            if (team == null)
+                return NotFound();
+
+            team.Name = model.Name;
+            team.Description = model.Description;
+
+            await _teamManager.UpdateAsync(team);
+
+            TempData["Success"] =
+                "Takım bilgileri başarıyla güncellendi.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = team.Id });
+        }
     }
 }
