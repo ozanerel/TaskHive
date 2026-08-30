@@ -12,6 +12,8 @@ namespace TH.ENTITIES.Models
         public string LastName { get; set; }
         public string Email { get; set; }
 
+        public string UserTag { get; set; }
+
         public int RoleId { get; set; }
         public int AppUserId { get; set; }
 
