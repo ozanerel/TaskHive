@@ -24,6 +24,7 @@ namespace TH.BLL.DependencyResolvers
             
             services.AddScoped<ITeamRepository,TeamRepository>();
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+            services.AddScoped<ITeamInvitationRepository, TeamInvitationRepository>();
         }
     }
 }
