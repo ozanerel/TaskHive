@@ -19,7 +19,8 @@ namespace TH.DAL.BogusHandling
                 LastName = "User",
                 Email = "admin@test.com",
                 RoleId = 1,
-                AppUserId = 1
+                AppUserId = 1,
+                UserTag = "ADMIN01"
             };
 
             User member = new()
@@ -29,7 +30,8 @@ namespace TH.DAL.BogusHandling
                 LastName = "Yilmaz",
                 Email = "ahmet@test.com",
                 RoleId = 3,
-                AppUserId = 2
+                AppUserId = 2,
+                UserTag = "AHMET01"
             };
 
             //User user2 = new()
