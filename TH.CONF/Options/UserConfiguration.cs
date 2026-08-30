@@ -8,7 +8,7 @@ using TH.ENTITIES.Models;
 
 namespace TH.CONF.Options
 {
-    public class UserConfiguration:BaseConfiguration<User>
+    public class UserConfiguration : BaseConfiguration<User>
     {
         public override void Configure(EntityTypeBuilder<User> builder)
         {
@@ -22,6 +22,11 @@ namespace TH.CONF.Options
             builder.Property(u => u.Email)
                    .IsRequired()
                    .HasMaxLength(100);
+            builder.Property(x => x.UserTag)
+                    .IsRequired()
+                    .HasMaxLength(7);
+            builder.HasIndex(x => x.UserTag)
+                    .IsUnique();
             builder.HasOne(u => u.Role)
                    .WithMany(r => r.Users)
                    .HasForeignKey(u => u.RoleId);
