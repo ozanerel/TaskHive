@@ -9,6 +9,7 @@ using TH.DAL.Repositories.Concretes;
 using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
+using TH.BLL.Helpers;
 
 namespace TH.BLL.Managers.Concretes
 {
@@ -28,6 +29,17 @@ namespace TH.BLL.Managers.Concretes
 
         public override async Task CreateAsync(User user)
         {
+            string userTag;
+
+            do
+            {
+                userTag = UserTagGenerator.Generate();
+            }
+            while (await _repository.UserTagExistsAsync(userTag));
+
+            //Yeni kullanıcı oluşturulduğunda UserTag otomatik alacak
+            user.UserTag = UserTagGenerator.Generate();
+
             await base.CreateAsync(user);
 
             await _notificationManager.CreateNotificationAsync(
