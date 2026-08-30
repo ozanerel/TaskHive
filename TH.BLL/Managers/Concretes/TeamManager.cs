@@ -46,5 +46,33 @@ namespace TH.BLL.Managers.Concretes
 
             await _teamMemberManager.CreateAsync(teamMember);
         }
+
+        public override async System.Threading.Tasks.Task MakePassiveAsync(Team team)
+        {
+            if (team == null)
+                return;
+
+            var existingTeam = await _repository.GetByIdAsync(team.Id);
+
+            if (existingTeam == null)
+                return;
+
+            if (existingTeam.Status == DataStatus.Deleted)
+                return;
+
+            // Önce takımı pasifleştir
+            await base.MakePassiveAsync(existingTeam);
+
+            // Takımın aktif üyeliklerini pasifleştir
+            var members = await _teamMemberManager
+                .GetTeamMembersAsync(team.Id);
+
+            foreach (var member in members)
+            {
+                await _teamMemberManager.RemoveMemberAsync(
+                    team.Id,
+                    member.UserId);
+            }
+        }
     }
 }
