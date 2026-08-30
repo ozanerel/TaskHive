@@ -18,5 +18,8 @@ namespace TH.DAL.Repositories.Abstracts
         Task<List<User>> FilterUsersAsync(string search, int? roleId, DataStatus? status);
 
         Task<User> GetByAppUserIdAsync(int appUserId);
+
+        //Unique UserTag oluşturuluyor fakat riske atmamak için kontrol işlemi
+        Task<bool> UserTagExistsAsync(string userTag);
     }
 }
