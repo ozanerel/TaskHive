@@ -28,14 +28,38 @@
 
 		</a>
 
-		<a asp-action="Edit"
-		   asp-route-id="@Model.Id"
-		   class="btn btn-warning">
+		@if (Model.IsAdmin)
+		{
+			<a asp-action="Edit"
+			   asp-route-id="@Model.Id"
+			   class="btn btn-warning">
 
-			<i class="fa-solid fa-pen-to-square me-2"></i>
-			Düzenle
+				<i class="fa-solid fa-pen-to-square me-2"></i>
+				Düzenle
 
-		</a>
+			</a>
+
+			<form asp-action="Delete"
+				  method="post"
+				  class="d-inline"
+				  onsubmit="return confirm('Bu takımı silmek istediğinize emin misiniz?');">
+
+				@Html.AntiForgeryToken()
+
+				<input type="hidden"
+					   name="id"
+					   value="@Model.Id" />
+
+				<button type="submit"
+						class="btn btn-danger">
+
+					<i class="fa-solid fa-trash me-2"></i>
+					Takımı Sil
+
+				</button>
+
+			</form>
+		}
 
 	</div>
 
