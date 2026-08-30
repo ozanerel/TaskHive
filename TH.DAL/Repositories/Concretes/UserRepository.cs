@@ -87,5 +87,11 @@ namespace TH.DAL.Repositories.Concretes
                 .Take(10)
                 .ToListAsync();
         }
+
+        public async Task<bool> UserTagExistsAsync(string userTag)
+        {
+            return await _context.Users
+                .AnyAsync(x => x.UserTag == userTag);
+        }
     }
 }
