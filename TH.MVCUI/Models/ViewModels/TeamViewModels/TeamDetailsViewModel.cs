@@ -13,6 +13,8 @@ namespace TH.MVCUI.Models.ViewModels.TeamViewModels
         public List<TeamMemberViewModel> Members { get; set; }
 
         public List<TeamProjectViewModel> Projects { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 
     public class TeamMemberViewModel
