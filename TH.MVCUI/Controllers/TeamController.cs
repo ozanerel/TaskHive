@@ -121,10 +121,16 @@ namespace TH.MVCUI.Controllers
             if (user == null)
                 return NotFound();
 
-            var isMember = await _teamMemberManager
-                .IsUserInTeamAsync(id, user.Id);
+            //var isMember = await _teamMemberManager
+            //    .IsUserInTeamAsync(id, user.Id);
 
-            if (!isMember)
+            //if (!isMember)
+            //    return Forbid();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(id, user.Id);
+
+            if (currentMember == null)
                 return Forbid();
 
             var team = await _teamManager.GetTeamDetailsAsync(id);
@@ -132,11 +138,15 @@ namespace TH.MVCUI.Controllers
             if (team == null)
                 return NotFound();
 
+            if (team.Status == DataStatus.Deleted)
+                return NotFound();
+
             var model = new TeamDetailsViewModel
             {
                 Id = team.Id,
                 Name = team.Name,
                 Description = team.Description,
+                IsAdmin = currentMember.TeamRole == TeamRole.Admin,
 
                 Members = team.TeamMembers?
                     .Select(x => new TeamMemberViewModel
@@ -263,7 +273,7 @@ namespace TH.MVCUI.Controllers
             //    return View(model);
             //}
 
-            var existingMember = await _teamMemberManager.GetTeamMemberIncludingDeletedAsync(model.TeamId,model.UserId);
+            var existingMember = await _teamMemberManager.GetTeamMemberIncludingDeletedAsync(model.TeamId, model.UserId);
 
             if (existingMember != null)
             {
@@ -358,7 +368,7 @@ namespace TH.MVCUI.Controllers
                     new { id = teamId });
             }
 
-            await _teamMemberManager.RemoveMemberAsync(teamId,userId);
+            await _teamMemberManager.RemoveMemberAsync(teamId, userId);
 
             TempData["Success"] =
                 "Kullanıcı takımdan başarıyla çıkarıldı.";
@@ -517,6 +527,45 @@ namespace TH.MVCUI.Controllers
             return RedirectToAction(
                 nameof(Details),
                 new { id = team.Id });
+        }
+
+        // POST: 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(id, currentUser.Id);
+
+            // Sadece takım Admin'i takımı silebilir
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager.GetByIdAsync(id);
+
+            if (team == null)
+                return NotFound();
+
+            await _teamManager.MakePassiveAsync(team);
+
+            TempData["Success"] =
+                "Takım başarıyla silindi.";
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
