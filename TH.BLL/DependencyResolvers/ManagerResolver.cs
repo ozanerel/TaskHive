@@ -25,6 +25,7 @@ namespace TH.BLL.DependencyResolvers
 
             services.AddScoped<ITeamManager, TeamManager>();
             services.AddScoped<ITeamMemberManager, TeamMemberManager>();
+            services.AddScoped<ITeamInvitationManager, TeamInvitationManager>();
 
         }
     }
