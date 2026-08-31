@@ -79,11 +79,27 @@ namespace TH.DAL.Repositories.Concretes
 
         public async Task<List<User>> SearchUsersAsync(string keyword)
         {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return new List<User>();
+
             keyword = keyword.Trim().ToLower();
 
+            // Kullanıcı # ile arama yapıyorsa # karakterini kaldırıyoruz.
+            if (keyword.StartsWith("#"))
+                keyword = keyword.Substring(1);
+
             return await _context.Users
-                .Where(x =>x.FirstName.ToLower().Contains(keyword) || x.LastName.ToLower().Contains(keyword) ||x.Email.ToLower().Contains(keyword))
+                .Include(x => x.Role)
+                .Where(x =>
+                    x.Status != DataStatus.Deleted &&
+                    (
+                        x.FirstName.ToLower().Contains(keyword) ||
+                        x.LastName.ToLower().Contains(keyword) ||
+                        x.Email.ToLower().Contains(keyword) ||
+                        x.UserTag.ToLower().Contains(keyword)
+                    ))
                 .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
                 .Take(10)
                 .ToListAsync();
         }
