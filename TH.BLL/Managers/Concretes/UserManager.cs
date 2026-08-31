@@ -38,7 +38,8 @@ namespace TH.BLL.Managers.Concretes
             while (await _repository.UserTagExistsAsync(userTag));
 
             //Yeni kullanıcı oluşturulduğunda UserTag otomatik alacak
-            user.UserTag = UserTagGenerator.Generate();
+            //user.UserTag = UserTagGenerator.Generate();
+            user.UserTag = userTag;
 
             await base.CreateAsync(user);
 
