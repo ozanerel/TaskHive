@@ -1,9 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TH.ENTITIES.Models
-@inject UserManager<AppUser> UserManager
+@using TH.BLL.Managers.Abstracts
+
+@inject UserManager<AppUser> IdentityUserManager
+@inject IUserManager UserManager
 
 @{
-	var currentUser = await UserManager.GetUserAsync(User);
+	var currentUser = await IdentityUserManager.GetUserAsync(User);
+
+	var currentTaskHiveUser = currentUser == null
+		? null
+		: await UserManager.GetByAppUserIdAsync(currentUser.Id);
+
 }
 
 @{
@@ -116,6 +124,14 @@
 						@(User.IsInRole("Admin") ? "Administrator" : "Member")
 
 					</span>
+
+					@if (currentTaskHiveUser != null &&
+										!string.IsNullOrEmpty(currentTaskHiveUser.UserTag))
+					{
+						<small>
+							#@currentTaskHiveUser.UserTag
+						</small>
+					}
 
 				</div>
 
