@@ -71,6 +71,15 @@
         </div> *@
 		@await Component.InvokeAsync("Notification")
 
+		<a asp-controller="TeamInvitation"
+		   asp-action="Index"
+		   class="th-navbar-icon"
+		   title="Takım Davetleri">
+
+			<i class="fa-solid fa-user-plus"></i>
+
+		</a>
+
 		<!-- Message -->
 
 		@* <div class="th-navbar-icon">
