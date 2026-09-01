@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Managers.Concretes;
 using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Models.ViewModels.TeamViewModels;
@@ -15,17 +16,20 @@ namespace TH.MVCUI.Controllers
         private readonly ITeamMemberManager _teamMemberManager;
         private readonly UserManager<AppUser> _identityUserManager;
         private readonly IUserManager _userManager;
+        private readonly ITeamInvitationManager _teamInvitationManager;
 
         public TeamController(
             ITeamManager teamManager,
             ITeamMemberManager teamMemberManager,
             UserManager<AppUser> identityUserManager,
-            IUserManager userManager)
+            IUserManager userManager,
+            ITeamInvitationManager teamInvitationManager)
         {
             _teamManager = teamManager;
             _teamMemberManager = teamMemberManager;
             _identityUserManager = identityUserManager;
             _userManager = userManager;
+            _teamInvitationManager = teamInvitationManager;
         }
 
         // GET: /Team
@@ -566,6 +570,168 @@ namespace TH.MVCUI.Controllers
                 "Takım başarıyla silindi.";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: /Team/InviteMember/5
+        [HttpGet]
+        public async Task<IActionResult> InviteMember(int id)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(id, currentUser.Id);
+
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager.GetByIdAsync(id);
+
+            if (team == null)
+                return NotFound();
+
+            if (team.Status == DataStatus.Deleted)
+                return NotFound();
+
+            var model = new TeamInviteUserViewModel
+            {
+                TeamId = team.Id,
+                TeamName = team.Name
+            };
+
+            return View(model);
+        }
+
+        // POST: /Team/InviteMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> InviteMember(
+            TeamInviteUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser = await _userManager
+                .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var currentMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    model.TeamId,
+                    currentUser.Id);
+
+            if (currentMember == null ||
+                currentMember.TeamRole != TeamRole.Admin)
+            {
+                return Forbid();
+            }
+
+            var team = await _teamManager
+                .GetByIdAsync(model.TeamId);
+
+            if (team == null)
+                return NotFound();
+
+            if (team.Status == DataStatus.Deleted)
+                return NotFound();
+
+            var invitedUser = await _userManager
+                .GetByUserTagAsync(model.UserTag);
+
+            if (invitedUser == null)
+            {
+                ModelState.AddModelError(
+                    "UserTag",
+                    "Bu UserTag ile eşleşen aktif bir kullanıcı bulunamadı.");
+
+                model.TeamName = team.Name;
+
+                return View(model);
+            }
+
+            if (invitedUser.Id == currentUser.Id)
+            {
+                ModelState.AddModelError(
+                    "UserTag",
+                    "Kendinizi takımınıza davet edemezsiniz.");
+
+                model.TeamName = team.Name;
+
+                return View(model);
+            }
+
+            var alreadyMember = await _teamMemberManager
+                .IsUserInTeamAsync(
+                    model.TeamId,
+                    invitedUser.Id);
+
+            if (alreadyMember)
+            {
+                ModelState.AddModelError(
+                    "UserTag",
+                    "Bu kullanıcı zaten takımın üyesi.");
+
+                model.TeamName = team.Name;
+
+                return View(model);
+            }
+            var existingInvitation =
+                await _teamInvitationManager
+                    .GetPendingInvitationAsync(
+                        model.TeamId,
+                        invitedUser.Id);
+
+            if (existingInvitation != null)
+            {
+                ModelState.AddModelError(
+                    "UserTag",
+                    "Bu kullanıcıya zaten bekleyen bir davet gönderilmiş.");
+
+                model.TeamName = team.Name;
+
+                return View(model);
+            }
+            var success =
+                await _teamInvitationManager.SendInvitationAsync(
+                    model.TeamId,
+                    invitedUser.Id,
+                    currentUser.Id);
+
+            if (!success)
+            {
+                ModelState.AddModelError(
+                    "UserTag",
+                    "Davet gönderilemedi. Lütfen tekrar deneyin.");
+
+                model.TeamName = team.Name;
+
+                return View(model);
+            }
+
+            TempData["Success"] =
+                $"{invitedUser.FirstName} {invitedUser.LastName} kullanıcısına takım daveti gönderildi.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = model.TeamId });
         }
     }
 }
