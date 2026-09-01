@@ -39,6 +39,17 @@
 
 			</a>
 
+			<a asp-controller="Team"
+			   asp-action="InviteMember"
+			   asp-route-id="@Model.Id"
+			   class="btn btn-primary">
+
+				<i class="fa-solid fa-user-plus me-2"></i>
+
+				Invite Member
+
+			</a>
+
 			<form asp-action="Delete"
 				  method="post"
 				  class="d-inline"

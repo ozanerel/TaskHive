@@ -1,0 +1,89 @@
+﻿@model TH.MVCUI.Models.ViewModels.TeamViewModels.TeamInviteUserViewModel
+
+@{
+    ViewData["Title"] = "Invite Member";
+}
+
+<div class="dashboard-header">
+
+    <div class="dashboard-title">
+
+        <h1>Invite Member</h1>
+
+        <p>
+            @Model.TeamName takımına yeni bir üye davet et.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+    <form asp-action="InviteMember"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               asp-for="TeamId" />
+
+        <div class="mb-4">
+
+            <label asp-for="UserTag"
+                   class="form-label">
+
+                UserTag
+
+            </label>
+
+            <input asp-for="UserTag"
+                   class="form-control"
+                   placeholder="#9CA41"
+                   autocomplete="off" />
+
+            <span asp-validation-for="UserTag"
+                  class="text-danger">
+            </span>
+
+            <div class="form-text">
+
+                Davet etmek istediğin kullanıcının
+                UserTag bilgisini gir.
+
+                Örnek:
+                <strong>#9CA41</strong>
+
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                <i class="fa-solid fa-user-plus me-2"></i>
+
+                Send Invitation
+
+            </button>
+
+            <a asp-action="Details"
+               asp-route-id="@Model.TeamId"
+               class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
