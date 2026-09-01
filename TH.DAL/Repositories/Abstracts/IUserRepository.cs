@@ -21,5 +21,7 @@ namespace TH.DAL.Repositories.Abstracts
 
         //Unique UserTag oluşturuluyor fakat riske atmamak için kontrol işlemi
         Task<bool> UserTagExistsAsync(string userTag);
+
+        Task<User> GetByUserTagAsync(string userTag);
     }
 }

@@ -21,5 +21,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<User> GetByAppUserIdAsync(int appUserId);
 
         Task<List<User>> GetAvailableUsersForTeamAsync(int teamId);
+
+        Task<User> GetByUserTagAsync(string userTag);
     }
 }

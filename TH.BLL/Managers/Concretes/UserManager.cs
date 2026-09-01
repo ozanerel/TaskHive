@@ -155,5 +155,10 @@ namespace TH.BLL.Managers.Concretes
                 .ThenBy(x => x.LastName)
                 .ToList();
         }
+
+        public async Task<User> GetByUserTagAsync(string userTag)
+        {
+            return await _repository.GetByUserTagAsync(userTag);
+        }
     }
 }

@@ -70,6 +70,22 @@ namespace TH.DAL.Repositories.Concretes
                 .FirstOrDefaultAsync(x => x.AppUserId == appUserId);
         }
 
+        public async Task<User> GetByUserTagAsync(string userTag)
+        {
+            if (string.IsNullOrWhiteSpace(userTag))
+                return null;
+
+            userTag = userTag
+                .Trim()
+                .TrimStart('#')
+                .ToLower();
+
+            return await _context.Users
+                .FirstOrDefaultAsync(x =>
+                    x.UserTag.ToLower() == userTag &&
+                    x.Status != DataStatus.Deleted);
+        }
+
         public async Task<User> GetUserWithTasksAsync(int id)
         {
             return await _context.Users
