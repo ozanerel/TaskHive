@@ -36,11 +36,26 @@ namespace TH.BLL.Managers.Concretes
                 .GetUserInvitationsAsync(userId);
         }
 
-        public async Task<bool> SendInvitationAsync(
-            int teamId,
-            int invitedUserId,
-            int invitedByUserId)
+        public async Task<bool> SendInvitationAsync(int teamId,int invitedUserId,int invitedByUserId)
         {
+            // Kullanıcı kendisini davet edemesin
+            if (invitedUserId == invitedByUserId)
+                return false;
+
+            // Kullanıcı zaten takım üyesi mi?
+            var existingMember =
+                await _teamMemberRepository
+                    .GetTeamMemberIncludingDeletedAsync(
+                        teamId,
+                        invitedUserId);
+
+            if (existingMember != null &&
+                existingMember.Status != DataStatus.Deleted)
+            {
+                return false;
+            }
+
+            // Bekleyen davet var mı?
             var existingInvitation =
                 await _repository.GetPendingInvitationAsync(
                     teamId,
@@ -54,7 +69,11 @@ namespace TH.BLL.Managers.Concretes
                 TeamId = teamId,
                 InvitedUserId = invitedUserId,
                 InvitedByUserId = invitedByUserId,
-                InvitationStatus = InvitationStatus.Pending
+
+                InvitationStatus = InvitationStatus.Pending,
+
+                Status = DataStatus.Inserted,
+                CreatedDate = DateTime.Now
             };
 
             await base.CreateAsync(invitation);
