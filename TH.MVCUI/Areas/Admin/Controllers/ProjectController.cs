@@ -52,6 +52,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Id = project.Id,
                 ProjectName = project.ProjectName,
                 Description = project.Description,
+                TeamId = project.TeamId,
+                TeamName = project.Team?.Name,
                 Tasks = project.Tasks?.ToList() ?? new(),
                 Users = project.Users?.ToList() ?? new(),
                 CreatedDate = project.CreatedDate,
@@ -93,6 +95,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             {
                 ProjectName = vm.ProjectName,
                 Description = vm.Description,
+                TeamId = vm.TeamId,
                 Users = new List<User>(),
 
             };
