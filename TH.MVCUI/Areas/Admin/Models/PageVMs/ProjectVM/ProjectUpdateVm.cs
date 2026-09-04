@@ -10,6 +10,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
 
         public string Description { get; set; }
 
+        public int TeamId { get; set; }
+
         // Seçilen kullanıcılar
         public List<int> UserIds { get; set; } = new();
 
