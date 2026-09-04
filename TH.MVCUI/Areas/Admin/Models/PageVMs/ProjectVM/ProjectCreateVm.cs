@@ -15,5 +15,7 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
 
         public List<User> Users { get; set; }
             = new();
+
+        public List<Team> Teams { get; set; }
     }
 }
