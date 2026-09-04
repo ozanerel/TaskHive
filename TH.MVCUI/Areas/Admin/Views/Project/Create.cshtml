@@ -54,6 +54,23 @@
 
             </div>
 
+            <div class="mb-3">
+                <label asp-for="TeamId" class="form-label">Team</label>
+
+                <select asp-for="TeamId" class="form-select">
+                    <option value="">-- Team Seçiniz --</option>
+
+                    @foreach (var team in Model.Teams)
+                    {
+                        <option value="@team.Id">
+                            @team.Name
+                        </option>
+                    }
+                </select>
+
+                <span asp-validation-for="TeamId" class="text-danger"></span>
+            </div>
+
             <div class="col-md-12 mb-4">
 
                 <label class="form-label">
