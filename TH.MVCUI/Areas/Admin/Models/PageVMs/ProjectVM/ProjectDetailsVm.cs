@@ -21,6 +21,10 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
 
         public string Description { get; set; }
 
+        public int TeamId { get; set; }
+
+        public string TeamName { get; set; }
+
         public List<TH.ENTITIES.Models.Task> Tasks { get; set; } = new();
 
         public List<User> Users { get; set; } = new();
