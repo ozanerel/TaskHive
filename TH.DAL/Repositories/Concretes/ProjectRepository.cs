@@ -87,6 +87,7 @@ namespace TH.DAL.Repositories.Concretes
             //    .FirstOrDefaultAsync(x => x.Id == id);
 
             return await _context.Projects
+                .Include(x => x.Team)
                 .Include(x => x.Users)
                 .Include(x => x.Tasks)
                 .FirstOrDefaultAsync(x => x.Id == id); 
