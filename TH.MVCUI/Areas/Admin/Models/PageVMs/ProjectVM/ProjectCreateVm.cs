@@ -8,6 +8,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.ProjectVM
 
         public string Description { get; set; }
 
+        public int TeamId { get; set; }
+
         public List<int> UserIds { get; set; }
             = new();
 
