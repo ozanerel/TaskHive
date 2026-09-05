@@ -210,12 +210,15 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .Select(x => x.User)
                 .ToList();
 
-            foreach (var id in vm.UserIds)
+            if (vm.UserIds != null)
             {
-                var user = teamUsers.FirstOrDefault(x => x.Id == id);
+                foreach (var id in vm.UserIds)
+                {
+                    var user = teamUsers.FirstOrDefault(x => x.Id == id);
 
-                if (user != null)
-                    project.Users.Add(user);
+                    if (user != null)
+                        project.Users.Add(user);
+                }
             }
 
             await _projectManager.CreateAsync(project);
@@ -301,20 +304,21 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             // Önce mevcut kullanıcıları temizle
             project.Users.Clear();
 
-            var teamMembers = await _teamMemberManager.GetTeamMembersAsync(project.TeamId);
+            var teamMembers = await _teamMemberManager.GetTeamMembersAsync(vm.TeamId);
 
             var teamUsers = teamMembers
                 .Where(x => x.User != null)
                 .Select(x => x.User)
                 .ToList();
 
-            foreach (var userId in vm.UserIds)
+            if (vm.UserIds != null)
             {
-                var user = teamUsers.FirstOrDefault(x => x.Id == userId);
-
-                if (user != null)
+                foreach (var id in vm.UserIds)
                 {
-                    project.Users.Add(user);
+                    var user = teamUsers.FirstOrDefault(x => x.Id == id);
+
+                    if (user != null)
+                        project.Users.Add(user);
                 }
             }
 
