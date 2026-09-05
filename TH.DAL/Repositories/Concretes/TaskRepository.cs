@@ -36,7 +36,7 @@ namespace TH.DAL.Repositories.Concretes
             return await _context.Tasks
                 .Include(x => x.Project)
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && x.Status != DataStatus.Deleted)
                 .OrderBy(x => x.Status)
                 .ThenBy(x => x.Title)
                 .ToListAsync();
@@ -60,7 +60,7 @@ namespace TH.DAL.Repositories.Concretes
             return await _context.Tasks
                 .Include(x => x.Project)
                 .Include(x => x.User)
-                .Where(x => x.Title.ToLower().Contains(keyword) ||x.Description.ToLower().Contains(keyword))
+                .Where(x => x.UserId == userId && (x.Title.ToLower().Contains(keyword) || x.Description.ToLower().Contains(keyword)))
                 .OrderBy(x => x.Title)
                 .Take(10)
                 .ToListAsync();
@@ -118,7 +118,7 @@ namespace TH.DAL.Repositories.Concretes
                 .FirstOrDefaultAsync(x =>
                     x.Id == taskId &&
                     x.UserId == userId &&
-                    x.Status == DataStatus.Inserted);
+                    x.Status != DataStatus.Deleted);
         }
     }
 }
