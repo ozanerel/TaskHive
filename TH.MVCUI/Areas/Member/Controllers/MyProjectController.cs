@@ -1,46 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
 using TH.ENTITIES.Enums;
-using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.MyProjectVM;
-
 
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
+    [Authorize]
     public class MyProjectController : Controller
     {
         private readonly IProjectManager _projectManager;
-        private readonly IUserManager _userManager;
         private readonly IUserContext _userContext;
 
-        public MyProjectController(IProjectManager projectManager,
-                                   IUserManager userManager,IUserContext userContext)
+        public MyProjectController(
+            IProjectManager projectManager,
+            IUserContext userContext)
         {
             _projectManager = projectManager;
-            _userManager = userManager;
             _userContext = userContext;
         }
 
-        // MEMBER'A AİT PROJELER
         public async Task<IActionResult> Index()
         {
-            
-            //int userId = 1;
-
-            //var user = await _userManager.GetByIdAsync(userId);
-
             var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            //var projects = user.Projects;
-
-            var projects = user.Projects
-                .Where(x => x.Status != DataStatus.Deleted)
-                .ToList();
+            var projects = await _projectManager.GetProjectsByUserAsync(user.Id);
 
             List<MyProjectListVm> vm = projects.Select(x => new MyProjectListVm
             {
@@ -54,26 +43,6 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             return View(vm);
         }
-
-        // PROJE DETAYI
-        //public async Task<IActionResult> Details(int id)
-        //{
-        //    Project project = await _projectManager.GetProjectDetailsAsync(id);
-
-        //    if (project == null)
-        //        return NotFound();
-
-        //    MyProjectDetailsVm vm = new MyProjectDetailsVm
-        //    {
-        //        Id = project.Id,
-        //        ProjectName = project.ProjectName,
-        //        Description = project.Description,
-        //        Users = project.Users.ToList(),
-        //        Tasks = project.Tasks.ToList()
-        //    };
-
-        //    return View(vm);
-        //}
 
         public async Task<IActionResult> Details(int id)
         {
@@ -91,7 +60,6 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 return NotFound();
 
             if (!project.Users.Any(x => x.Id == user.Id))
-                //Bu kaynak var ama senin erişim yetkin yok, 403 Forbidden döndür
                 return Forbid();
 
             MyProjectDetailsVm vm = new MyProjectDetailsVm
