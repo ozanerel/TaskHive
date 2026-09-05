@@ -95,6 +95,17 @@ namespace TH.DAL.Repositories.Concretes
                 .FirstOrDefaultAsync(x => x.Id == id); 
         }
 
+        public async Task<List<Project>> GetProjectsByUserAsync(int userId)
+        {
+            return await _context.Projects
+                .Include(x => x.Users)
+                .Include(x => x.Tasks)
+                .Include(x => x.Team)
+                .Where(x => x.Users.Any(u => u.Id == userId) && x.Status != DataStatus.Deleted)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+        }
+
         public async Task<List<Project>> GetProjectsWithTasksAsync()
         {
             //return await _context.Projects
@@ -127,7 +138,7 @@ namespace TH.DAL.Repositories.Concretes
 
             return await _context.Projects
                 .Include(x => x.Users)
-                .Where(x =>x.ProjectName.ToLower().Contains(keyword) ||x.Description.ToLower().Contains(keyword))
+                .Where(x => x.Users.Any(u => u.Id == userId) && (x.ProjectName.ToLower().Contains(keyword) || x.Description.ToLower().Contains(keyword)))
                 .OrderBy(x => x.ProjectName)
                 .Take(10)
                 .ToListAsync();
