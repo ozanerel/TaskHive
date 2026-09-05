@@ -57,7 +57,7 @@
             <div class="mb-3">
                 <label asp-for="TeamId" class="form-label">Team</label>
 
-                <select asp-for="TeamId" class="form-select">
+                <select asp-for="TeamId" class="form-select" id="teamSelect">
                     <option value="">-- Team Seçiniz --</option>
 
                     @foreach (var team in Model.Teams)
@@ -97,7 +97,8 @@
 
                 <select asp-for="UserIds"
                         class="form-select"
-                        multiple>
+                        multiple 
+                        id="userSelect">
 
 
                     @foreach (var user in Model.Users)
@@ -142,5 +143,39 @@
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById("teamSelect").addEventListener("change", async function () {
+
+            const teamId = this.value;
+            const userSelect = document.getElementById("userSelect");
+
+            userSelect.innerHTML = "";
+
+            if (!teamId) {
+                return;
+            }
+
+            const response = await fetch(
+                `/Admin/Project/GetTeamUsers?teamId=${teamId}`
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const users = await response.json();
+
+            users.forEach(user => {
+
+                const option = document.createElement("option");
+
+                option.value = user.id;
+                option.textContent = `${user.name} (${user.email})`;
+
+                userSelect.appendChild(option);
+            });
+        });
+    </script>
 
 }
