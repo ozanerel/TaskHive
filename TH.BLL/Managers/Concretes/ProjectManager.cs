@@ -121,9 +121,11 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<Project>> GetProjectsByUserAsync(int userId)
         {
-            return await _repository
-                .Where(x => x.Users.Any(u => u.Id == userId))
-                .ToListAsync();
+            //return await _repository
+            //    .Where(x => x.Users.Any(u => u.Id == userId))
+            //    .ToListAsync();
+
+            return await _repository.GetProjectsByUserAsync(userId);
         }
 
         public async Task<List<Project>> GetDashboardProjectsAsync()
