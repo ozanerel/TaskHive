@@ -101,14 +101,18 @@
                         id="userSelect">
 
 
-                    @foreach (var user in Model.Users)
+                   @*  @foreach (var user in Model.Users)
                     {
                         <option value="@user.Id">
 
                             @user.FirstName @user.LastName
 
                         </option>
-                    }
+                    } *@
+
+                    <option disabled>
+                        Önce bir takım seçiniz
+                    </option>
 
 
                 </select>
@@ -145,6 +149,7 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+
         document.getElementById("teamSelect").addEventListener("change", async function () {
 
             const teamId = this.value;
@@ -153,29 +158,75 @@
             userSelect.innerHTML = "";
 
             if (!teamId) {
-                return;
-            }
-
-            const response = await fetch(
-                `/Admin/Project/GetTeamUsers?teamId=${teamId}`
-            );
-
-            if (!response.ok) {
-                return;
-            }
-
-            const users = await response.json();
-
-            users.forEach(user => {
 
                 const option = document.createElement("option");
 
-                option.value = user.id;
-                option.textContent = `${user.name} (${user.email})`;
+                option.disabled = true;
+                option.textContent = "Önce bir takım seçiniz";
 
                 userSelect.appendChild(option);
-            });
+
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `/Admin/Project/GetTeamUsers?teamId=${teamId}`
+                );
+
+                if (!response.ok) {
+
+                    const option = document.createElement("option");
+
+                    option.disabled = true;
+                    option.textContent = "Kullanıcılar yüklenemedi";
+
+                    userSelect.appendChild(option);
+
+                    return;
+                }
+
+                const users = await response.json();
+
+                if (users.length === 0) {
+
+                    const option = document.createElement("option");
+
+                    option.disabled = true;
+                    option.textContent = "Bu takımda aktif kullanıcı bulunmuyor";
+
+                    userSelect.appendChild(option);
+
+                    return;
+                }
+
+                users.forEach(user => {
+
+                    const option = document.createElement("option");
+
+                    option.value = user.id;
+                    option.textContent = `${user.name} (${user.email})`;
+
+                    userSelect.appendChild(option);
+
+                });
+
+            }
+            catch (error) {
+
+                console.error("Team users could not be loaded:", error);
+
+                const option = document.createElement("option");
+
+                option.disabled = true;
+                option.textContent = "Kullanıcılar yüklenirken hata oluştu";
+
+                userSelect.appendChild(option);
+            }
+
         });
+
     </script>
 
 }
