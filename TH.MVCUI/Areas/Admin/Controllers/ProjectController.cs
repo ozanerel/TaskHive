@@ -32,13 +32,27 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         // Proje Listesi
         public async Task<IActionResult> Index(string search,DataStatus? status,string sortBy)
         {
-            var projects = await _projectManager.FilterProjectsAsync(search,status,sortBy);
+            var currentUser = await GetCurrentUserAsync();
+
+            if (currentUser == null)
+                return NotFound();
+
+            var adminTeams = await GetAdminTeamsAsync();
+
+            var teamIds = adminTeams
+                .Select(x => x.Id)
+                .ToList();
+
+            var projects = await _projectManager.FilterProjectsAsync(
+                search,
+                status,
+                sortBy,
+                teamIds);
 
             ProjectIndexVm vm = new()
             {
                 Projects = projects,
                 Search = search,
-                //Status = status?.ToString(),
                 Status = status,
                 SortBy = sortBy
             };
@@ -99,26 +113,26 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (currentUser == null)
                 return NotFound();
 
-            var teams = await _teamManager.GetTeamsByUserAsync(currentUser.Id);
+            //var teams = await _teamManager.GetTeamsByUserAsync(currentUser.Id);
 
-            var adminTeams = new List<Team>();
+            //var adminTeams = new List<Team>();
 
-            foreach (var team in teams)
-            {
-                var teamMember = await _teamMemberManager.GetTeamMemberAsync(
-                    team.Id,
-                    currentUser.Id);
+            //foreach (var team in teams)
+            //{
+            //    var teamMember = await _teamMemberManager.GetTeamMemberAsync(
+            //        team.Id,
+            //        currentUser.Id);
 
-                if (teamMember != null &&
-                    teamMember.TeamRole == TeamRole.Admin)
-                {
-                    adminTeams.Add(team);
-                }
-            }
+            //    if (teamMember != null &&
+            //        teamMember.TeamRole == TeamRole.Admin)
+            //    {
+            //        adminTeams.Add(team);
+            //    }
+            //}
 
             ProjectCreateVm vm = new()
             {
-                Users = await _userManager.GetAllAsync(),
+                Users = new List<User>(),
                 Teams = await GetAdminTeamsAsync()
             };
             //vm.Project = new Project(); // Initialize the Project property
@@ -133,7 +147,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.Users = await _userManager.GetAllAsync();
+                vm.Users = new List<User>();
                 vm.Teams = await GetAdminTeamsAsync();
 
                 return View(vm);
@@ -188,9 +202,17 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Users = new List<User>()
             };
 
+
+            var teamMembers = await _teamMemberManager.GetTeamMembersAsync(vm.TeamId);
+
+            var teamUsers = teamMembers
+                .Where(x => x.User != null)
+                .Select(x => x.User)
+                .ToList();
+
             foreach (var id in vm.UserIds)
             {
-                var user = await _userManager.GetByIdAsync(id);
+                var user = teamUsers.FirstOrDefault(x => x.Id == id);
 
                 if (user != null)
                     project.Users.Add(user);
@@ -225,6 +247,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (!isTeamAdmin)
                 return Forbid();
 
+            var teamMembers = await _teamMemberManager.GetTeamMembersAsync(project.TeamId);
+
+            var teamUsers = teamMembers
+                .Where(x => x.User != null)
+                .Select(x => x.User)
+                .ToList();
+
             ProjectUpdateVm vm = new()
             {
                 Id = project.Id,
@@ -232,7 +261,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Description = project.Description,
                 TeamId = project.TeamId,
                 UserIds = project.Users.Select(x => x.Id).ToList(),
-                Users = await _userManager.GetAllAsync()
+                Users = teamUsers
             };
 
             return View(vm);
@@ -272,10 +301,16 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             // Önce mevcut kullanıcıları temizle
             project.Users.Clear();
 
-            // Yeni seçilen kullanıcıları ekle
+            var teamMembers = await _teamMemberManager.GetTeamMembersAsync(project.TeamId);
+
+            var teamUsers = teamMembers
+                .Where(x => x.User != null)
+                .Select(x => x.User)
+                .ToList();
+
             foreach (var userId in vm.UserIds)
             {
-                var user = await _userManager.GetByIdAsync(userId);
+                var user = teamUsers.FirstOrDefault(x => x.Id == userId);
 
                 if (user != null)
                 {
@@ -380,6 +415,36 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             await _projectManager.MakePassiveAsync(project);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTeamUsers(int teamId)
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            if (currentUser == null)
+                return Unauthorized();
+
+            var isTeamAdmin = await IsTeamAdminAsync(
+                teamId,
+                currentUser.Id);
+
+            if (!isTeamAdmin)
+                return Forbid();
+
+            var teamMembers = await _teamMemberManager.GetTeamMembersAsync(teamId);
+
+            var users = teamMembers
+                .Where(x => x.User != null)
+                .Select(x => x.User)
+                .ToList();
+
+            return Json(users.Select(x => new
+            {
+                id = x.Id,
+                name = $"{x.FirstName} {x.LastName}",
+                email = x.Email
+            }));
         }
 
         private async Task<List<Team>> GetAdminTeamsAsync()
