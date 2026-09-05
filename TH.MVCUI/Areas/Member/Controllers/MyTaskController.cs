@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
 using TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM;
@@ -6,6 +7,7 @@ using TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM;
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
+    [Authorize]
     public class MyTaskController : Controller
     {
         private readonly ITaskManager _taskManager;
@@ -90,7 +92,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsAsync(vm.Id);
+            var task = await _taskManager.GetTaskDetailsByUserAsync(vm.Id,user.Id);
 
             if (task == null)
                 return NotFound();
