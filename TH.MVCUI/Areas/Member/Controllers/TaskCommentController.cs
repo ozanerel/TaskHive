@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
+using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM;
 
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
-    [Authorize(Roles = "Member")]
+    [Authorize]
     public class TaskCommentController : Controller
     {
         private readonly ITaskCommentManager _taskCommentManager;
@@ -36,10 +37,6 @@ namespace TH.MVCUI.Areas.Member.Controllers
             var comments = await _taskCommentManager
                 .GetCommentsByUserAsync(user.Id);
 
-            comments = comments
-                .Where(x => x.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
-                .ToList();
-
             TaskCommentIndexVm vm = new()
             {
                 Comments = comments
@@ -56,15 +53,10 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var comment = await _taskCommentManager.GetByIdAsync(id);
+            var comment = await _taskCommentManager
+                .GetCommentByUserAsync(id, user.Id);
 
             if (comment == null)
-                return NotFound();
-
-            if (comment.UserId != user.Id)
-                return Forbid();
-
-            if (comment.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
                 return NotFound();
 
             TaskCommentDetailsVm vm = new()
@@ -75,7 +67,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return View(vm);
         }
 
-        // CREATE
+        // CREATE GET
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -84,39 +76,41 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            ViewBag.Tasks = user.Tasks
-                .Where(x => x.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
-                .ToList();
+            var tasks = await _taskManager
+                .GetTasksByUserAsync(user.Id);
+
+            ViewBag.Tasks = tasks;
 
             return View(new TaskCommentCreateVm());
         }
 
+        // CREATE POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaskCommentCreateVm vm)
+        public async Task<IActionResult> Create(
+            TaskCommentCreateVm vm)
         {
             var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Tasks = user.Tasks
-                    .Where(x => x.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
-                    .ToList();
-
-                return View(vm);
-            }
-
-            // Task gerçekten bu Member'a atanmış mı?
-            var task = user.Tasks
-                .FirstOrDefault(x =>
-                    x.Id == vm.TaskId &&
-                    x.Status != TH.ENTITIES.Enums.DataStatus.Deleted);
+            // Task gerçekten bu kullanıcıya mı ait?
+            var task = await _taskManager
+                .GetTaskDetailsByUserAsync(
+                    vm.TaskId,
+                    user.Id);
 
             if (task == null)
                 return Forbid();
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Tasks = await _taskManager
+                    .GetTasksByUserAsync(user.Id);
+
+                return View(vm);
+            }
 
             TaskComment comment = new()
             {
@@ -131,7 +125,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // EDIT
+        // EDIT GET
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -140,23 +134,16 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var comment = await _taskCommentManager.GetByIdAsync(id);
+            var comment = await _taskCommentManager
+                .GetCommentByUserAsync(id, user.Id);
 
             if (comment == null)
-                return NotFound();
-
-            // Sadece yorum sahibi düzenleyebilir
-            if (comment.UserId != user.Id)
-                return Forbid();
-
-            if (comment.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
                 return NotFound();
 
             TaskCommentUpdateVm vm = new()
             {
                 Id = comment.Id,
-                Message = comment.Message,
-                //TaskId = comment.TaskId
+                Message = comment.Message
             };
 
             return View(vm);
@@ -165,29 +152,25 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // EDIT POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TaskCommentUpdateVm vm)
+        public async Task<IActionResult> Edit(
+            TaskCommentUpdateVm vm)
         {
             var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            if (!ModelState.IsValid)
-                return View(vm);
-
-            var comment = await _taskCommentManager.GetByIdAsync(vm.Id);
+            var comment = await _taskCommentManager
+                .GetCommentByUserAsync(
+                    vm.Id,
+                    user.Id);
 
             if (comment == null)
                 return NotFound();
 
-            // Sadece yorum sahibi düzenleyebilir
-            if (comment.UserId != user.Id)
-                return Forbid();
+            if (!ModelState.IsValid)
+                return View(vm);
 
-            if (comment.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
-                return NotFound();
-
-            // TaskId formdan değiştirilmesine izin vermiyoruz.
             comment.Message = vm.Message;
 
             await _taskCommentManager.UpdateAsync(comment);
@@ -195,7 +178,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // DELETE
+        // DELETE GET
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -204,21 +187,16 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var comment = await _taskCommentManager.GetByIdAsync(id);
+            var comment = await _taskCommentManager
+                .GetCommentByUserAsync(id, user.Id);
 
             if (comment == null)
                 return NotFound();
 
-            // Sadece yorum sahibi silebilir
-            if (comment.UserId != user.Id)
-                return Forbid();
-
-            if (comment.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
-                return NotFound();
-
             TaskCommentDeleteVm vm = new()
             {
-                Comment = comment
+                Id = comment.Id,
+                Message = comment.Message
             };
 
             return View(vm);
@@ -227,23 +205,20 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // DELETE POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(TaskCommentDeleteVm vm)
+        public async Task<IActionResult> Delete(
+            TaskCommentDeleteVm vm)
         {
             var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            var comment = await _taskCommentManager.GetByIdAsync(vm.Comment.Id);
+            var comment = await _taskCommentManager
+                .GetCommentByUserAsync(
+                    vm.Id,
+                    user.Id);
 
             if (comment == null)
-                return NotFound();
-
-            // Sadece yorum sahibi silebilir
-            if (comment.UserId != user.Id)
-                return Forbid();
-
-            if (comment.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
                 return NotFound();
 
             await _taskCommentManager.MakePassiveAsync(comment);
@@ -252,12 +227,3 @@ namespace TH.MVCUI.Areas.Member.Controllers
         }
     }
 }
-
-//Artık Member'ın yapamayacağı işlemler : 
-
-//UserId değiştiremez
-//IsRead değiştiremez
-//Başka task'a yorum taşıyamaz
-//Başkasının yorumunu düzenleyemez
-//Başkasının yorumunu silemez
-//Başka Member'ın task'ına yorum yazamaz
