@@ -27,7 +27,7 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId)
         {
             return await _context.Tasks
-                .Where(t => t.ProjectId == projectId)
+                .Where(t => t.ProjectId == projectId && t.Status != DataStatus.Deleted)
                 .ToListAsync();
         }
 
@@ -81,11 +81,14 @@ namespace TH.DAL.Repositories.Concretes
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted)
+        public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted, List<int> teamIds)
         {
             var query = _context.Tasks
         .Include(x => x.User)
         .Include(x => x.Project)
+        .Where(x =>
+            teamIds.Contains(x.Project.TeamId) &&
+            x.Status != DataStatus.Deleted)
         .AsQueryable();
 
             // SEARCH
@@ -101,13 +104,13 @@ namespace TH.DAL.Repositories.Concretes
             // PRIORITY
             if (priority.HasValue)
             {
-                query = query.Where(x => x.Priority == priority);
+                query = query.Where(x => x.Priority == priority.Value);
             }
 
             // STATUS
             if (isCompleted.HasValue)
             {
-                query = query.Where(x => x.IsCompleted == isCompleted);
+                query = query.Where(x => x.IsCompleted == isCompleted.Value);
             }
 
             return await query
