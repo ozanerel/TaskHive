@@ -16,13 +16,15 @@ namespace TH.BLL.Managers.Concretes
         private readonly ITaskRepository _repository;
         private readonly INotificationManager _notificationManager;
         private readonly IUserManager _userManager;
+        private readonly ITeamMemberManager _teamMemberManager;
 
-        public TaskManager(ITaskRepository repository, INotificationManager notificationManager,IUserManager userManager)
+        public TaskManager(ITaskRepository repository, INotificationManager notificationManager,IUserManager userManager,ITeamMemberManager teamMemberManager)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
             _userManager = userManager;
+            _teamMemberManager = teamMemberManager;
         }
 
         public override async Task CreateAsync(ENTITIES.Models.Task task)
@@ -43,14 +45,31 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task AssignTaskAsync(int taskId, int userId)
         {
-            var task = await _repository.GetByIdAsync(taskId);
+            var task = await _repository.GetTaskDetailsAsync(taskId);
 
             if (task == null)
                 return;
 
+            if (task.Status == DataStatus.Deleted)
+                return;
+
+            if (task.Project == null)
+                return;
+
+            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
+                task.Project.TeamId,
+                userId);
+
+            if (teamMember == null)
+                return;
+
             task.UserId = userId;
 
-            await _notificationManager.CreateNotificationAsync(userId,"New Task",$"{task.Title} assigned to you.",NotificationType.TaskAssigned);
+            await _notificationManager.CreateNotificationAsync(
+                userId,
+                "New Task",
+                $"{task.Title} assigned to you.",
+                NotificationType.TaskAssigned);
 
             await _repository.UpdateAsync(task, task);
         }
@@ -67,17 +86,26 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(task, task);
         }
 
-        public async Task CompleteTaskAsync(int taskId)
+        public async Task CompleteTaskAsync(int taskId, int userId)
         {
-            var task = await _repository.GetByIdAsync(taskId);
+            var task = await _repository.GetTaskDetailsByUserAsync(
+                taskId,
+                userId);
 
             if (task == null)
+                return;
+
+            if (task.IsCompleted)
                 return;
 
             task.IsCompleted = true;
             task.UpdatedDate = DateTime.Now;
 
-            await _notificationManager.CreateNotificationAsync(task.UserId,"Task Completed",$"{task.Title} completed.",NotificationType.TaskCompleted);
+            await _notificationManager.CreateNotificationAsync(
+                task.UserId,
+                "Task Completed",
+                $"{task.Title} completed.",
+                NotificationType.TaskCompleted);
 
             await _repository.UpdateAsync(task, task);
         }
@@ -89,11 +117,26 @@ namespace TH.BLL.Managers.Concretes
             if (oldTask == null)
                 return;
 
+            if (oldTask.Status == DataStatus.Deleted)
+                return;
+
             var oldUserId = oldTask.UserId;
+
+            if (oldUserId != task.UserId)
+            {
+                if (oldTask.Project == null)
+                    return;
+
+                var teamMember = await _teamMemberManager.GetTeamMemberAsync(
+                    oldTask.Project.TeamId,
+                    task.UserId);
+
+                if (teamMember == null)
+                    return;
+            }
 
             await base.UpdateAsync(task);
 
-            // Eğer görev başka kullanıcıya atanmışsa
             if (oldUserId != task.UserId)
             {
                 await _notificationManager.CreateNotificationAsync(
@@ -103,9 +146,8 @@ namespace TH.BLL.Managers.Concretes
                     NotificationType.TaskUpdated
                 );
             }
-            else 
+            else
             {
-                // Güncel kullanıcıya bilgi ver
                 await _notificationManager.CreateNotificationAsync(
                     task.UserId,
                     "Task Updated",
@@ -164,9 +206,9 @@ namespace TH.BLL.Managers.Concretes
             return await _repository.GetTaskDetailsAsync(id);
         }
 
-        public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted)
+        public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted,List<int> teamIds)
         {
-            return await _repository.FilterTasksAsync(search,priority,isCompleted);
+            return await _repository.FilterTasksAsync(search,priority,isCompleted, teamIds);
         }
 
         public async Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId, int userId)
