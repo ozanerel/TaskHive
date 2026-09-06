@@ -95,6 +95,18 @@ namespace TH.DAL.Repositories.Concretes
                 .FirstOrDefaultAsync(x => x.Id == id); 
         }
 
+        public async Task<Project> GetProjectDetailsByUserAsync(int projectId, int userId)
+        {
+            return await _context.Projects
+                .Include(x => x.Team)
+                .Include(x => x.Users)
+                .Include(x => x.Tasks)
+                .FirstOrDefaultAsync(x =>
+                    x.Id == projectId &&
+                    x.Users.Any(u => u.Id == userId) &&
+                    x.Status != DataStatus.Deleted);
+        }
+
         public async Task<List<Project>> GetProjectsByUserAsync(int userId)
         {
             return await _context.Projects
