@@ -13,7 +13,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
         private readonly ITaskManager _taskManager;
         private readonly IUserContext _userContext;
 
-        public MyTaskController(ITaskManager taskManager,IUserContext userContext)
+        public MyTaskController(
+            ITaskManager taskManager,
+            IUserContext userContext)
         {
             _taskManager = taskManager;
             _userContext = userContext;
@@ -41,13 +43,12 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(id,user.Id);
+            var task = await _taskManager.GetTaskDetailsByUserAsync(
+                id,
+                user.Id);
 
             if (task == null)
                 return NotFound();
-
-            //if (task.UserId != user.Id)
-            //    return Forbid();
 
             TaskDetailPageVm vm = new()
             {
@@ -64,7 +65,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(id, user.Id);
+            var task = await _taskManager.GetTaskDetailsByUserAsync(
+                id,
+                user.Id);
 
             if (task == null)
                 return NotFound();
@@ -84,24 +87,20 @@ namespace TH.MVCUI.Areas.Member.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MyTaskUpdateVm vm)
         {
-            if (!ModelState.IsValid)
-                return View(vm);
-
             var user = await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(vm.Id,user.Id);
+            var task = await _taskManager.GetTaskDetailsByUserAsync(
+                vm.Id,
+                user.Id);
 
             if (task == null)
                 return NotFound();
 
-            //if (task.UserId != user.Id)
-            //    return Forbid();
-
-            //if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
-            //    return Forbid();
+            if (!ModelState.IsValid)
+                return View(vm);
 
             task.Title = vm.Title;
             task.Description = vm.Description;
@@ -112,6 +111,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Complete(int id)
         {
             var user = await _userContext.GetCurrentUserAsync();
