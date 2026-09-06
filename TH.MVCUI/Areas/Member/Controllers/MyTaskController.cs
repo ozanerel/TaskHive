@@ -41,13 +41,13 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsAsync(id);
+            var task = await _taskManager.GetTaskDetailsByUserAsync(id,user.Id);
 
             if (task == null)
                 return NotFound();
 
-            if (task.UserId != user.Id)
-                return Forbid();
+            //if (task.UserId != user.Id)
+            //    return Forbid();
 
             TaskDetailPageVm vm = new()
             {
@@ -97,11 +97,11 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (task == null)
                 return NotFound();
 
-            if (task.UserId != user.Id)
-                return Forbid();
+            //if (task.UserId != user.Id)
+            //    return Forbid();
 
-            if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
-                return Forbid();
+            //if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+            //    return Forbid();
 
             task.Title = vm.Title;
             task.Description = vm.Description;
