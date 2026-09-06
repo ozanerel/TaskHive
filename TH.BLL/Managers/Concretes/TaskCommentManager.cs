@@ -1,66 +1,162 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
-using TH.DAL.Repositories.Concretes;
 using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using Task = System.Threading.Tasks.Task;
 
 namespace TH.BLL.Managers.Concretes
 {
-    public class TaskCommentManager : BaseManager<TaskComment>, ITaskCommentManager
+    public class TaskCommentManager
+        : BaseManager<TaskComment>,
+          ITaskCommentManager
     {
         private readonly ITaskCommentRepository _repository;
         private readonly INotificationManager _notificationManager;
         private readonly ITaskRepository _taskRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ITeamMemberManager _teamMemberManager;
 
-        public TaskCommentManager(ITaskCommentRepository repository, INotificationManager notificationManager,ITaskRepository taskRepository,IUserRepository userRepository)
+        public TaskCommentManager(
+            ITaskCommentRepository repository,
+            INotificationManager notificationManager,
+            ITaskRepository taskRepository,
+            IUserRepository userRepository,
+            ITeamMemberManager teamMemberManager)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
             _taskRepository = taskRepository;
             _userRepository = userRepository;
+            _teamMemberManager = teamMemberManager;
         }
 
         public override async Task CreateAsync(TaskComment comment)
         {
-            var task = await _taskRepository.GetTaskDetailsAsync(comment.TaskId);
+            var task = await _taskRepository
+                .GetTaskDetailsAsync(comment.TaskId);
 
             if (task == null)
                 return;
 
+            if (task.Status == DataStatus.Deleted)
+                return;
+
+            if (task.Project == null)
+                return;
+
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    task.Project.TeamId,
+                    comment.UserId);
+
+            if (teamMember == null)
+                return;
+
+            var user = await _userRepository
+                .GetByIdAsync(comment.UserId);
+
+            if (user == null)
+                return;
+
+            if (user.Status == DataStatus.Deleted)
+                return;
+
             await base.CreateAsync(comment);
 
-            var user = await _userRepository.GetByIdAsync(comment.UserId);
-
-            // Yorumu yapan kişi task sahibi değilse bildirim gönder
+            // Yorumu yapan kişi task sahibi değilse
+            // task sahibine bildirim gönder.
             if (task.UserId != comment.UserId)
             {
                 await _notificationManager.CreateNotificationAsync(
                     task.UserId,
                     "New Comment Added",
-                    //$"A new comment was added to your task \"{task.Title}\".",
                     $"{user.FirstName} {user.LastName} commented on \"{task.Title}\".",
-                    NotificationType.CommentAdded
-                );
+                    NotificationType.CommentAdded);
             }
         }
 
-        public async Task<List<TaskComment>> GetCommentsByTaskAsync(int taskId)
+        public override async Task UpdateAsync(TaskComment comment)
         {
-            return await _repository.Where(x =>x.TaskId == taskId &&x.Status != DataStatus.Deleted).ToListAsync();
+            var existingComment = await _repository
+                .GetCommentDetailsAsync(comment.Id);
+
+            if (existingComment == null)
+                return;
+
+            if (existingComment.Status == DataStatus.Deleted)
+                return;
+
+            // Yorum sahibinin UserId'sini değiştirmesine izin verme.
+            if (existingComment.UserId != comment.UserId)
+                return;
+
+            // TaskId değiştirilemez.
+            if (existingComment.TaskId != comment.TaskId)
+                return;
+
+            existingComment.Message = comment.Message;
+            existingComment.IsRead = comment.IsRead;
+
+            await base.UpdateAsync(existingComment);
         }
 
-        public async Task<List<TaskComment>> GetCommentsByUserAsync(int userId)
+        public override async Task MakePassiveAsync(TaskComment comment)
         {
-            return await _repository.Where(x =>x.UserId == userId &&x.Status != DataStatus.Deleted).ToListAsync();
+            var existingComment = await _repository
+                .GetCommentDetailsAsync(comment.Id);
+
+            if (existingComment == null)
+                return;
+
+            if (existingComment.Status == DataStatus.Deleted)
+                return;
+
+            // Sadece yorum sahibi kendi yorumunu silebilir.
+            if (existingComment.UserId != comment.UserId)
+                return;
+
+            await base.MakePassiveAsync(existingComment);
+        }
+
+        public async Task<List<TaskComment>> GetCommentsByTaskAsync(
+            int taskId)
+        {
+            return await _repository
+                .Where(x =>
+                    x.TaskId == taskId &&
+                    x.Status != DataStatus.Deleted)
+                .Include(x => x.User)
+                .OrderBy(x => x.CreatedDate)
+                .ToListAsync();
+        }
+
+        public async Task<List<TaskComment>> GetCommentsByUserAsync(
+            int userId)
+        {
+            return await _repository
+                .Where(x =>
+                    x.UserId == userId &&
+                    x.Status != DataStatus.Deleted)
+                .Include(x => x.Task)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+        }
+
+        public async Task<TaskComment> GetCommentByUserAsync(
+            int commentId,
+            int userId)
+        {
+            return await _repository
+                .GetCommentByUserAsync(commentId, userId);
+        }
+
+        public async Task<TaskComment> GetCommentDetailsAsync(
+            int commentId)
+        {
+            return await _repository
+                .GetCommentDetailsAsync(commentId);
         }
     }
 }
