@@ -51,16 +51,16 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var project = await _projectManager.GetProjectDetailsAsync(id);
+            var project = await _projectManager.GetProjectDetailsByUserAsync(id,user.Id);
 
             if (project == null)
                 return NotFound();
 
-            if (project.Status == DataStatus.Deleted)
-                return NotFound();
+            //if (project.Status == DataStatus.Deleted)
+            //    return NotFound();
 
-            if (!project.Users.Any(x => x.Id == user.Id))
-                return Forbid();
+            //if (!project.Users.Any(x => x.Id == user.Id))
+            //    return Forbid();
 
             MyProjectDetailsVm vm = new MyProjectDetailsVm
             {
