@@ -189,10 +189,51 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var task = await _taskManager.GetByIdAsync(id);
+            var task = await _taskManager.GetTaskDetailsAsync(id);
 
             if (task == null)
                 return NotFound();
+
+            if (task.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (task.Project == null)
+                return NotFound();
+
+            if (!await IsTeamAdminAsync(task.Project.TeamId))
+                return Forbid();
+
+            var adminTeams = await GetAdminTeamsAsync();
+
+            var teamIds = adminTeams
+                .Select(x => x.Id)
+                .ToList();
+
+            var projects = await _projectManager.GetAllAsync();
+
+            projects = projects
+                .Where(x =>
+                    teamIds.Contains(x.TeamId) &&
+                    x.Status != DataStatus.Deleted)
+                .ToList();
+
+            var users = new List<TH.ENTITIES.Models.User>();
+
+            foreach (var team in adminTeams)
+            {
+                var members = await _teamMemberManager.GetTeamMembersAsync(team.Id);
+
+                users.AddRange(
+                    members
+                        .Where(x => x.User != null)
+                        .Select(x => x.User));
+            }
+
+            users = users
+                .Where(x => x.Status != DataStatus.Deleted)
+                .GroupBy(x => x.Id)
+                .Select(x => x.First())
+                .ToList();
 
             TaskUpdateVm vm = new()
             {
@@ -203,8 +244,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 UserId = task.UserId,
                 ProjectId = task.ProjectId,
                 IsCompleted = task.IsCompleted,
-                Users = await _userManager.GetAllAsync(),
-                Projects = await _projectManager.GetAllAsync()
+                Users = users,
+                Projects = projects
             };
 
             return View(vm);
@@ -214,18 +255,79 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TaskUpdateVm vm)
         {
-            if (!ModelState.IsValid)
-            {
-                vm.Users = await _userManager.GetAllAsync();
-                vm.Projects = await _projectManager.GetAllAsync();
-
-                return View(vm);
-            }
-
-            var task = await _taskManager.GetByIdAsync(vm.Id);
+            var task = await _taskManager.GetTaskDetailsAsync(vm.Id);
 
             if (task == null)
                 return NotFound();
+
+            if (task.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (task.Project == null)
+                return NotFound();
+
+            // Mevcut task'ın Team'inde Admin mi?
+            if (!await IsTeamAdminAsync(task.Project.TeamId))
+                return Forbid();
+
+            var newProject = await _projectManager.GetByIdAsync(vm.ProjectId);
+
+            if (newProject == null)
+                return NotFound();
+
+            if (newProject.Status == DataStatus.Deleted)
+                return NotFound();
+
+            // Yeni Project'in Team'inde Admin mi?
+            if (!await IsTeamAdminAsync(newProject.TeamId))
+                return Forbid();
+
+            // Atanmak istenen kullanıcı yeni Team'in üyesi mi?
+            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
+                newProject.TeamId,
+                vm.UserId);
+
+            if (teamMember == null)
+                return BadRequest();
+
+            if (!ModelState.IsValid)
+            {
+                var adminTeams = await GetAdminTeamsAsync();
+
+                var teamIds = adminTeams
+                    .Select(x => x.Id)
+                    .ToList();
+
+                var projects = await _projectManager.GetAllAsync();
+
+                projects = projects
+                    .Where(x =>
+                        teamIds.Contains(x.TeamId) &&
+                        x.Status != DataStatus.Deleted)
+                    .ToList();
+
+                var users = new List<TH.ENTITIES.Models.User>();
+
+                foreach (var team in adminTeams)
+                {
+                    var members = await _teamMemberManager.GetTeamMembersAsync(team.Id);
+
+                    users.AddRange(
+                        members
+                            .Where(x => x.User != null)
+                            .Select(x => x.User));
+                }
+
+                vm.Users = users
+                    .Where(x => x.Status != DataStatus.Deleted)
+                    .GroupBy(x => x.Id)
+                    .Select(x => x.First())
+                    .ToList();
+
+                vm.Projects = projects;
+
+                return View(vm);
+            }
 
             task.Title = vm.Title;
             task.Description = vm.Description;
@@ -241,10 +343,19 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var task = await _taskManager.GetByIdAsync(id);
+            var task = await _taskManager.GetTaskDetailsAsync(id);
 
             if (task == null)
                 return NotFound();
+
+            if (task.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (task.Project == null)
+                return NotFound();
+
+            if (!await IsTeamAdminAsync(task.Project.TeamId))
+                return Forbid();
 
             TaskDeleteVm vm = new()
             {
@@ -262,19 +373,49 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(TaskDeleteVm vm)
         {
-            var task = await _taskManager.GetByIdAsync(vm.Id);
+            var task = await _taskManager.GetTaskDetailsAsync(vm.Id);
 
             if (task == null)
                 return NotFound();
+
+            if (task.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (task.Project == null)
+                return NotFound();
+
+            if (!await IsTeamAdminAsync(task.Project.TeamId))
+                return Forbid();
 
             await _taskManager.MakePassiveAsync(task);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> CompleteTask(int id,int userId)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CompleteTask(int id)
         {
-            await _taskManager.CompleteTaskAsync(id,userId);
+            var user = await _userContext.GetCurrentUserAsync();
+
+            if (user == null)
+                return Unauthorized();
+
+            var task = await _taskManager.GetTaskDetailsAsync(id);
+
+            if (task == null)
+                return NotFound();
+
+            if (task.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (task.Project == null)
+                return NotFound();
+
+            if (!await IsTeamAdminAsync(task.Project.TeamId))
+                return Forbid();
+
+            await _taskManager.CompleteTaskAsync(id, user.Id);
 
             return RedirectToAction(nameof(Index));
         }
