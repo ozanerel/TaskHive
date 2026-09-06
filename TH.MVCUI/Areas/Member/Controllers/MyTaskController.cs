@@ -119,21 +119,19 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetByIdAsync(id);
+            var task = await _taskManager.GetTaskDetailsByUserAsync(
+                id,
+                user.Id);
 
             if (task == null)
                 return NotFound();
 
-            if (task.UserId != user.Id)
-                return Forbid();
-
-            if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
-                return Forbid();
-
             if (task.IsCompleted)
                 return RedirectToAction(nameof(Index));
 
-            await _taskManager.CompleteTaskAsync(id);
+            await _taskManager.CompleteTaskAsync(
+                id,
+                user.Id);
 
             return RedirectToAction(nameof(Index));
         }
