@@ -17,20 +17,36 @@ namespace TH.BLL.Managers.Concretes
         private readonly INotificationManager _notificationManager;
         private readonly IUserManager _userManager;
         private readonly ITeamMemberManager _teamMemberManager;
+        private readonly IProjectManager _projectManager;
 
-        public TaskManager(ITaskRepository repository, INotificationManager notificationManager,IUserManager userManager,ITeamMemberManager teamMemberManager)
+        public TaskManager(ITaskRepository repository, INotificationManager notificationManager,IUserManager userManager,ITeamMemberManager teamMemberManager,IProjectManager projectManager)
             : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
             _userManager = userManager;
             _teamMemberManager = teamMemberManager;
+            _projectManager = projectManager;
         }
 
         public override async Task CreateAsync(ENTITIES.Models.Task task)
         {
-            await base.CreateAsync(task);
+            var project = await _projectManager.GetByIdAsync(task.ProjectId);
 
+            if (project == null)
+                return;
+
+            if (project.Status == DataStatus.Deleted)
+                return;
+
+            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
+                project.TeamId,
+                task.UserId);
+
+            if (teamMember == null)
+                return;
+
+            await base.CreateAsync(task);
 
             if (task.UserId > 0)
             {
@@ -38,8 +54,7 @@ namespace TH.BLL.Managers.Concretes
                     task.UserId,
                     "New Task Assigned",
                     $"You have been assigned a new task: {task.Title}",
-                    NotificationType.TaskAssigned
-                );
+                    NotificationType.TaskAssigned);
             }
         }
 
@@ -120,20 +135,22 @@ namespace TH.BLL.Managers.Concretes
             if (oldTask.Status == DataStatus.Deleted)
                 return;
 
+            var newProject = await _projectManager.GetByIdAsync(task.ProjectId);
+
+            if (newProject == null)
+                return;
+
+            if (newProject.Status == DataStatus.Deleted)
+                return;
+
+            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
+                newProject.TeamId,
+                task.UserId);
+
+            if (teamMember == null)
+                return;
+
             var oldUserId = oldTask.UserId;
-
-            if (oldUserId != task.UserId)
-            {
-                if (oldTask.Project == null)
-                    return;
-
-                var teamMember = await _teamMemberManager.GetTeamMemberAsync(
-                    oldTask.Project.TeamId,
-                    task.UserId);
-
-                if (teamMember == null)
-                    return;
-            }
 
             await base.UpdateAsync(task);
 
@@ -143,8 +160,7 @@ namespace TH.BLL.Managers.Concretes
                     task.UserId,
                     "Task Updated",
                     $"You have been assigned to task \"{task.Title}\".",
-                    NotificationType.TaskUpdated
-                );
+                    NotificationType.TaskUpdated);
             }
             else
             {
@@ -152,8 +168,7 @@ namespace TH.BLL.Managers.Concretes
                     task.UserId,
                     "Task Updated",
                     $"Task \"{task.Title}\" has been updated.",
-                    NotificationType.TaskUpdated
-                );
+                    NotificationType.TaskUpdated);
             }
         }
 
