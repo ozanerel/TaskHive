@@ -17,11 +17,11 @@ namespace TH.BLL.Managers.Abstracts
 
         Task<List<TH.ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId);
 
-        Task CompleteTaskAsync(int taskId);
+        Task CompleteTaskAsync(int taskId,int userId);
 
         Task<ENTITIES.Models.Task> GetTaskDetailsAsync(int id);
 
-        Task<List<TH.ENTITIES.Models.Task>> FilterTasksAsync(string search,PriorityLevel? priority,bool? isCompleted);
+        Task<List<TH.ENTITIES.Models.Task>> FilterTasksAsync(string search,PriorityLevel? priority,bool? isCompleted,List<int> teamIds);
 
         Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId,int userId);
     }
