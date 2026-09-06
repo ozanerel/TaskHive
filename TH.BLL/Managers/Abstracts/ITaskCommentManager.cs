@@ -11,5 +11,7 @@ namespace TH.BLL.Managers.Abstracts
     {
         Task<List<TaskComment>> GetCommentsByTaskAsync(int taskId);
         Task<List<TaskComment>> GetCommentsByUserAsync(int userId);
+        Task<TaskComment> GetCommentByUserAsync(int commentId, int userId);
+        Task<TaskComment> GetCommentDetailsAsync(int commentId);
     }
 }
