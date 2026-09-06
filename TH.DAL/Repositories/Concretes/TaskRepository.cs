@@ -34,12 +34,14 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<ENTITIES.Models.Task>> GetTasksByUserAsync(int userId)
         {
             return await _context.Tasks
-                .Include(x => x.Project)
-                .Include(x => x.User)
-                .Where(x => x.UserId == userId && x.Status != DataStatus.Deleted)
-                .OrderBy(x => x.Status)
-                .ThenBy(x => x.Title)
-                .ToListAsync();
+         .Include(x => x.Project)
+         .Include(x => x.User)
+         .Where(x =>
+             x.UserId == userId &&
+             x.Status != DataStatus.Deleted)
+         .OrderBy(x => x.Status)
+         .ThenBy(x => x.Title)
+         .ToListAsync();
         }
 
         public async Task<List<ENTITIES.Models.Task>> SearchTasksAsync(string keyword)
@@ -60,7 +62,11 @@ namespace TH.DAL.Repositories.Concretes
             return await _context.Tasks
                 .Include(x => x.Project)
                 .Include(x => x.User)
-                .Where(x => x.UserId == userId && (x.Title.ToLower().Contains(keyword) || x.Description.ToLower().Contains(keyword)))
+                .Where(x =>
+                    x.UserId == userId &&
+                    x.Status != DataStatus.Deleted &&
+                    (x.Title.ToLower().Contains(keyword) ||
+                     x.Description.ToLower().Contains(keyword)))
                 .OrderBy(x => x.Title)
                 .Take(10)
                 .ToListAsync();
