@@ -137,5 +137,10 @@ namespace TH.BLL.Managers.Concretes
         {
             return await _repository.FilterProjectsAsync(search,status,sortBy,teamIds);
         }
+
+        public async Task<Project> GetProjectDetailsByUserAsync(int projectId, int userId)
+        {
+            return await _repository.GetProjectDetailsByUserAsync(projectId,userId);
+        }
     }
 }
