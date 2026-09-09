@@ -89,7 +89,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 IsCompleted = task.IsCompleted,
                 UserName = task.User?.FirstName,
                 ProjectName = task.Project?.ProjectName,
-                Comments = task.TaskComments?.ToList() ?? new()
+                Comments = task.TaskComments?.Where(x => x.Status != DataStatus.Deleted).ToList() ?? new()
             };
 
             return View(vm);
