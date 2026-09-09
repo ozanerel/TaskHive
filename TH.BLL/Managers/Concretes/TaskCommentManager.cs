@@ -65,8 +65,6 @@ namespace TH.BLL.Managers.Concretes
 
             await base.CreateAsync(comment);
 
-            // Yorumu yapan kişi task sahibi değilse
-            // task sahibine bildirim gönder.
             if (task.UserId != comment.UserId)
             {
                 await _notificationManager.CreateNotificationAsync(
@@ -88,16 +86,13 @@ namespace TH.BLL.Managers.Concretes
             if (existingComment.Status == DataStatus.Deleted)
                 return;
 
-            // Yorum sahibinin UserId'sini değiştirmesine izin verme.
             if (existingComment.UserId != comment.UserId)
                 return;
 
-            // TaskId değiştirilemez.
             if (existingComment.TaskId != comment.TaskId)
                 return;
 
             existingComment.Message = comment.Message;
-            existingComment.IsRead = comment.IsRead;
 
             await base.UpdateAsync(existingComment);
         }
@@ -113,11 +108,43 @@ namespace TH.BLL.Managers.Concretes
             if (existingComment.Status == DataStatus.Deleted)
                 return;
 
-            // Sadece yorum sahibi kendi yorumunu silebilir.
             if (existingComment.UserId != comment.UserId)
                 return;
 
             await base.MakePassiveAsync(existingComment);
+        }
+
+        public async Task DeleteCommentByTeamAdminAsync(
+            int commentId,
+            int teamAdminUserId)
+        {
+            var comment = await _repository
+                .GetCommentDetailsAsync(commentId);
+
+            if (comment == null)
+                return;
+
+            if (comment.Status == DataStatus.Deleted)
+                return;
+
+            if (comment.Task == null)
+                return;
+
+            if (comment.Task.Project == null)
+                return;
+
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    comment.Task.Project.TeamId,
+                    teamAdminUserId);
+
+            if (teamMember == null)
+                return;
+
+            if (teamMember.TeamRole != TeamRole.Admin)
+                return;
+
+            await base.MakePassiveAsync(comment);
         }
 
         public async Task<List<TaskComment>> GetCommentsByTaskAsync(
@@ -149,7 +176,9 @@ namespace TH.BLL.Managers.Concretes
             int userId)
         {
             return await _repository
-                .GetCommentByUserAsync(commentId, userId);
+                .GetCommentByUserAsync(
+                    commentId,
+                    userId);
         }
 
         public async Task<TaskComment> GetCommentDetailsAsync(
