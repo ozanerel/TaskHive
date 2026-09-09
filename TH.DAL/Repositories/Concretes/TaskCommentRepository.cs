@@ -24,6 +24,7 @@ namespace TH.DAL.Repositories.Concretes
         {
             return await _context.TaskComments
                 .Include(x => x.Task)
+                    .ThenInclude(x => x.Project)
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x =>
                     x.Id == commentId &&
@@ -36,6 +37,7 @@ namespace TH.DAL.Repositories.Concretes
         {
             return await _context.TaskComments
                 .Include(x => x.Task)
+                    .ThenInclude(x => x.Project)
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x =>
                     x.Id == commentId &&
