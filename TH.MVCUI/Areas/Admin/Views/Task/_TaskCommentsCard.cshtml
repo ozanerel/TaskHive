@@ -8,7 +8,8 @@
             Comments
         </h3>
 
-        <a asp-controller="TaskComment"
+        <a asp-area="Admin"
+           asp-controller="TaskComment"
            asp-action="Index"
            asp-route-taskId="@Model.Id"
            class="btn-outline-custom">
@@ -28,7 +29,15 @@
 
                 <div class="activity-avatar">
 
-                    @comment.User.FirstName.Substring(0, 1)
+                    @if (comment.User != null &&
+                   !string.IsNullOrEmpty(comment.User.FirstName))
+                    {
+                        @comment.User.FirstName.Substring(0, 1)
+                    }
+                    else
+                    {
+                        <span>?</span>
+                    }
 
                 </div>
 
@@ -38,8 +47,15 @@
 
                         <h5>
 
-                            @comment.User.FirstName
-                            @comment.User.LastName
+                            @if (comment.User != null)
+                            {
+                                @comment.User.FirstName
+                                @comment.User.LastName
+                            }
+                            else
+                            {
+                                <span>Unknown User</span>
+                            }
 
                         </h5>
 
@@ -69,9 +85,7 @@
     else
     {
         <p>
-
             No comments yet.
-
         </p>
     }
 
