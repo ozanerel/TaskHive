@@ -187,5 +187,16 @@ namespace TH.BLL.Managers.Concretes
             return await _repository
                 .GetCommentDetailsAsync(commentId);
         }
+
+        public async Task<List<TaskComment>> GetCommentsByTeamIdsAsync(
+            List<int> teamIds)
+        {
+            if (teamIds == null || teamIds.Count == 0)
+                return new List<TaskComment>();
+
+            return await _repository
+                .GetCommentsByTeamIdsAsync(teamIds);
+        }
+
     }
 }

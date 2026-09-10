@@ -43,5 +43,21 @@ namespace TH.DAL.Repositories.Concretes
                     x.Id == commentId &&
                     x.Status != DataStatus.Deleted);
         }
+
+        public async Task<List<TaskComment>> GetCommentsByTeamIdsAsync(
+            List<int> teamIds)
+        {
+            return await _context.TaskComments
+                .Include(x => x.Task)
+                    .ThenInclude(x => x.Project)
+                .Include(x => x.User)
+                .Where(x =>
+                    x.Task != null &&
+                    x.Task.Project != null &&
+                    teamIds.Contains(x.Task.Project.TeamId) &&
+                    x.Status != DataStatus.Deleted)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+        }
     }
 }

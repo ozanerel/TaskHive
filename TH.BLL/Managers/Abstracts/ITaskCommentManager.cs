@@ -14,5 +14,6 @@ namespace TH.BLL.Managers.Abstracts
         Task<TaskComment> GetCommentByUserAsync(int commentId, int userId);
         Task<TaskComment> GetCommentDetailsAsync(int commentId);
         System.Threading.Tasks.Task DeleteCommentByTeamAdminAsync(int commentId, int teamAdminUserId);
+        Task<List<TaskComment>> GetCommentsByTeamIdsAsync(List<int> teamIds);
     }
 }

@@ -14,5 +14,7 @@ namespace TH.DAL.Repositories.Abstracts
 
         //Yorum + Task + User bilgilerine ihtiyaç olduğunda kullanılacak.
         Task<TaskComment> GetCommentDetailsAsync(int commentId);
+
+        Task<List<TaskComment>> GetCommentsByTeamIdsAsync(List<int> teamIds);
     }
 }
