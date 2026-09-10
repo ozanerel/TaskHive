@@ -7,6 +7,7 @@
 
 <div class="dashboard-header">
 
+    ```
     <div class="dashboard-title">
 
         <h1>Notification Details</h1>
@@ -23,6 +24,7 @@
 
 <div class="dashboard-card">
 
+    ```
     <div class="d-flex justify-content-between align-items-center">
 
         <div>
@@ -106,15 +108,23 @@
 
         @if (!Model.IsRead)
         {
-            <a asp-action="MarkAsRead"
-               asp-route-id="@Model.Id"
-               class="btn-primary-custom">
+            <form asp-action="MarkAsRead"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  class="d-inline">
 
-                <i class="fa-solid fa-check"></i>
+                @Html.AntiForgeryToken()
 
-                Mark as Read
+                <button type="submit"
+                        class="btn-primary-custom">
 
-            </a>
+                    <i class="fa-solid fa-check"></i>
+
+                    Mark as Read
+
+                </button>
+
+            </form>
         }
 
     </div>
