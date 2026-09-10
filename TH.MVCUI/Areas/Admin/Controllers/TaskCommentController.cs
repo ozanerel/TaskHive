@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.BLL.Services.Abstracts;
 using TH.ENTITIES.Enums;
+using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Admin.Models.PageVMs.TaskCommentVM;
 using TH.MVCUI.Areas.Member.Models.PageVMs.TaskCommentVM;
 using TaskCommentDeleteVm = TH.MVCUI.Areas.Admin.Models.PageVMs.TaskCommentVM.TaskCommentDeleteVm;
@@ -29,6 +30,38 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             _taskManager = taskManager;
             _teamMemberManager = teamMemberManager;
             _userContext = userContext;
+        }
+
+        public async Task<IActionResult> Index(int? taskId)
+        {
+            var user = await _userContext
+                .GetCurrentUserAsync();
+
+            if (user == null)
+                return NotFound();
+
+            var adminTeams = await GetAdminTeamsAsync(user.Id);
+
+            var teamIds = adminTeams
+                .Select(x => x.TeamId)
+                .ToList();
+
+            var comments = await _taskCommentManager
+                .GetCommentsByTeamIdsAsync(teamIds);
+
+            if (taskId.HasValue)
+            {
+                comments = comments
+                    .Where(x => x.TaskId == taskId.Value)
+                    .ToList();
+            }
+
+            Models.PageVMs.TaskCommentVM.TaskCommentIndexVm vm = new()
+            {
+                Comments = comments
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -160,6 +193,19 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             return teamMember != null &&
                    teamMember.TeamRole == TeamRole.Admin &&
                    teamMember.Status != DataStatus.Deleted;
+        }
+
+        private async Task<List<TeamMember>> GetAdminTeamsAsync(
+            int userId)
+        {
+            var memberships = await _teamMemberManager
+                .GetUserTeamsAsync(userId);
+
+            return memberships
+                .Where(x =>
+                    x.TeamRole == TeamRole.Admin &&
+                    x.Status != DataStatus.Deleted)
+                .ToList();
         }
     }
 }
