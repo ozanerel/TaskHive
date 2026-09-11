@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
@@ -11,27 +9,33 @@ using Task = System.Threading.Tasks.Task;
 
 namespace TH.BLL.Managers.Concretes
 {
-    public class TaskManager : BaseManager<TH.ENTITIES.Models.Task>,ITaskManager
+    public class TaskManager
+    : BaseManager<TH.ENTITIES.Models.Task>,
+    ITaskManager
     {
         private readonly ITaskRepository _repository;
         private readonly INotificationManager _notificationManager;
-        private readonly IUserManager _userManager;
         private readonly ITeamMemberManager _teamMemberManager;
         private readonly IProjectManager _projectManager;
 
-        public TaskManager(ITaskRepository repository, INotificationManager notificationManager,IUserManager userManager,ITeamMemberManager teamMemberManager,IProjectManager projectManager)
-            : base(repository)
+    public TaskManager(
+        ITaskRepository repository,
+        INotificationManager notificationManager,
+        ITeamMemberManager teamMemberManager,
+        IProjectManager projectManager)
+        : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
-            _userManager = userManager;
             _teamMemberManager = teamMemberManager;
             _projectManager = projectManager;
         }
 
-        public override async Task CreateAsync(ENTITIES.Models.Task task)
+        public override async Task CreateAsync(
+            ENTITIES.Models.Task task)
         {
-            var project = await _projectManager.GetByIdAsync(task.ProjectId);
+            var project = await _projectManager
+                .GetByIdAsync(task.ProjectId);
 
             if (project == null)
                 return;
@@ -39,9 +43,10 @@ namespace TH.BLL.Managers.Concretes
             if (project.Status == DataStatus.Deleted)
                 return;
 
-            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
-                project.TeamId,
-                task.UserId);
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    project.TeamId,
+                    task.UserId);
 
             if (teamMember == null)
                 return;
@@ -58,9 +63,12 @@ namespace TH.BLL.Managers.Concretes
             }
         }
 
-        public async Task AssignTaskAsync(int taskId, int userId)
+        public async Task AssignTaskAsync(
+            int taskId,
+            int userId)
         {
-            var task = await _repository.GetTaskDetailsAsync(taskId);
+            var task = await _repository
+                .GetTaskDetailsAsync(taskId);
 
             if (task == null)
                 return;
@@ -71,9 +79,10 @@ namespace TH.BLL.Managers.Concretes
             if (task.Project == null)
                 return;
 
-            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
-                task.Project.TeamId,
-                userId);
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    task.Project.TeamId,
+                    userId);
 
             if (teamMember == null)
                 return;
@@ -89,11 +98,17 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(task, task);
         }
 
-        public async Task ChangePriorityAsync(int taskId, PriorityLevel priority)
+        public async Task ChangePriorityAsync(
+            int taskId,
+            PriorityLevel priority)
         {
-            var task = await _repository.GetByIdAsync(taskId);
+            var task = await _repository
+                .GetByIdAsync(taskId);
 
             if (task == null)
+                return;
+
+            if (task.Status == DataStatus.Deleted)
                 return;
 
             task.Priority = priority;
@@ -101,11 +116,14 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(task, task);
         }
 
-        public async Task CompleteTaskAsync(int taskId, int userId)
+        public async Task CompleteTaskAsync(
+            int taskId,
+            int userId)
         {
-            var task = await _repository.GetTaskDetailsByUserAsync(
-                taskId,
-                userId);
+            var task = await _repository
+                .GetTaskDetailsByUserAsync(
+                    taskId,
+                    userId);
 
             if (task == null)
                 return;
@@ -125,9 +143,11 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(task, task);
         }
 
-        public override async Task UpdateAsync(ENTITIES.Models.Task task)
+        public override async Task UpdateAsync(
+            ENTITIES.Models.Task task)
         {
-            var oldTask = await _repository.GetTaskDetailsAsync(task.Id);
+            var oldTask = await _repository
+                .GetTaskDetailsAsync(task.Id);
 
             if (oldTask == null)
                 return;
@@ -135,7 +155,8 @@ namespace TH.BLL.Managers.Concretes
             if (oldTask.Status == DataStatus.Deleted)
                 return;
 
-            var newProject = await _projectManager.GetByIdAsync(task.ProjectId);
+            var newProject = await _projectManager
+                .GetByIdAsync(task.ProjectId);
 
             if (newProject == null)
                 return;
@@ -143,9 +164,10 @@ namespace TH.BLL.Managers.Concretes
             if (newProject.Status == DataStatus.Deleted)
                 return;
 
-            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
-                newProject.TeamId,
-                task.UserId);
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    newProject.TeamId,
+                    task.UserId);
 
             if (teamMember == null)
                 return;
@@ -172,63 +194,75 @@ namespace TH.BLL.Managers.Concretes
             }
         }
 
-        public override async Task MakePassiveAsync(ENTITIES.Models.Task task)
+        public override async Task MakePassiveAsync(
+            ENTITIES.Models.Task task)
         {
-            var taskWithDetails = await _repository.GetTaskDetailsAsync(task.Id);
+            var taskWithDetails = await _repository
+                .GetTaskDetailsAsync(task.Id);
 
             if (taskWithDetails == null)
                 return;
 
+            if (taskWithDetails.Status == DataStatus.Deleted)
+                return;
+
             await base.MakePassiveAsync(taskWithDetails);
 
-            // Atanan kullanıcıya bildir
             if (taskWithDetails.UserId > 0)
             {
                 await _notificationManager.CreateNotificationAsync(
                     taskWithDetails.UserId,
                     "Task Deleted",
                     $"Task \"{taskWithDetails.Title}\" has been deleted.",
-                    NotificationType.TaskDeleted
-                );
-            }
-
-            // Tüm adminlere bildir
-            var admins = await _userManager.GetAdminsAsync();
-
-            foreach (var admin in admins)
-            {
-                await _notificationManager.CreateNotificationAsync(
-                    admin.Id,
-                    "Task Deleted",
-                    $"Task \"{taskWithDetails.Title}\" has been deleted.",
-                    NotificationType.TaskDeleted
-                );
+                    NotificationType.TaskDeleted);
             }
         }
 
-        public async Task<List<ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId)
+        public async Task<List<ENTITIES.Models.Task>>
+            GetTasksByProjectAsync(int projectId)
         {
-            return await _repository.GetTasksByProjectAsync(projectId);
+            return await _repository
+                .GetTasksByProjectAsync(projectId);
         }
 
-        public async Task<List<ENTITIES.Models.Task>> GetTasksByUserAsync(int userId)
+        public async Task<List<ENTITIES.Models.Task>>
+            GetTasksByUserAsync(int userId)
         {
-            return await _repository.GetTasksByUserAsync(userId);
+            return await _repository
+                .GetTasksByUserAsync(userId);
         }
 
-        public async Task<ENTITIES.Models.Task> GetTaskDetailsAsync(int id)
+        public async Task<ENTITIES.Models.Task>
+            GetTaskDetailsAsync(int id)
         {
-            return await _repository.GetTaskDetailsAsync(id);
+            return await _repository
+                .GetTaskDetailsAsync(id);
         }
 
-        public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted,List<int> teamIds)
+        public async Task<List<ENTITIES.Models.Task>>
+            FilterTasksAsync(
+                string search,
+                PriorityLevel? priority,
+                bool? isCompleted,
+                List<int> teamIds)
         {
-            return await _repository.FilterTasksAsync(search,priority,isCompleted, teamIds);
+            return await _repository
+                .FilterTasksAsync(
+                    search,
+                    priority,
+                    isCompleted,
+                    teamIds);
         }
 
-        public async Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId, int userId)
+        public async Task<ENTITIES.Models.Task>
+            GetTaskDetailsByUserAsync(
+                int taskId,
+                int userId)
         {
-            return await _repository.GetTaskDetailsByUserAsync(taskId,userId);
+            return await _repository
+                .GetTaskDetailsByUserAsync(
+                    taskId,
+                    userId);
         }
     }
 }
