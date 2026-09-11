@@ -70,5 +70,10 @@ namespace TH.ENTITIES.Enums
         Rejected = 3
     }
 
+    public enum ConversationType
+    {
+        Private = 1,
+        Team = 2
+    }
 
 }
