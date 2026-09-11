@@ -7,9 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace TH.BLL.Managers.Concretes
 {
-    public class TaskCommentManager
-        : BaseManager<TaskComment>,
-          ITaskCommentManager
+    public class TaskCommentManager : BaseManager<TaskComment>, ITaskCommentManager
     {
         private readonly ITaskCommentRepository _repository;
         private readonly INotificationManager _notificationManager;
@@ -17,13 +15,13 @@ namespace TH.BLL.Managers.Concretes
         private readonly IUserRepository _userRepository;
         private readonly ITeamMemberManager _teamMemberManager;
 
-        public TaskCommentManager(
-            ITaskCommentRepository repository,
-            INotificationManager notificationManager,
-            ITaskRepository taskRepository,
-            IUserRepository userRepository,
-            ITeamMemberManager teamMemberManager)
-            : base(repository)
+    public TaskCommentManager(
+        ITaskCommentRepository repository,
+        INotificationManager notificationManager,
+        ITaskRepository taskRepository,
+        IUserRepository userRepository,
+        ITeamMemberManager teamMemberManager)
+        : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
@@ -65,7 +63,11 @@ namespace TH.BLL.Managers.Concretes
 
             await base.CreateAsync(comment);
 
-            if (task.UserId != comment.UserId)
+            // Task'ın atanmış bir kullanıcısı varsa
+            // ve yorumu yazan kişi Task sahibi değilse
+            // Task sahibine notification gönder.
+            if (task.UserId > 0 &&
+                task.UserId != comment.UserId)
             {
                 await _notificationManager.CreateNotificationAsync(
                     task.UserId,
@@ -197,6 +199,5 @@ namespace TH.BLL.Managers.Concretes
             return await _repository
                 .GetCommentsByTeamIdsAsync(teamIds);
         }
-
     }
 }
