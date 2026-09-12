@@ -35,6 +35,9 @@ namespace TH.DAL.ContextClasses
             modelBuilder.ApplyConfiguration(new TeamConfiguration());
             modelBuilder.ApplyConfiguration(new TeamMemberConfiguration());
             modelBuilder.ApplyConfiguration(new TeamInvitationConfiguration());
+            modelBuilder.ApplyConfiguration(new ConversationConfiguration());
+            modelBuilder.ApplyConfiguration(new MessageConfiguration());
+            modelBuilder.ApplyConfiguration(new ConversationParticipantConfiguration());
 
             UserAndRoleSeed.SeedUsersAndRoles(modelBuilder);
             NotificationSeed.SeedNotifications(modelBuilder);
@@ -58,5 +61,8 @@ namespace TH.DAL.ContextClasses
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<TeamInvitation> TeamInvitations { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<ConversationParticipant> ConversationParticipants { get; set; }
     }
 }
