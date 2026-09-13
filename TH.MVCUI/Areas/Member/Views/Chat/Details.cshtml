@@ -1,0 +1,220 @@
+﻿@model TH.MVCUI.Areas.Member.Models.PageVMs.ChatVM.ConversationDetailsVm
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm">
+
+                <!-- Chat Header -->
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <div class="d-flex align-items-center">
+
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                             style="width:45px;height:45px;">
+
+                            @if (Model.IsTeamConversation)
+                            {
+                                <i class="bi bi-people-fill"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-person-fill"></i>
+                            }
+
+                        </div>
+
+                        <div>
+
+                            <h5 class="mb-0">
+                                @Model.Title
+                            </h5>
+
+                            @if (Model.IsTeamConversation)
+                            {
+                                <small class="text-muted">
+                                    Takım Sohbeti
+                                </small>
+                            }
+                            else
+                            {
+                                <small class="text-muted">
+                                    Özel Sohbet
+                                </small>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <a asp-area="Member"
+                       asp-controller="Chat"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary btn-sm">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Mesajlar
+
+                    </a>
+
+                </div>
+
+
+                <!-- Messages -->
+                <div class="card-body"
+                     style="height:500px; overflow-y:auto;">
+
+                    @if (Model.Messages == null ||
+                    !Model.Messages.Any())
+                    {
+                        <div class="d-flex justify-content-center align-items-center h-100">
+
+                            <div class="text-center">
+
+                                <i class="bi bi-chat-dots fs-1 text-muted"></i>
+
+                                <p class="text-muted mt-3 mb-0">
+                                    Henüz mesaj bulunmuyor.
+                                </p>
+
+                                <small class="text-muted">
+                                    İlk mesajı siz gönderin.
+                                </small>
+
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (var message in Model.Messages)
+                        {
+                            if (message.IsMine)
+                            {
+                                <!-- My Message -->
+                                <div class="d-flex justify-content-end mb-3">
+
+                                    <div style="max-width:70%;">
+
+                                        <div class="bg-primary text-white rounded-3 p-3">
+
+                                            <div class="small mb-1">
+                                                @message.UserName
+                                            </div>
+
+                                            <div>
+                                                @message.Content
+                                            </div>
+
+                                        </div>
+
+                                        <div class="text-end mt-1">
+
+                                            <small class="text-muted">
+                                                @message.CreatedDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Other Message -->
+                                <div class="d-flex justify-content-start mb-3">
+
+                                    <div style="max-width:70%;">
+
+                                        <div class="bg-light border rounded-3 p-3">
+
+                                            <div class="small text-muted mb-1">
+                                                @message.UserName
+                                            </div>
+
+                                            <div>
+                                                @message.Content
+                                            </div>
+
+                                        </div>
+
+                                        <div class="mt-1">
+
+                                            <small class="text-muted">
+                                                @message.CreatedDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                    }
+
+                </div>
+
+
+                <!-- Send Message -->
+                <div class="card-footer">
+
+                    <form asp-area="Member"
+                          asp-controller="Chat"
+                          asp-action="SendMessage"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               asp-for="SendMessage.ConversationId" />
+
+                        <div class="input-group">
+
+                            <textarea asp-for="SendMessage.Content"
+                                      class="form-control"
+                                      rows="2"
+                                      placeholder="Mesajınızı yazın..."
+                                      maxlength="2000"></textarea>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-send-fill"></i>
+                                Gönder
+
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="SendMessage.Content"
+                              class="text-danger">
+                        </span>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
