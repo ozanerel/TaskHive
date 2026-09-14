@@ -15,6 +15,8 @@ namespace TH.MVCUI.Models.ViewModels.TeamViewModels
         public List<TeamProjectViewModel> Projects { get; set; }
 
         public bool IsAdmin { get; set; }
+
+        public int CurrentUserId { get; set; }
     }
 
     public class TeamMemberViewModel

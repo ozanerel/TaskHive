@@ -151,6 +151,7 @@ namespace TH.MVCUI.Controllers
                 Name = team.Name,
                 Description = team.Description,
                 IsAdmin = currentMember.TeamRole == TeamRole.Admin,
+                CurrentUserId = user.Id,
 
                 Members = team.TeamMembers?
                     .Select(x => new TeamMemberViewModel

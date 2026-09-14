@@ -124,6 +124,7 @@
 								<th>Mesleki Rol</th>
 								<th>Takım Rolü</th>
 								<th>İşlemler</th>
+								<th>Mesaj</th>
 
 							</tr>
 
@@ -160,6 +161,31 @@
 										{
 											<span class="badge bg-secondary">
 												Member
+											</span>
+										}
+
+									</td>
+
+									<td>
+
+										@if (member.UserId != Model.CurrentUserId)
+										{
+											<a asp-area="Member"
+											   asp-controller="Chat"
+											   asp-action="StartPrivateChat"
+											   asp-route-userId="@member.UserId"
+											   class="btn btn-sm btn-primary">
+
+												<i class="fa-solid fa-message me-1"></i>
+
+												Mesaj Gönder
+
+											</a>
+										}
+										else
+										{
+											<span class="text-muted small">
+												Siz
 											</span>
 										}
 
