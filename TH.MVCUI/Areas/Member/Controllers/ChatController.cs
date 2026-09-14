@@ -19,23 +19,26 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         private readonly IMessageManager _messageManager;
 
-        private readonly IConversationParticipantManager
-            _conversationParticipantManager;
+        private readonly IConversationParticipantManager _conversationParticipantManager;
 
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<AppUser> _identityUserManager;
+
+        private readonly IUserManager _userManager;
 
         public ChatController(
             IConversationManager conversationManager,
             IMessageManager messageManager,
             IConversationParticipantManager conversationParticipantManager,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> identityUserManager,
+            IUserManager userManager)
         {
             _conversationManager = conversationManager;
 
             _messageManager = messageManager;
 
-            _conversationParticipantManager =
-                conversationParticipantManager;
+            _conversationParticipantManager = conversationParticipantManager;
+
+            _identityUserManager = identityUserManager;
 
             _userManager = userManager;
         }
@@ -43,15 +46,24 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // Kullanıcının konuşmalarını listeler.
         public async Task<IActionResult> Index()
         {
-            var currentUser =
-                await _userManager.GetUserAsync(User);
+            var appUser =
+                await _identityUserManager.GetUserAsync(User);
 
-            if (currentUser == null)
+            if (appUser == null)
             {
                 return RedirectToAction(
                     "Login",
                     "Account",
                     new { area = "" });
+            }
+
+            var currentUser =
+                await _userManager
+                    .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
             }
 
             var conversations =
@@ -101,15 +113,25 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var currentUser =
-                await _userManager.GetUserAsync(User);
+            // Giriş yapan Identity kullanıcısını al.
+            var appUser =
+                await _identityUserManager.GetUserAsync(User);
 
-            if (currentUser == null)
+            if (appUser == null)
             {
                 return RedirectToAction(
                     "Login",
                     "Account",
                     new { area = "" });
+            }
+
+            // Identity kullanıcısına bağlı domain User kaydını al.
+            var currentUser =
+                await _userManager.GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
             }
 
             var conversation =
@@ -121,6 +143,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 return NotFound();
             }
 
+            // Burada domain User.Id kullanılmalı.
             var isParticipant =
                 await _conversationParticipantManager
                     .IsUserParticipantAsync(
@@ -143,8 +166,13 @@ namespace TH.MVCUI.Areas.Member.Controllers
             {
                 var messageUser =
                     await _userManager
+                        .GetByIdAsync(message.UserId);
+
+                var messageAppUser = messageUser == null
+                    ? null
+                    : await _identityUserManager
                         .FindByIdAsync(
-                            message.UserId.ToString());
+                            messageUser.AppUserId.ToString());
 
                 messageModels.Add(new MessageListVm
                 {
@@ -157,7 +185,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
                         message.UserId,
 
                     UserName =
-                        messageUser?.UserName
+                        messageAppUser?.UserName
                         ?? "Kullanıcı",
 
                     Content =
@@ -201,23 +229,32 @@ namespace TH.MVCUI.Areas.Member.Controllers
         }
 
         // Özel sohbet başlatır veya mevcut özel sohbeti açar.
-        public async Task<IActionResult>
-            StartPrivateChat(int userId)
+        public async Task<IActionResult> StartPrivateChat(int userId)
         {
             if (userId <= 0)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            var currentUser =
-                await _userManager.GetUserAsync(User);
+            var appUser =
+                await _identityUserManager
+                    .GetUserAsync(User);
 
-            if (currentUser == null)
+            if (appUser == null)
             {
                 return RedirectToAction(
                     "Login",
                     "Account",
                     new { area = "" });
+            }
+
+            var currentUser =
+                await _userManager
+                    .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
             }
 
             if (currentUser.Id == userId)
@@ -227,10 +264,14 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             var targetUser =
                 await _userManager
-                    .FindByIdAsync(
-                        userId.ToString());
+                    .GetByIdAsync(userId);
 
             if (targetUser == null)
+            {
+                return NotFound();
+            }
+
+            if (targetUser.Status == DataStatus.Deleted)
             {
                 return NotFound();
             }
@@ -239,7 +280,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 await _conversationManager
                     .GetOrCreatePrivateConversationAsync(
                         currentUser.Id,
-                        userId);
+                        targetUser.Id);
 
             if (conversation == null)
             {
@@ -255,23 +296,32 @@ namespace TH.MVCUI.Areas.Member.Controllers
         }
 
         // Takım sohbetini açar veya oluşturur.
-        public async Task<IActionResult>
-            OpenTeamChat(int teamId)
+        public async Task<IActionResult> OpenTeamChat(int teamId)
         {
             if (teamId <= 0)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            var currentUser =
-                await _userManager.GetUserAsync(User);
+            var appUser =
+                await _identityUserManager
+                    .GetUserAsync(User);
 
-            if (currentUser == null)
+            if (appUser == null)
             {
                 return RedirectToAction(
                     "Login",
                     "Account",
                     new { area = "" });
+            }
+
+            var currentUser =
+                await _userManager
+                    .GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
             }
 
             var conversation =
@@ -306,9 +356,7 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // Mesaj gönderir.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>
-            SendMessage(
-                SendMessageVm model)
+        public async Task<IActionResult> SendMessage(SendMessageVm model)
         {
             if (model == null)
             {
@@ -325,10 +373,11 @@ namespace TH.MVCUI.Areas.Member.Controllers
                     });
             }
 
-            var currentUser =
-                await _userManager.GetUserAsync(User);
+            // Giriş yapan Identity kullanıcısını al.
+            var appUser =
+                await _identityUserManager.GetUserAsync(User);
 
-            if (currentUser == null)
+            if (appUser == null)
             {
                 return RedirectToAction(
                     "Login",
@@ -336,6 +385,16 @@ namespace TH.MVCUI.Areas.Member.Controllers
                     new { area = "" });
             }
 
+            // Identity kullanıcısına bağlı domain User kaydını al.
+            var currentUser =
+                await _userManager.GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            // Katılımcı kontrolünde domain User.Id kullanılmalı.
             var isParticipant =
                 await _conversationParticipantManager
                     .IsUserParticipantAsync(
