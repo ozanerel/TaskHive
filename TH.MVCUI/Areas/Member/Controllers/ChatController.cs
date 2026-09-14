@@ -356,7 +356,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
         // Mesaj gönderir.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMessage(SendMessageVm model)
+        public async Task<IActionResult> SendMessage([Bind(Prefix = "SendMessage")] SendMessageVm model)
+        //[Bind(Prefix = "SendMessage")] = Formdan gelen SendMessage alanlarının değerlerini ViewModel'e bağlar.
         {
             if (model == null)
             {
@@ -365,6 +366,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             if (!ModelState.IsValid)
             {
+                TempData["ErrorMessage"] =
+                    "Mesaj içeriği geçersiz.";
+
                 return RedirectToAction(
                     nameof(Details),
                     new
@@ -373,9 +377,9 @@ namespace TH.MVCUI.Areas.Member.Controllers
                     });
             }
 
-            // Giriş yapan Identity kullanıcısını al.
             var appUser =
-                await _identityUserManager.GetUserAsync(User);
+                await _identityUserManager
+                    .GetUserAsync(User);
 
             if (appUser == null)
             {
@@ -385,16 +389,15 @@ namespace TH.MVCUI.Areas.Member.Controllers
                     new { area = "" });
             }
 
-            // Identity kullanıcısına bağlı domain User kaydını al.
             var currentUser =
-                await _userManager.GetByAppUserIdAsync(appUser.Id);
+                await _userManager
+                    .GetByAppUserIdAsync(appUser.Id);
 
             if (currentUser == null)
             {
                 return NotFound();
             }
 
-            // Katılımcı kontrolünde domain User.Id kullanılmalı.
             var isParticipant =
                 await _conversationParticipantManager
                     .IsUserParticipantAsync(
@@ -415,8 +418,19 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             if (message == null)
             {
-                return BadRequest();
+                TempData["ErrorMessage"] =
+                    "Mesaj kaydedilemedi.";
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new
+                    {
+                        id = model.ConversationId
+                    });
             }
+
+            TempData["SuccessMessage"] =
+                "Mesaj başarıyla gönderildi.";
 
             return RedirectToAction(
                 nameof(Details),
