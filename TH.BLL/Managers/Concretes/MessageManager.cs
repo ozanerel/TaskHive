@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
-using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 
 namespace TH.BLL.Managers.Concretes
@@ -23,7 +22,9 @@ namespace TH.BLL.Managers.Concretes
         {
             _conversationParticipantManager =
                 conversationParticipantManager;
-            _repository = repository;
+
+            _repository =
+                repository;
         }
 
         public async Task<Message>
@@ -52,9 +53,14 @@ namespace TH.BLL.Managers.Concretes
 
             var message = new Message
             {
-                ConversationId = conversationId,
-                UserId = userId,
-                Content = content.Trim()
+                ConversationId =
+                    conversationId,
+
+                UserId =
+                    userId,
+
+                Content =
+                    content.Trim()
             };
 
             await base.CreateAsync(message);
@@ -71,7 +77,7 @@ namespace TH.BLL.Managers.Concretes
                 return new List<Message>();
             }
 
-            return await ((IMessageRepository)_repository)
+            return await _repository
                 .GetMessagesByConversationAsync(
                     conversationId);
         }
@@ -85,7 +91,7 @@ namespace TH.BLL.Managers.Concretes
                 return null;
             }
 
-            return await ((IMessageRepository)_repository)
+            return await _repository
                 .GetLastMessageAsync(
                     conversationId);
         }
