@@ -18,6 +18,9 @@ namespace TH.CONF.Options
             builder.Property(x => x.UserId)
                    .IsRequired();
 
+            builder.Property(x => x.LastReadMessageId)
+                   .IsRequired(false);
+
             // ConversationParticipant -> Conversation
             builder.HasOne(x => x.Conversation)
                    .WithMany(x => x.Participants)

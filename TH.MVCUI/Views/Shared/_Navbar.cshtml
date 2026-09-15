@@ -82,14 +82,7 @@
 
 		<!-- Message -->
 
-		<a asp-controller="Chat"
-		   asp-action="Index"
-		   class="th-navbar-icon"
-		   title="Mesajlar">
-
-			<i class="fa-solid fa-envelope"></i>
-
-		</a>
+		@await Component.InvokeAsync("MessageNotification")
 
 		<!-- User -->
 

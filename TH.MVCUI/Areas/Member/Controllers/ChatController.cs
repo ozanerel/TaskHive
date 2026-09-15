@@ -159,6 +159,10 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 await _messageManager
                     .GetMessagesByConversationAsync(id);
 
+            // Kullanıcı konuşmayı açtığı için
+            // bu konuşmadaki mesajlar okunmuş kabul edilir.
+            await _conversationParticipantManager.MarkConversationAsReadAsync(id, currentUser.Id);
+
             var messageModels =
                 new List<MessageListVm>();
 

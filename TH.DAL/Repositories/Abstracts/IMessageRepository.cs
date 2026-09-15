@@ -12,5 +12,10 @@ namespace TH.DAL.Repositories.Abstracts
 
         Task<Message> GetLastMessageAsync(
             int conversationId);
+
+        Task<int> GetUnreadMessageCountAsync(
+           int userId);
+
+        Task<int?> GetLastMessageIdAsync(int conversationId);
     }
 }

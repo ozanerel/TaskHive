@@ -15,12 +15,15 @@ namespace TH.BLL.Managers.Concretes
     {
 
         private readonly IConversationParticipantRepository _repository;
+        private readonly IMessageRepository _messageRepository;
 
         public ConversationParticipantManager(
-            IConversationParticipantRepository repository)
+            IConversationParticipantRepository repository,
+            IMessageRepository messageRepository)
             : base(repository)
         {
             _repository = repository;
+            _messageRepository = messageRepository;
         }
 
         public async System.Threading.Tasks.Task AddParticipantAsync(
@@ -124,6 +127,36 @@ namespace TH.BLL.Managers.Concretes
 
             return await ((IConversationParticipantRepository)_repository)
                 .GetParticipantAsync(conversationId, userId);
+        }
+
+        public async System.Threading.Tasks.Task MarkConversationAsReadAsync(int conversationId, int userId)
+        {
+            if (conversationId <= 0 ||
+                userId <= 0)
+            {
+                return;
+            }
+
+            var participant =
+                await GetParticipantAsync(
+                    conversationId,
+                    userId);
+
+            if (participant == null)
+            {
+                return;
+            }
+
+            var lastMessageId =
+                await _messageRepository
+                    .GetLastMessageIdAsync(
+                        conversationId);
+
+            participant.LastReadMessageId =
+                lastMessageId;
+
+            await base.UpdateAsync(
+                participant);
         }
     }
 }

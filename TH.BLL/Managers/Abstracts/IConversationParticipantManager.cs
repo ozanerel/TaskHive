@@ -26,5 +26,9 @@ namespace TH.BLL.Managers.Abstracts
             GetParticipantAsync(
                 int conversationId,
                 int userId);
+
+        System.Threading.Tasks.Task MarkConversationAsReadAsync(
+            int conversationId,
+            int userId);
     }
 }

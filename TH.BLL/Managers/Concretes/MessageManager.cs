@@ -95,5 +95,15 @@ namespace TH.BLL.Managers.Concretes
                 .GetLastMessageAsync(
                     conversationId);
         }
+
+        public async Task<int> GetUnreadMessageCountAsync(int userId)
+        {
+            if (userId <= 0)
+            {
+                return 0;
+            }
+
+            return await _repository.GetUnreadMessageCountAsync(userId);
+        }
     }
 }

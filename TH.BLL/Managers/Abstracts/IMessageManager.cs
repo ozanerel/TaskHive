@@ -7,18 +7,12 @@ namespace TH.BLL.Managers.Abstracts
     public interface IMessageManager
         : IManager<Message>
     {
-        Task<Message>
-            SendMessageAsync(
-                int conversationId,
-                int userId,
-                string content);
+        Task<Message> SendMessageAsync(int conversationId, int userId, string content);
 
-        Task<List<Message>>
-            GetMessagesByConversationAsync(
-                int conversationId);
+        Task<List<Message>> GetMessagesByConversationAsync(int conversationId);
 
-        Task<Message>
-            GetLastMessageAsync(
-                int conversationId);
+        Task<Message> GetLastMessageAsync(int conversationId);
+
+        Task<int> GetUnreadMessageCountAsync(int userId);
     }
 }

@@ -8,6 +8,10 @@ namespace TH.ENTITIES.Models
 
         public int UserId { get; set; }
 
+        // Kullanıcının bu konuşmada en son okuduğu mesajın ID'si.
+        // Null olması, kullanıcının henüz hiçbir mesaj okumadığını ifade eder.
+        public int? LastReadMessageId { get; set; }
+
         // Relational Properties
 
         public virtual Conversation Conversation { get; set; }
