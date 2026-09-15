@@ -11,14 +11,20 @@ namespace TH.BLL.Managers.Concretes
     {
         private readonly ITeamInvitationRepository _repository;
         private readonly ITeamMemberRepository _teamMemberRepository;
+        private readonly IConversationManager _conversationManager;
+        private readonly IConversationParticipantManager _conversationParticipantManager;
 
         public TeamInvitationManager(
             ITeamInvitationRepository repository,
-            ITeamMemberRepository teamMemberRepository)
+            ITeamMemberRepository teamMemberRepository,
+            IConversationManager conversationManager,
+            IConversationParticipantManager conversationParticipantManager)
             : base(repository)
         {
             _repository = repository;
             _teamMemberRepository = teamMemberRepository;
+            _conversationManager = conversationManager;
+            _conversationParticipantManager = conversationParticipantManager;
         }
 
         public async Task<TeamInvitation> GetPendingInvitationAsync(
@@ -132,6 +138,16 @@ namespace TH.BLL.Managers.Concretes
                 teamMember.Status = DataStatus.Inserted;
 
                 await _teamMemberRepository.CreateAsync(teamMember);
+            }
+
+            var teamConversation = await _conversationManager.GetTeamConversationAsync(invitation.TeamId);
+
+            if (teamConversation != null)
+            {
+                await _conversationParticipantManager
+                    .AddParticipantAsync(
+                        teamConversation.Id,
+                        userId);
             }
 
             invitation.InvitationStatus = InvitationStatus.Accepted;

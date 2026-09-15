@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TH.BLL.Managers.Abstracts;
+using TH.BLL.Managers.Concretes;
 using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
 using TH.MVCUI.Areas.Member.Models.PageVMs.ChatVM;
@@ -16,31 +17,26 @@ namespace TH.MVCUI.Areas.Member.Controllers
     public class ChatController : Controller
     {
         private readonly IConversationManager _conversationManager;
-
         private readonly IMessageManager _messageManager;
-
         private readonly IConversationParticipantManager _conversationParticipantManager;
-
         private readonly UserManager<AppUser> _identityUserManager;
-
         private readonly IUserManager _userManager;
+        private readonly ITeamMemberManager _teamMemberManager;
 
         public ChatController(
             IConversationManager conversationManager,
             IMessageManager messageManager,
             IConversationParticipantManager conversationParticipantManager,
             UserManager<AppUser> identityUserManager,
-            IUserManager userManager)
+            IUserManager userManager,
+            ITeamMemberManager teamMemberManager)
         {
             _conversationManager = conversationManager;
-
             _messageManager = messageManager;
-
             _conversationParticipantManager = conversationParticipantManager;
-
             _identityUserManager = identityUserManager;
-
             _userManager = userManager;
+            _teamMemberManager = teamMemberManager;
         }
 
         // Kullanıcının konuşmalarını listeler.
@@ -442,6 +438,49 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 {
                     id = model.ConversationId
                 });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TeamChat(int teamId)
+        {
+            var appUser = await _identityUserManager.GetUserAsync(User);
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var currentUser =
+                await _userManager.GetByAppUserIdAsync(appUser.Id);
+
+            if (currentUser == null)
+                return NotFound();
+
+            // Kullanıcı gerçekten takımın aktif üyesi mi?
+            var isMember =
+                await _teamMemberManager
+                    .IsUserInTeamAsync(
+                        teamId,
+                        currentUser.Id);
+
+            if (!isMember)
+                return Forbid();
+
+            var conversation =
+                await _conversationManager
+                    .GetTeamConversationAsync(teamId);
+
+            if (conversation == null)
+            {
+                conversation =
+                    await _conversationManager
+                        .GetOrCreateTeamConversationAsync(teamId);
+            }
+
+            if (conversation == null)
+                return NotFound();
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = conversation.Id });
         }
     }
 }

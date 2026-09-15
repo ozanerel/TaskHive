@@ -17,19 +17,25 @@ namespace TH.MVCUI.Controllers
         private readonly UserManager<AppUser> _identityUserManager;
         private readonly IUserManager _userManager;
         private readonly ITeamInvitationManager _teamInvitationManager;
+        private readonly IConversationManager _conversationManager;
+        private readonly IConversationParticipantManager _conversationParticipantManager;
 
         public TeamController(
             ITeamManager teamManager,
             ITeamMemberManager teamMemberManager,
             UserManager<AppUser> identityUserManager,
             IUserManager userManager,
-            ITeamInvitationManager teamInvitationManager)
+            ITeamInvitationManager teamInvitationManager,
+            IConversationManager conversationManager,
+            IConversationParticipantManager conversationParticipantManager)
         {
             _teamManager = teamManager;
             _teamMemberManager = teamMemberManager;
             _identityUserManager = identityUserManager;
             _userManager = userManager;
             _teamInvitationManager = teamInvitationManager;
+            _conversationManager = conversationManager;
+            _conversationParticipantManager = conversationParticipantManager;
         }
 
         // GET: /Team
@@ -260,25 +266,11 @@ namespace TH.MVCUI.Controllers
             if (team == null)
                 return NotFound();
 
-            //var existingMember = await _teamMemberManager
-            //    .GetTeamMemberAsync(
-            //        model.TeamId,
-            //        model.UserId);
-
-            //if (existingMember != null &&
-            //    existingMember.Status != DataStatus.Deleted)
-            //{
-            //    ModelState.AddModelError(
-            //        "UserId",
-            //        "Bu kullanıcı zaten takımın üyesi."
-            //    );
-
-            //    model.TeamName = team.Name;
-
-            //    return View(model);
-            //}
-
-            var existingMember = await _teamMemberManager.GetTeamMemberIncludingDeletedAsync(model.TeamId, model.UserId);
+            var existingMember =
+                await _teamMemberManager
+                    .GetTeamMemberIncludingDeletedAsync(
+                        model.TeamId,
+                        model.UserId);
 
             if (existingMember != null)
             {
@@ -299,6 +291,20 @@ namespace TH.MVCUI.Controllers
 
                 await _teamMemberManager.UpdateAsync(existingMember);
 
+                // Kullanıcı tekrar takıma eklendiğinde,
+                // mevcut Team Chat'e tekrar participant olarak eklenir.
+                var teamConversation =
+                    await _conversationManager
+                        .GetTeamConversationAsync(model.TeamId);
+
+                if (teamConversation != null)
+                {
+                    await _conversationParticipantManager
+                        .AddParticipantAsync(
+                            teamConversation.Id,
+                            model.UserId);
+                }
+
                 TempData["Success"] =
                     "Kullanıcı tekrar takıma başarıyla eklendi.";
 
@@ -315,6 +321,20 @@ namespace TH.MVCUI.Controllers
             };
 
             await _teamMemberManager.CreateAsync(teamMember);
+
+            // Team Chat zaten oluşturulmuşsa,
+            // yeni kullanıcıyı chat participant'larına ekle.
+            var conversation =
+                await _conversationManager
+                    .GetTeamConversationAsync(model.TeamId);
+
+            if (conversation != null)
+            {
+                await _conversationParticipantManager
+                    .AddParticipantAsync(
+                        conversation.Id,
+                        model.UserId);
+            }
 
             TempData["Success"] =
                 "Kullanıcı takıma başarıyla eklendi.";
@@ -374,6 +394,16 @@ namespace TH.MVCUI.Controllers
             }
 
             await _teamMemberManager.RemoveMemberAsync(teamId, userId);
+
+            var teamConversation = await _conversationManager .GetTeamConversationAsync(teamId);
+
+            if (teamConversation != null)
+            {
+                await _conversationParticipantManager
+                    .RemoveParticipantAsync(
+                        teamConversation.Id,
+                        userId);
+            }
 
             TempData["Success"] =
                 "Kullanıcı takımdan başarıyla çıkarıldı.";

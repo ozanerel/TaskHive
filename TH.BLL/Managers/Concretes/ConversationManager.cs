@@ -154,6 +154,17 @@ namespace TH.BLL.Managers.Concretes
             return conversation;
         }
 
+        public async Task<Conversation> GetTeamConversationAsync(int teamId)
+        {
+            if (teamId <= 0)
+            {
+                return null;
+            }
+
+            return await _repository
+                .GetTeamConversationAsync(teamId);
+        }
+
         public async Task<List<Conversation>>
             GetUserConversationsAsync(int userId)
         {

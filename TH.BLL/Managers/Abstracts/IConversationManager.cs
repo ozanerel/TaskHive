@@ -19,5 +19,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<Conversation>>
             GetUserConversationsAsync(
                 int userId);
+
+        Task<Conversation> GetTeamConversationAsync(int teamId);
     }
 }
