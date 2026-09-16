@@ -12,6 +12,13 @@
             Completed
         </div>
     }
+    else if (Model.DueDate.HasValue &&
+    Model.DueDate.Value < DateTime.Now)
+    {
+        <div class="status-badge overdue">
+            Overdue
+        </div>
+    }
     else
     {
         <div class="status-badge pending">

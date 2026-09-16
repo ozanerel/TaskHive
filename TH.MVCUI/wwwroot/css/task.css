@@ -145,6 +145,10 @@
     background: #2ED47A;
 }
 
+.status-overdue {
+    background: #E5484D;
+}
+
 .task-title-card {
     margin-top: 20px;
     font-size: 22px;
@@ -290,6 +294,10 @@
 
     .status-badge.pending {
         background: #FFB648;
+    }
+
+    .status-badge.overdue {
+        background: #E5484D;
     }
 
 @media(max-width:992px) {

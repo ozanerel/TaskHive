@@ -88,6 +88,13 @@
                                 Completed
                             </span>
                         }
+                        else if (task.DueDate.HasValue &&
+                        task.DueDate.Value < DateTime.Now)
+                        {
+                            <span class="badge bg-danger">
+                                Overdue
+                            </span>
+                        }
                         else
                         {
                             <span class="badge bg-warning text-dark">
