@@ -46,28 +46,34 @@
 
                 <div class="row text-center">
 
-                    <div class="col-6">
+                    <div class="col-4">
 
                         <small class="text-muted">
-
                             Project
-
                         </small>
 
                         <h6>
-
                             @(task.Project?.ProjectName ?? "-")
-
                         </h6>
 
                     </div>
 
-                    <div class="col-6">
+                    <div class="col-4">
 
                         <small class="text-muted">
+                            Due Date
+                        </small>
 
+                        <h6>
+                            @(task.DueDate?.ToString("dd.MM.yyyy") ?? "-")
+                        </h6>
+
+                    </div>
+
+                    <div class="col-4">
+
+                        <small class="text-muted">
                             Status
-
                         </small>
 
                         @if (task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)

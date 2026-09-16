@@ -86,6 +86,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Title = task.Title,
                 Description = task.Description,
                 Priority = task.Priority,
+                DueDate = task.DueDate,
+                CompletedDate = task.CompletedDate,
                 IsCompleted = task.IsCompleted,
                 UserName = task.User?.FirstName,
                 ProjectName = task.Project?.ProjectName,
@@ -178,6 +180,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Title = vm.Title,
                 Description = vm.Description,
                 Priority = vm.Priority,
+                DueDate = vm.DueDate,
                 UserId = vm.UserId,
                 ProjectId = vm.ProjectId
             };
@@ -241,6 +244,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Title = task.Title,
                 Description = task.Description,
                 Priority = task.Priority,
+                DueDate = task.DueDate,
                 UserId = task.UserId,
                 ProjectId = task.ProjectId,
                 IsCompleted = task.IsCompleted,
@@ -332,6 +336,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             task.Title = vm.Title;
             task.Description = vm.Description;
             task.Priority = vm.Priority;
+            task.DueDate = vm.DueDate;
             task.UserId = vm.UserId;
             task.ProjectId = vm.ProjectId;
             task.IsCompleted = vm.IsCompleted;
@@ -415,7 +420,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (!await IsTeamAdminAsync(task.Project.TeamId))
                 return Forbid();
 
-            await _taskManager.CompleteTaskAsync(id, user.Id);
+            await _taskManager.CompleteTaskAsync(id, task.UserId);
 
             return RedirectToAction(nameof(Index));
         }

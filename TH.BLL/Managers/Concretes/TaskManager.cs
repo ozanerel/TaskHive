@@ -116,14 +116,9 @@ namespace TH.BLL.Managers.Concretes
             await _repository.UpdateAsync(task, task);
         }
 
-        public async Task CompleteTaskAsync(
-            int taskId,
-            int userId)
+        public async Task CompleteTaskAsync(int taskId, int userId)
         {
-            var task = await _repository
-                .GetTaskDetailsByUserAsync(
-                    taskId,
-                    userId);
+            var task = await _repository.GetTaskDetailsByUserAsync(taskId, userId);
 
             if (task == null)
                 return;
@@ -132,13 +127,15 @@ namespace TH.BLL.Managers.Concretes
                 return;
 
             task.IsCompleted = true;
+            task.CompletedDate = DateTime.Now;
             task.UpdatedDate = DateTime.Now;
 
             await _notificationManager.CreateNotificationAsync(
                 task.UserId,
                 "Task Completed",
                 $"{task.Title} completed.",
-                NotificationType.TaskCompleted);
+                NotificationType.TaskCompleted
+            );
 
             await _repository.UpdateAsync(task, task);
         }
@@ -151,6 +148,8 @@ namespace TH.BLL.Managers.Concretes
 
             if (oldTask == null)
                 return;
+
+            var wasCompleted = oldTask.IsCompleted;
 
             if (oldTask.Status == DataStatus.Deleted)
                 return;
@@ -173,6 +172,19 @@ namespace TH.BLL.Managers.Concretes
                 return;
 
             var oldUserId = oldTask.UserId;
+
+            if (!wasCompleted && task.IsCompleted)
+            {
+                task.CompletedDate = DateTime.Now;
+            }
+            else if (wasCompleted && !task.IsCompleted)
+            {
+                task.CompletedDate = null;
+            }
+            else if (wasCompleted && task.IsCompleted)
+            {
+                task.CompletedDate = oldTask.CompletedDate;
+            }
 
             await base.UpdateAsync(task);
 

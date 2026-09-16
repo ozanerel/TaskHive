@@ -14,6 +14,11 @@ namespace TH.ENTITIES.Models
         public PriorityLevel Priority { get; set; }
         public bool IsCompleted { get; set; }
 
+        //Görevin son teslim tarihi
+        public DateTime? DueDate { get; set; }
+        //Görevin tamamlanma tarihi
+        public DateTime? CompletedDate { get; set; }
+
         public int UserId { get; set; }
         public int ProjectId { get; set; }
 

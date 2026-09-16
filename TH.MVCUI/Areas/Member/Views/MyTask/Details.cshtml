@@ -96,6 +96,24 @@
                 </span>
             }
 
+            <br /><br />
+
+            <p>
+                <strong>Due Date</strong>
+            </p>
+
+            <p>
+                @(Model.Task.DueDate?.ToString("dd.MM.yyyy") ?? "No due date")
+            </p>
+
+            <p>
+                <strong>Completed Date</strong>
+            </p>
+
+            <p>
+                @(Model.Task.CompletedDate?.ToString("dd.MM.yyyy HH:mm") ?? "Not completed")
+            </p>
+
         </div>
 
     </div>

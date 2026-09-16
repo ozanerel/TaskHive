@@ -13,6 +13,10 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 
         public PriorityLevel Priority { get; set; }
 
+        public DateTime? DueDate { get; set; }
+
+        public DateTime? CompletedDate { get; set; }
+
         public bool IsCompleted { get; set; }
 
         public string ProjectName { get; set; }

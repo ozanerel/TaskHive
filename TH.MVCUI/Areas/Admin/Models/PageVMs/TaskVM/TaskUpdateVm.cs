@@ -13,6 +13,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 
         public PriorityLevel Priority { get; set; }
 
+        public DateTime? DueDate { get; set; }
+
         public int UserId { get; set; }
 
         public int ProjectId { get; set; }

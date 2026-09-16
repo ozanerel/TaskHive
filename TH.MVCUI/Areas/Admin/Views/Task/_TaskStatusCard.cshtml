@@ -3,26 +3,48 @@
 <div class="dashboard-card">
 
     <h3>
-
         Status
-
     </h3>
 
     @if (Model.IsCompleted)
     {
         <div class="status-badge completed">
-
             Completed
-
         </div>
     }
     else
     {
         <div class="status-badge pending">
-
             In Progress
-
         </div>
     }
+
+    <div class="mt-4">
+
+        <div class="mb-3">
+
+            <small class="text-muted">
+                Due Date
+            </small>
+
+            <div>
+                @(Model.DueDate?.ToString("dd.MM.yyyy") ?? "No due date")
+            </div>
+
+        </div>
+
+        <div>
+
+            <small class="text-muted">
+                Completed Date
+            </small>
+
+            <div>
+                @(Model.CompletedDate?.ToString("dd.MM.yyyy HH:mm") ?? "Not completed")
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
