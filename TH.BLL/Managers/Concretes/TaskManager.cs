@@ -5,6 +5,7 @@ using TH.BLL.Managers.Abstracts;
 using TH.DAL.Repositories.Abstracts;
 using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
+using TH.BLL.DTOs.Task;
 using Task = System.Threading.Tasks.Task;
 
 namespace TH.BLL.Managers.Concretes
@@ -18,12 +19,12 @@ namespace TH.BLL.Managers.Concretes
         private readonly ITeamMemberManager _teamMemberManager;
         private readonly IProjectManager _projectManager;
 
-    public TaskManager(
-        ITaskRepository repository,
-        INotificationManager notificationManager,
-        ITeamMemberManager teamMemberManager,
-        IProjectManager projectManager)
-        : base(repository)
+        public TaskManager(
+            ITaskRepository repository,
+            INotificationManager notificationManager,
+            ITeamMemberManager teamMemberManager,
+            IProjectManager projectManager)
+            : base(repository)
         {
             _repository = repository;
             _notificationManager = notificationManager;
@@ -275,6 +276,38 @@ namespace TH.BLL.Managers.Concretes
                 .GetTaskDetailsByUserAsync(
                     taskId,
                     userId);
+        }
+
+        public async Task<TaskAnalyticsDto> GetTaskAnalyticsAsync(List<int> teamIds)
+        {
+            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+
+            var totalTasks = tasks.Count;
+
+            var completedTasks = tasks
+                .Count(x => x.IsCompleted);
+
+            var pendingTasks = tasks
+                .Count(x => !x.IsCompleted);
+
+            var overdueTasks = tasks
+                .Count(x =>
+                    !x.IsCompleted &&
+                    x.DueDate.HasValue &&
+                    x.DueDate.Value < DateTime.Now);
+
+            double completionRate = totalTasks == 0
+                ? 0
+                : (double)completedTasks / totalTasks * 100;
+
+            return new TaskAnalyticsDto
+            {
+                TotalTasks = totalTasks,
+                CompletedTasks = completedTasks,
+                PendingTasks = pendingTasks,
+                OverdueTasks = overdueTasks,
+                CompletionRate = Math.Round(completionRate, 2)
+            };
         }
     }
 }

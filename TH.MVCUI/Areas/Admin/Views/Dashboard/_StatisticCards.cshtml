@@ -9,28 +9,23 @@
             <div>
 
                 <div class="stat-title">
-
                     Total Projects
-
                 </div>
 
                 <div class="stat-value">
-
                     @Model.TotalProjects
-
                 </div>
 
             </div>
 
             <div class="stat-icon bg-blue">
-
                 <i class="fa-solid fa-diagram-project"></i>
-
             </div>
 
         </div>
 
     </div>
+
 
     <div class="stat-card">
 
@@ -39,28 +34,23 @@
             <div>
 
                 <div class="stat-title">
-
                     Total Tasks
-
                 </div>
 
                 <div class="stat-value">
-
                     @Model.TotalTasks
-
                 </div>
 
             </div>
 
             <div class="stat-icon bg-green">
-
                 <i class="fa-solid fa-list-check"></i>
-
             </div>
 
         </div>
 
     </div>
+
 
     <div class="stat-card">
 
@@ -69,28 +59,23 @@
             <div>
 
                 <div class="stat-title">
-
                     Completed
-
                 </div>
 
                 <div class="stat-value">
-
                     @Model.CompletedTasks
-
                 </div>
 
             </div>
 
             <div class="stat-icon bg-orange">
-
                 <i class="fa-solid fa-circle-check"></i>
-
             </div>
 
         </div>
 
     </div>
+
 
     <div class="stat-card">
 
@@ -99,28 +84,73 @@
             <div>
 
                 <div class="stat-title">
-
-                    Users
-
+                    Pending Tasks
                 </div>
 
                 <div class="stat-value">
-
-                    @Model.TotalUsers
-
+                    @Model.PendingTasks
                 </div>
 
             </div>
 
-            <div class="stat-icon bg-red">
-
-                <i class="fa-solid fa-users"></i>
-
+            <div class="stat-icon bg-warning">
+                <i class="fa-solid fa-clock"></i>
             </div>
 
         </div>
 
     </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+                    Overdue Tasks
+                </div>
+
+                <div class="stat-value">
+                    @Model.OverdueTasks
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-red">
+                <i class="fa-solid fa-calendar-xmark"></i>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-title">
+                    Users
+                </div>
+
+                <div class="stat-value">
+                    @Model.TotalUsers
+                </div>
+
+            </div>
+
+            <div class="stat-icon bg-red">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+        </div>
+
+    </div>
+
 
     <div class="stat-card">
 
@@ -139,14 +169,13 @@
             </div>
 
             <div class="stat-icon bg-warning">
-
                 <i class="fa-solid fa-bell"></i>
-
             </div>
 
         </div>
 
     </div>
+
 
     <div class="stat-card">
 
@@ -155,28 +184,23 @@
             <div>
 
                 <div class="stat-title">
-
                     Completion Rate
-
                 </div>
 
                 <div class="stat-value">
-
-                    @Model.CompletionRate%
-
+                    @($"{Model.CompletionRate:0.##}%")
                 </div>
 
             </div>
 
             <div class="stat-icon bg-purple">
-
                 <i class="fa-solid fa-chart-line"></i>
-
             </div>
 
         </div>
 
     </div>
+
 
     <div class="dashboard-card mt-3">
 
@@ -184,7 +208,9 @@
 
             <span>Task Completion</span>
 
-            <span>@Model.CompletionRate%</span>
+            <span>
+                @($"{Model.CompletionRate:0.##}%")
+            </span>
 
         </div>
 
@@ -192,7 +218,10 @@
 
             <div class="progress-bar"
                  role="progressbar"
-                 style="width:@(Model.CompletionRate)%">
+                 style="width: @(Model.CompletionRate.ToString(System.Globalization.CultureInfo.InvariantCulture))%"
+                 aria-valuenow="@Model.CompletionRate"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
             </div>
 
         </div>

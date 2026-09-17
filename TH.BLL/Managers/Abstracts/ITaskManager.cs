@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TH.BLL.DTOs.Task;
 using TH.ENTITIES.Enums;
 
 namespace TH.BLL.Managers.Abstracts
@@ -24,5 +25,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<TH.ENTITIES.Models.Task>> FilterTasksAsync(string search,PriorityLevel? priority,bool? isCompleted,List<int> teamIds);
 
         Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId,int userId);
+
+        Task<TaskAnalyticsDto> GetTaskAnalyticsAsync(List<int> teamIds);
     }
 }

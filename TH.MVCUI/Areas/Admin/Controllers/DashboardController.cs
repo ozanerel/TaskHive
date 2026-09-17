@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TH.BLL.Managers.Abstracts;
 using TH.MVCUI.Areas.Admin.Models.PageVMs;
+using TH.BLL.DTOs.Task;
 
 namespace TH.MVCUI.Areas.Admin.Controllers
 {
@@ -30,23 +31,38 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var projects = await _projectManager.GetAllAsync();
             var projects = await _projectManager.GetDashboardProjectsAsync();
+
             var tasks = await _taskManager.GetAllAsync();
+
             var users = await _userManager.GetAllAsync();
+
             var notifications = await _notificationManager.GetAllAsync();
+
+            var teamIds = projects
+                .Select(x => x.TeamId)
+                .Distinct()
+                .ToList();
+
+            var taskAnalytics = await _taskManager.GetTaskAnalyticsAsync(teamIds);
 
             DashboardVm vm = new DashboardVm
             {
                 TotalProjects = projects.Count,
-                TotalTasks = tasks.Count,
-                CompletedTasks = tasks.Count(x => x.IsCompleted),
-                PendingTasks = tasks.Count(x => !x.IsCompleted),
+
+                TotalTasks = taskAnalytics.TotalTasks,
+
+                CompletedTasks = taskAnalytics.CompletedTasks,
+
+                PendingTasks = taskAnalytics.PendingTasks,
+
+                OverdueTasks = taskAnalytics.OverdueTasks,
+
+                CompletionRate = taskAnalytics.CompletionRate,
 
                 InProgressTasks = tasks.Count(x =>
                     !x.IsCompleted &&
                     x.Status == TH.ENTITIES.Enums.DataStatus.Updated),
-                CompletionRate = tasks.Count == 0 ? 0 : (tasks.Count(x => x.IsCompleted) * 100) / tasks.Count,
 
                 TotalUsers = users.Count,
 
@@ -66,15 +82,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     .ToList(),
 
                 RecentUsers = users
-                .OrderByDescending(x => x.CreatedDate)
-                .Take(5)
-                .ToList(),
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(5)
+                    .ToList(),
 
                 Notifications = notifications,
 
                 UnreadNotificationCount = notifications.Count(x => !x.IsRead)
-
-
             };
 
             return View(vm);
