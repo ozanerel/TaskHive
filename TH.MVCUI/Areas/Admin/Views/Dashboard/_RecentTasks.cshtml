@@ -21,6 +21,11 @@
     {
         foreach (var task in Model.RecentTasks)
         {
+            bool isOverdue =
+            !task.IsCompleted &&
+            task.DueDate.HasValue &&
+            task.DueDate.Value < DateTime.Now;
+
             <div class="project-item">
 
                 <div class="project-left">
@@ -30,6 +35,10 @@
                         @if (task.IsCompleted)
                         {
                             <i class="fa-solid fa-circle-check text-success"></i>
+                        }
+                        else if (isOverdue)
+                        {
+                            <i class="fa-solid fa-clock text-danger"></i>
                         }
                         else
                         {
@@ -48,15 +57,44 @@
 
                         <div class="project-date">
 
+                            Created:
                             @task.CreatedDate.ToString("dd MMM yyyy")
 
                         </div>
+
+                        @if (task.IsCompleted && task.CompletedDate.HasValue)
+                        {
+                            <div class="project-date text-success">
+
+                                Completed:
+                                @task.CompletedDate.Value.ToString("dd MMM yyyy")
+
+                            </div>
+                        }
+                        else if (isOverdue)
+                        {
+                            <div class="project-date text-danger">
+
+                                Overdue:
+                                @task.DueDate.Value.ToString("dd MMM yyyy")
+
+                            </div>
+                        }
+                        else if (task.DueDate.HasValue)
+                        {
+                            <div class="project-date">
+
+                                Due:
+                                @task.DueDate.Value.ToString("dd MMM yyyy")
+
+                            </div>
+                        }
 
                     </div>
 
                 </div>
 
-                <div>
+                <div class="text-end">
 
                     @switch (task.Priority)
                     {
@@ -84,6 +122,29 @@
                             </span>
                             break;
                     }
+
+                    <div class="mt-2">
+
+                        @if (task.IsCompleted)
+                        {
+                            <span class="badge bg-success">
+                                Completed
+                            </span>
+                        }
+                        else if (isOverdue)
+                        {
+                            <span class="badge bg-danger">
+                                Overdue
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Pending
+                            </span>
+                        }
+
+                    </div>
 
                 </div>
 

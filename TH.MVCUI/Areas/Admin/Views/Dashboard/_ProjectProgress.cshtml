@@ -6,11 +6,9 @@
 
         <h3>System Progress</h3>
 
-        <button class="btn btn-outline-primary btn-sm">
-
-            This Month
-
-        </button>
+        <span class="text-muted">
+            Current Status
+        </span>
 
     </div>
 
@@ -19,80 +17,63 @@
     <div class="text-center mt-4">
 
         <h2>
-
-            @Model.CompletionRate%
-
+            @($"{Model.CompletionRate:0.##}%")
         </h2>
 
         <p class="text-muted">
-
             Task Completion Rate
-
         </p>
 
     </div>
 
 </div>
 
-@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
 
-    <script>
+    const ctx = document.getElementById('projectChart');
 
-        const ctx=document.getElementById('projectChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'doughnut',
 
-        new Chart(ctx,{
+            data: {
+                labels: [
+                    'Completed',
+                    'Pending',
+                    'Overdue'
+                ],
 
-        type:'doughnut',
+                datasets: [{
+                    data: [
+    @Model.CompletedTasks,
+    @(Model.PendingTasks - Model.OverdueTasks),
+    @Model.OverdueTasks
+                    ],
 
-        data:{
+                    backgroundColor: [
+                        '#4EDBD2',
+                        '#15157D',
+                        '#E5484D'
+                    ],
 
-        labels:['Completed','Pending','In Progress'],
+                    borderWidth: 0
+                }]
+            },
 
-        datasets:[{
+            options: {
+                responsive: true,
 
-        // data:[52,24,18],
-                data:[
-        @Model.CompletedTasks,
-        @Model.PendingTasks,
-        @Model.InProgressTasks
-        ]
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
 
-        backgroundColor:[
-
-        '#4EDBD2',
-
-        '#15157D',
-
-        '#FFC857'
-
-        ],
-
-        borderWidth:0
-
-        }]
-
-        },
-
-        options:{
-
-        plugins:{
-
-        legend:{
-
-        position:'bottom'
-
-        }
-
-        },
-
-        cutout:'75%'
-
-        }
-
+                cutout: '75%'
+            }
         });
+    }
 
-    </script>
-
-}
+</script>
