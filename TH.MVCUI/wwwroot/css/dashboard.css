@@ -463,3 +463,24 @@ Quick Actions
         background: rgba(255,182,72,.18);
         color: #FF9F1A;
     }
+
+    .status-badge.overdue {
+        background: rgba(247,104,91,.15);
+        color: #F7685B;
+    }
+
+
+/* ===========================
+   Unread Notifications
+=========================== */
+
+.notification-unread {
+    background: rgba(21,21,125,.04);
+    border-radius: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+    .notification-unread .notification-content h5 {
+        font-weight: 700;
+    }
