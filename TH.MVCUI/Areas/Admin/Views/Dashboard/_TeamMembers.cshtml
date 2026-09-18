@@ -19,49 +19,59 @@
 
     <div class="member-list">
 
-        @* @for (int i = 1; i <= Math.Min(Model.TotalUsers, 5); i++)
+        @if (Model.RecentUsers != null && Model.RecentUsers.Any())
         {
-            <div class="member-item">
+            foreach (var user in Model.RecentUsers)
+            {
+                var fullName = $"{user.FirstName} {user.LastName}".Trim();
 
-                <div class="member-avatar">
+                var avatarLetter = !string.IsNullOrWhiteSpace(user.FirstName)
+                ? user.FirstName.Substring(0, 1).ToUpper()
+                : "U";
 
-                    U
+                <div class="member-item">
+
+                    <div class="member-avatar">
+
+                        @avatarLetter
+
+                    </div>
+
+                    <div class="member-info">
+
+                        <h5>
+                            @(string.IsNullOrWhiteSpace(fullName)
+                                ? "Unknown User"
+                                : fullName)
+                        </h5>
+
+                        <span>
+                            @(user.Role?.Name ?? "No Role")
+                        </span>
+
+                        @if (!string.IsNullOrWhiteSpace(user.Email))
+                        {
+                            <small class="text-muted d-block">
+                                @user.Email
+                            </small>
+                        }
+
+                    </div>
+
+                    <span class="badge bg-success">
+                        Active
+                    </span>
 
                 </div>
-
-                <div class="member-info">
-
-                    <h5>User @i</h5>
-
-                    <span>TaskHive Member</span>
-
-                </div>
-
-                <span class="badge bg-success">
-
-                    Active
-
-                </span>
-
-            </div>
-        } *@
-
-        @foreach (var user in Model.RecentUsers)
+            }
+        }
+        else
         {
-            <div class="member-item">
+            <div class="text-center py-4">
 
-                <div class="member-avatar">
-                    @user.FirstName.Substring(0, 1)
-                </div>
+                <i class="fa-solid fa-users fa-3x text-secondary mb-3"></i>
 
-                <div class="member-info">
-                    <h5>@user.FirstName @user.LastName</h5>
-                    <span>@user.Role?.Name</span>
-                </div>
-
-                <span class="badge bg-success">
-                    Active
-                </span>
+                <h5>No team members found.</h5>
 
             </div>
         }

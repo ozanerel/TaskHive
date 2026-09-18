@@ -5,6 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <h3>
+
             Recent Notifications
 
             @if (Model.UnreadNotificationCount > 0)
@@ -13,8 +14,7 @@
                     @Model.UnreadNotificationCount
                 </span>
             }
-            
-        
+
         </h3>
 
         <a asp-area="Admin"
@@ -28,21 +28,23 @@
 
     </div>
 
-    @if (Model.RecentNotifications.Any())
+    @if (Model.RecentNotifications != null &&
+    Model.RecentNotifications.Any())
     {
         foreach (var notification in Model.RecentNotifications)
         {
-            <div class="notification-item">
+            <div class="notification-item
+                 @(notification.IsRead ? "" : "notification-unread")">
 
                 <div class="notification-icon">
 
                     @if (notification.IsRead)
                     {
-                        <i class="fa-solid fa-check"></i>
+                        <i class="fa-solid fa-check text-success"></i>
                     }
                     else
                     {
-                        <i class="fa-solid fa-bell"></i>
+                        <i class="fa-solid fa-bell text-danger"></i>
                     }
 
                 </div>
@@ -53,13 +55,24 @@
 
                         @notification.Title
 
+                        @if (!notification.IsRead)
+                        {
+                            <span class="badge bg-danger ms-2">
+                                New
+                            </span>
+                        }
+
                     </h5>
 
                     <p>
-
                         @notification.Message
-
                     </p>
+
+                    <small class="text-muted">
+
+                        @notification.NotificationDate.ToString("dd MMM yyyy HH:mm")
+
+                    </small>
 
                 </div>
 

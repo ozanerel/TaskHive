@@ -6,7 +6,10 @@
 
         <h3>Recent Activity</h3>
 
-        <a href="#" class="btn btn-sm btn-outline-primary">
+        <a asp-area="Admin"
+           asp-controller="Task"
+           asp-action="Index"
+           class="btn btn-sm btn-outline-primary">
 
             View All
 
@@ -18,31 +21,60 @@
     {
         foreach (var task in Model.RecentTasks.Take(5))
         {
+            bool isOverdue =
+            !task.IsCompleted &&
+            task.DueDate.HasValue &&
+            task.DueDate.Value < DateTime.Now;
+
             <div class="activity">
 
                 <div class="activity-avatar">
 
-                    @task.Title.Substring(0, 1).ToUpper()
+                    @if (task.IsCompleted)
+                    {
+                        <i class="fa-solid fa-check"></i>
+                    }
+                    else if (isOverdue)
+                    {
+                        <i class="fa-solid fa-clock"></i>
+                    }
+                    else
+                    {
+                        @task.Title.Substring(0, 1).ToUpper()
+                    }
 
                 </div>
 
                 <div class="activity-content">
 
                     <h5>
-
                         @task.Title
-
                     </h5>
 
-                    <p>
-
-                        Task created
-
-                        •
-
-                        @task.CreatedDate.ToString("dd MMM yyyy")
-
-                    </p>
+                    @if (task.IsCompleted && task.CompletedDate.HasValue)
+                    {
+                        <p>
+                            Task completed
+                            •
+                            @task.CompletedDate.Value.ToString("dd MMM yyyy")
+                        </p>
+                    }
+                    else if (isOverdue)
+                    {
+                        <p class="text-danger">
+                            Task overdue
+                            •
+                            @task.DueDate.Value.ToString("dd MMM yyyy")
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            Task created
+                            •
+                            @task.CreatedDate.ToString("dd MMM yyyy")
+                        </p>
+                    }
 
                 </div>
 
