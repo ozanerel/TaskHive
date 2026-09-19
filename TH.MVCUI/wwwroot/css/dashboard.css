@@ -8,6 +8,7 @@
     padding: 35px;
     min-height: 100vh;
     background: var(--background);
+    transition: .35s;
 }
 
 /* ===========================
