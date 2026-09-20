@@ -1,4 +1,5 @@
-﻿/* ===========================
+﻿
+/* ===========================
    Dashboard Layout
 =========================== */
 
@@ -8,7 +9,7 @@
     padding: 35px;
     min-height: 100vh;
     background: var(--background);
-    transition: .35s;
+    transition: margin-left .35s ease;
 }
 
 /* ===========================
@@ -40,7 +41,7 @@
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     margin-bottom: 35px;
 }
@@ -183,40 +184,8 @@
 }
 
 /* ===========================
-   Activity
-=========================== */
-
-.activity {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.activity-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-}
-
-.activity-content h5 {
-    font-size: 15px;
-    margin-bottom: 4px;
-}
-
-.activity-content p {
-    color: #8F9BB3;
-    font-size: 13px;
-}
-
-/* ==========================
    Activity Timeline
-========================== */
+=========================== */
 
 .activity {
     display: flex;
@@ -225,9 +194,9 @@
     margin-bottom: 22px;
 }
 
-.activity:last-child {
-    margin-bottom: 0;
-}
+    .activity:last-child {
+        margin-bottom: 0;
+    }
 
 .activity-avatar {
     width: 48px;
@@ -247,22 +216,22 @@
     flex: 1;
 }
 
-.activity-content h5 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--dark);
-}
+    .activity-content h5 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--dark);
+    }
 
-.activity-content p {
-    margin-top: 4px;
-    font-size: 13px;
-    color: #8F9BB3;
-}
+    .activity-content p {
+        margin-top: 4px;
+        font-size: 13px;
+        color: #8F9BB3;
+    }
 
-/* ==========================
+/* ===========================
    Team Members
-========================== */
+=========================== */
 
 .member-list {
     display: flex;
@@ -310,10 +279,9 @@
         font-size: 13px;
     }
 
-
-/*============================
-Notifications
-============================*/
+/* ===========================
+   Notifications
+=========================== */
 
 .notification-item {
     display: flex;
@@ -331,7 +299,7 @@ Notifications
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: rgba(21,21,125,.08);
+    background: rgba(21, 21, 125, .08);
     color: var(--primary);
     display: flex;
     justify-content: center;
@@ -355,14 +323,13 @@ Notifications
         font-size: 13px;
     }
 
-
-/*============================
-Quick Actions
-============================*/
+/* ===========================
+   Quick Actions
+=========================== */
 
 .quick-actions {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 18px;
 }
 
@@ -379,7 +346,7 @@ Quick Actions
 
     .quick-action:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0,0,0,.08);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
         color: var(--primary);
     }
 
@@ -414,10 +381,10 @@ Quick Actions
    Responsive
 =========================== */
 
-@media(max-width:1200px) {
+@media (max-width: 1200px) {
 
     .stats-grid {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .dashboard-grid {
@@ -425,7 +392,7 @@ Quick Actions
     }
 }
 
-@media(max-width:768px) {
+@media (max-width: 768px) {
 
     .th-main {
         margin-left: 0;
@@ -456,27 +423,26 @@ Quick Actions
 }
 
     .status-badge.completed {
-        background: rgba(46,212,122,.15);
+        background: rgba(46, 212, 122, .15);
         color: #2ED47A;
     }
 
     .status-badge.pending {
-        background: rgba(255,182,72,.18);
+        background: rgba(255, 182, 72, .18);
         color: #FF9F1A;
     }
 
     .status-badge.overdue {
-        background: rgba(247,104,91,.15);
+        background: rgba(247, 104, 91, .15);
         color: #F7685B;
     }
-
 
 /* ===========================
    Unread Notifications
 =========================== */
 
 .notification-unread {
-    background: rgba(21,21,125,.04);
+    background: rgba(21, 21, 125, .04);
     border-radius: 12px;
     padding-left: 12px;
     padding-right: 12px;
