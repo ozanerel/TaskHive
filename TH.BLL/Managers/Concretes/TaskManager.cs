@@ -309,5 +309,60 @@ namespace TH.BLL.Managers.Concretes
                 CompletionRate = Math.Round(completionRate, 2)
             };
         }
+
+        public async Task<List<ProjectTaskAnalyticsDto>> GetProjectTaskAnalyticsAsync(List<int> teamIds)
+        {
+            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+
+            var projectAnalytics = tasks
+                .GroupBy(x => new
+                {
+                    x.ProjectId,
+                    ProjectName = x.Project?.ProjectName
+                })
+                .Select(group =>
+                {
+                    var totalTasks = group.Count();
+
+                    var completedTasks = group.Count(x =>
+                        x.IsCompleted);
+
+                    var pendingTasks = group.Count(x =>
+                        !x.IsCompleted);
+
+                    var overdueTasks = group.Count(x =>
+                        !x.IsCompleted &&
+                        x.DueDate.HasValue &&
+                        x.DueDate.Value < DateTime.Now);
+
+                    var completionRate = totalTasks == 0
+                        ? 0
+                        : (double)completedTasks / totalTasks * 100;
+
+                    return new ProjectTaskAnalyticsDto
+                    {
+                        ProjectId = group.Key.ProjectId,
+
+                        ProjectName = group.Key.ProjectName
+                            ?? "Unknown Project",
+
+                        TotalTasks = totalTasks,
+
+                        CompletedTasks = completedTasks,
+
+                        PendingTasks = pendingTasks,
+
+                        OverdueTasks = overdueTasks,
+
+                        CompletionRate = Math.Round(
+                            completionRate,
+                            2)
+                    };
+                })
+                .OrderByDescending(x => x.TotalTasks)
+                .ToList();
+
+            return projectAnalytics;
+        }
     }
 }

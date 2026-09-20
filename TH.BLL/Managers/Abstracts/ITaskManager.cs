@@ -27,5 +27,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<ENTITIES.Models.Task> GetTaskDetailsByUserAsync(int taskId,int userId);
 
         Task<TaskAnalyticsDto> GetTaskAnalyticsAsync(List<int> teamIds);
+
+        Task<List<ProjectTaskAnalyticsDto>> GetProjectTaskAnalyticsAsync(List<int> teamIds);
     }
 }
