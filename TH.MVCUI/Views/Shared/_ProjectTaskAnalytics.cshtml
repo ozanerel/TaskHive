@@ -1,0 +1,125 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Project Task Analytics</h3>
+
+        <span class="text-muted">
+            Project Performance
+        </span>
+    </div>
+
+    @if (Model.ProjectTaskAnalytics != null &&
+    Model.ProjectTaskAnalytics.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Total</th>
+                        <th>Completed</th>
+                        <th>Pending</th>
+                        <th>Overdue</th>
+                        <th>Completion</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var project in Model.ProjectTaskAnalytics)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    @project.ProjectName
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-primary">
+                                    @project.TotalTasks
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    @project.CompletedTasks
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    @project.PendingTasks
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (project.OverdueTasks > 0)
+                                {
+                                    <span class="badge bg-danger">
+                                        @project.OverdueTasks
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        0
+                                    </span>
+                                }
+                            </td>
+
+                            <td style="min-width: 150px;">
+
+                                <div class="d-flex justify-content-between mb-1">
+
+                                    <small>
+                                        @($"{project.CompletionRate:0.##}%")
+                                    </small>
+
+                                </div>
+
+                                <div class="progress"
+                                     style="height: 8px;">
+
+                                    <div class="progress-bar bg-success"
+                                         role="progressbar"
+                                         style="width: @project.CompletionRate.ToString(System.Globalization.CultureInfo.InvariantCulture)%"
+                                         aria-valuenow="@project.CompletionRate"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+
+            <i class="fa-solid fa-chart-column fa-3x text-secondary mb-3"></i>
+
+            <h5>No project analytics available.</h5>
+
+            <p class="text-muted">
+                There are no project task statistics to display.
+            </p>
+
+        </div>
+    }
+
+</div>
