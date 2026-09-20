@@ -40,7 +40,9 @@
                     }
                     else
                     {
-                        @task.Title.Substring(0, 1).ToUpper()
+                        @(string.IsNullOrWhiteSpace(task.Title)
+                            ? "?"
+                            : task.Title.Substring(0, 1).ToUpper())
                     }
 
                 </div>
