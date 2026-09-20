@@ -46,19 +46,17 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
             var taskAnalytics = await _taskManager.GetTaskAnalyticsAsync(teamIds);
 
+            var projectTaskAnalytics = await _taskManager.GetProjectTaskAnalyticsAsync(teamIds);
+
             DashboardVm vm = new DashboardVm
             {
                 TotalProjects = projects.Count,
-
                 TotalTasks = taskAnalytics.TotalTasks,
-
                 CompletedTasks = taskAnalytics.CompletedTasks,
-
                 PendingTasks = taskAnalytics.PendingTasks,
-
                 OverdueTasks = taskAnalytics.OverdueTasks,
-
                 CompletionRate = taskAnalytics.CompletionRate,
+                ProjectTaskAnalytics = projectTaskAnalytics,
 
                 InProgressTasks = tasks.Count(x =>
                     !x.IsCompleted &&

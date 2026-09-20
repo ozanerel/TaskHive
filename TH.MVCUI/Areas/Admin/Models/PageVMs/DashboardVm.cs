@@ -1,4 +1,5 @@
 ﻿using TH.ENTITIES.Models;
+using TH.BLL.DTOs.Task;
 
 namespace TH.MVCUI.Areas.Admin.Models.PageVMs
 {
@@ -21,6 +22,7 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs
         public int PendingTasks { get; set; }
         public int InProgressTasks { get; set; }
         public int OverdueTasks { get; set; }
+        public List<ProjectTaskAnalyticsDto> ProjectTaskAnalytics { get; set; } = new();
 
     }
 }
