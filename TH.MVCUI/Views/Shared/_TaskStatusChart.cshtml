@@ -1,0 +1,56 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Task Status Overview</h3>
+        <span class="text-muted">Overall Performance</span>
+    </div>
+
+    <div style="position: relative; height: 300px;">
+        <canvas id="taskStatusChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const canvas = document.getElementById("taskStatusChart");
+
+        if (!canvas) {
+            return;
+        }
+
+        new Chart(canvas, {
+            type: "doughnut",
+            data: {
+                labels: [
+                    "Completed",
+                    "Pending",
+                    "Overdue"
+                ],
+                datasets: [
+                    {
+                        data: [
+    @Model.CompletedTasks,
+    @Model.PendingTasks,
+    @Model.OverdueTasks
+                        ]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        });
+
+    });
+</script>
