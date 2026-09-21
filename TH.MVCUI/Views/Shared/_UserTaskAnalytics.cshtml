@@ -1,0 +1,123 @@
+﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.DashboardVm
+
+<div class="dashboard-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>User Task Analytics</h3>
+        <span class="text-muted">Team Member Performance</span>
+    </div>
+
+    @if (Model.UserTaskAnalytics != null &&
+    Model.UserTaskAnalytics.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Total</th>
+                        <th>Completed</th>
+                        <th>Pending</th>
+                        <th>Overdue</th>
+                        <th>Completion</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var user in Model.UserTaskAnalytics)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    @user.UserName
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-primary">
+                                    @user.TotalTasks
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    @user.CompletedTasks
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    @user.PendingTasks
+                                </span>
+                            </td>
+
+                            <td>
+
+                                @if (user.OverdueTasks > 0)
+                                {
+                                    <span class="badge bg-danger">
+                                        @user.OverdueTasks
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        0
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td style="min-width: 150px;">
+
+                                <div class="d-flex justify-content-between mb-1">
+
+                                    <small>
+                                        @($"{user.CompletionRate:0.##}%")
+                                    </small>
+
+                                </div>
+
+                                <div class="progress" style="height: 8px;">
+
+                                    <div class="progress-bar bg-success"
+                                         role="progressbar"
+                                         style="width: @user.CompletionRate.ToString(System.Globalization.CultureInfo.InvariantCulture)%"
+                                         aria-valuenow="@user.CompletionRate"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+
+            <i class="fa-solid fa-users fa-3x text-secondary mb-3"></i>
+
+            <h5>No user analytics available.</h5>
+
+            <p class="text-muted">
+                There are no user task statistics to display.
+            </p>
+
+        </div>
+    }
+
+</div>
