@@ -23,6 +23,7 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs
         public int InProgressTasks { get; set; }
         public int OverdueTasks { get; set; }
         public List<ProjectTaskAnalyticsDto> ProjectTaskAnalytics { get; set; } = new();
+        public List<UserTaskAnalyticsDto> UserTaskAnalytics { get; set; } = new();
 
     }
 }
