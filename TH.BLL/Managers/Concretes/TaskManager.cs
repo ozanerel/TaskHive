@@ -364,5 +364,63 @@ namespace TH.BLL.Managers.Concretes
 
             return projectAnalytics;
         }
+
+        public async Task<List<UserTaskAnalyticsDto>> GetUserTaskAnalyticsAsync(List<int> teamIds)
+        {
+            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+
+            var userAnalytics = tasks
+                .GroupBy(x => new
+                {
+                    x.UserId,
+                    UserName = x.User != null
+                        ? $"{x.User.FirstName} {x.User.LastName}".Trim()
+                        : "Unknown User"
+                })
+                .Select(group =>
+                {
+                    var totalTasks = group.Count();
+
+                    var completedTasks = group.Count(x =>
+                        x.IsCompleted);
+
+                    var pendingTasks = group.Count(x =>
+                        !x.IsCompleted);
+
+                    var overdueTasks = group.Count(x =>
+                        !x.IsCompleted &&
+                        x.DueDate.HasValue &&
+                        x.DueDate.Value < DateTime.Now);
+
+                    var completionRate = totalTasks == 0
+                        ? 0
+                        : (double)completedTasks / totalTasks * 100;
+
+                    return new UserTaskAnalyticsDto
+                    {
+                        UserId = group.Key.UserId,
+
+                        UserName = string.IsNullOrWhiteSpace(group.Key.UserName)
+                            ? "Unknown User"
+                            : group.Key.UserName,
+
+                        TotalTasks = totalTasks,
+
+                        CompletedTasks = completedTasks,
+
+                        PendingTasks = pendingTasks,
+
+                        OverdueTasks = overdueTasks,
+
+                        CompletionRate = Math.Round(
+                            completionRate,
+                            2)
+                    };
+                })
+                .OrderByDescending(x => x.TotalTasks)
+                .ToList();
+
+            return userAnalytics;
+        }
     }
 }

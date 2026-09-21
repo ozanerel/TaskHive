@@ -29,5 +29,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<TaskAnalyticsDto> GetTaskAnalyticsAsync(List<int> teamIds);
 
         Task<List<ProjectTaskAnalyticsDto>> GetProjectTaskAnalyticsAsync(List<int> teamIds);
+
+        Task<List<UserTaskAnalyticsDto>> GetUserTaskAnalyticsAsync(List<int> teamIds);
     }
 }
