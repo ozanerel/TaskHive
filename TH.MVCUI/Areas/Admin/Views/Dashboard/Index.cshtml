@@ -35,7 +35,19 @@
 
             <br />
 
+            @await Html.PartialAsync("_ProjectTaskChart", Model)
+
+            <br />
+
+            @await Html.PartialAsync("_TaskStatusChart", Model)
+
+            <br />
+
             @await Html.PartialAsync("_UserTaskAnalytics", Model)
+
+            <br />
+
+            @await Html.PartialAsync("_UserTaskChart", Model)
 
             <br />
 
