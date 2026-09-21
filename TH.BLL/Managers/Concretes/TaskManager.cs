@@ -422,5 +422,70 @@ namespace TH.BLL.Managers.Concretes
 
             return userAnalytics;
         }
+
+        public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsAsync(List<int> teamIds)
+        {
+            //Görevleri filtreleme
+            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+
+            var suggestions = tasks
+                .Where(x => x.User != null)
+                //Kullanıcı bazında gruplama
+                .GroupBy(x => new
+                {
+                    x.UserId,
+                    UserName = $"{x.User.FirstName} {x.User.LastName}".Trim()
+                })
+                .Select(group =>
+                {
+                    var totalTasks = group.Count();
+
+                    var pendingTasks = group.Count(x =>
+                        !x.IsCompleted);
+
+                    var overdueTasks = group.Count(x =>
+                        !x.IsCompleted &&
+                        x.DueDate.HasValue &&
+                        x.DueDate.Value < DateTime.Now);
+
+                    var completedTasks = group.Count(x =>
+                        x.IsCompleted);
+
+                    var completionRate = totalTasks == 0
+                        ? 0
+                        : (double)completedTasks / totalTasks * 100;
+
+                    //İş yükü puanı
+                    var workloadScore =
+                        (pendingTasks * 1) +
+                        (overdueTasks * 3);
+
+                    return new TaskAssignmentSuggestionDto
+                    {
+                        UserId = group.Key.UserId,
+
+                        UserName = string.IsNullOrWhiteSpace(group.Key.UserName)
+                            ? "Unknown User"
+                            : group.Key.UserName,
+
+                        TotalTasks = totalTasks,
+
+                        PendingTasks = pendingTasks,
+
+                        OverdueTasks = overdueTasks,
+
+                        CompletionRate = Math.Round(
+                            completionRate,
+                            2),
+
+                        WorkloadScore = workloadScore
+                    };
+                })
+                .OrderBy(x => x.WorkloadScore)
+                .ThenByDescending(x => x.CompletionRate)
+                .ToList();
+
+            return suggestions;
+        }
     }
 }
