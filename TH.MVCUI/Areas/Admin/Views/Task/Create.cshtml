@@ -130,6 +130,18 @@
 
                 <div class="dashboard-card">
 
+                    @if (assignmentSuggestions.Any())
+                    {
+                        <div class="d-flex justify-content-end mb-3">
+                            <button type="button"
+                                    id="auto-assign-user"
+                                    class="btn btn-success">
+                                <i class="bi bi-magic"></i>
+                                En Uygun Kullanıcıyı Seç
+                            </button>
+                        </div>
+                    }
+
                     <div class="d-flex justify-content-between align-items-center mb-3">
 
                         <h4 class="mb-0">
@@ -295,41 +307,83 @@
                 'select[name="UserId"]'
             );
 
+            function selectUser(userId) {
+
+                if (!userSelect) {
+                    console.error(
+                        "UserId dropdown bulunamadı."
+                    );
+
+                    return;
+                }
+
+                const userOption = userSelect.querySelector(
+                    `option[value="${userId}"]`
+                );
+
+                if (!userOption) {
+                    console.error(
+                        "Seçilecek kullanıcı dropdown içerisinde bulunamadı."
+                    );
+
+                    return;
+                }
+
+                userSelect.value = userId;
+
+                userSelect.dispatchEvent(
+                    new Event("change", {
+                        bubbles: true
+                    })
+                );
+
+                userSelect.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+
             selectButtons.forEach(button => {
 
                 button.addEventListener("click", function () {
 
                     const userId = this.dataset.userId;
 
-                    if (!userSelect) {
-                        console.error(
-                            "UserId dropdown bulunamadı."
+                    selectUser(userId);
+
+                });
+
+            });
+
+            const autoAssignButton = document.getElementById(
+                "auto-assign-user"
+            );
+
+            if (autoAssignButton) {
+
+                autoAssignButton.addEventListener("click", function () {
+
+                    const firstSuggestionButton =
+                        document.querySelector(
+                            ".select-assignment-user"
+                        );
+
+                    if (!firstSuggestionButton) {
+                        alert(
+                            "Atama yapılabilecek bir kullanıcı bulunamadı."
                         );
 
                         return;
                     }
 
-                    userSelect.value = userId;
+                    const userId =
+                        firstSuggestionButton.dataset.userId;
 
-                    userSelect.dispatchEvent(
-                        new Event("change", {
-                            bubbles: true
-                        })
-                    );
-
-                    console.log(
-                        "Seçilen kullanıcı ID:",
-                        userId
-                    );
-
-                    console.log(
-                        "Dropdown değeri:",
-                        userSelect.value
-                    );
+                    selectUser(userId);
 
                 });
 
-            });
+            }
 
         });
     </script>
