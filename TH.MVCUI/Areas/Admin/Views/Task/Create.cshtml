@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "Create Task";
     Layout = "~/Views/Shared/_AreaLayout.cshtml";
+
+    var assignmentSuggestions = Model.AssignmentSuggestions
+        .OrderBy(x => x.WorkloadScore)
+        .ThenByDescending(x => x.CompletionRate)
+        .ToList();
 }
 
 <div class="page-header">
@@ -123,6 +128,107 @@
 
             <div class="col-md-12 mb-4">
 
+                <div class="dashboard-card">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h4 class="mb-0">
+                            <i class="fa-solid fa-lightbulb text-warning"></i>
+                            Assignment Suggestions
+                        </h4>
+
+                        <span class="text-muted">
+                            Lowest workload first
+                        </span>
+
+                    </div>
+
+                    @if (assignmentSuggestions.Any())
+                    {
+                        <div class="table-responsive">
+
+                            <table class="table align-middle">
+
+                                <thead>
+                                    <tr>
+                                        <th>Kullanıcı</th>
+                                        <th>Bekleyen Görev</th>
+                                        <th>Geciken Görev</th>
+                                        <th>Tamamlanma Oranı</th>
+                                        <th>İş Yükü Skoru</th>
+                                        <th>İşlem</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var suggestion in assignmentSuggestions)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @suggestion.UserName
+                                            </td>
+
+                                            <td>
+                                                @suggestion.PendingTasks
+                                            </td>
+
+                                            <td>
+                                                @suggestion.OverdueTasks
+                                            </td>
+
+                                            @* <td>
+                                                %@suggestion.CompletionRate
+                                            </td> *@
+
+                                            <td>
+                                                @($"{suggestion.CompletionRate:0.##}%")
+                                            </td>
+
+                                            <td>
+                                                @suggestion.WorkloadScore
+
+                                                @if (suggestion == assignmentSuggestions.First())
+                                                {
+                                                    <span class="badge bg-success ms-1">
+                                                        En Düşük
+                                                    </span>
+                                                }
+                                            </td>
+
+                                            <td>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-primary select-assignment-user"
+                                                        data-user-id="@suggestion.UserId">
+                                                    Seç
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+
+                            <i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
+
+                            <p class="text-muted mb-0">
+                                No assignment suggestions are available yet.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12 mb-4">
+
                 <label class="form-label">
 
                     Project
@@ -178,7 +284,53 @@
 </div>
 
 @section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-    <partial name="_ValidationScriptsPartial" />
+            const selectButtons = document.querySelectorAll(
+                ".select-assignment-user"
+            );
 
+            const userSelect = document.querySelector(
+                'select[name="UserId"]'
+            );
+
+            selectButtons.forEach(button => {
+
+                button.addEventListener("click", function () {
+
+                    const userId = this.dataset.userId;
+
+                    if (!userSelect) {
+                        console.error(
+                            "UserId dropdown bulunamadı."
+                        );
+
+                        return;
+                    }
+
+                    userSelect.value = userId;
+
+                    userSelect.dispatchEvent(
+                        new Event("change", {
+                            bubbles: true
+                        })
+                    );
+
+                    console.log(
+                        "Seçilen kullanıcı ID:",
+                        userId
+                    );
+
+                    console.log(
+                        "Dropdown değeri:",
+                        userSelect.value
+                    );
+
+                });
+
+            });
+
+        });
+    </script>
 }
