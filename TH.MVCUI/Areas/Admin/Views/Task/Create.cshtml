@@ -1,4 +1,5 @@
 ﻿@model TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM.TaskCreateVm
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Create Task";
@@ -94,6 +95,26 @@
                 <label asp-for="DueDate" class="form-label">Due Date</label>
                 <input asp-for="DueDate" type="date" class="form-control" />
                 <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RequiredRoleId" class="form-label">
+                    Gerekli Rol
+                </label>
+
+                <select asp-for="RequiredRoleId"
+                        class="form-select"
+                        asp-items="@(new SelectList(Model.Roles, "Id", "Name"))">
+
+                    <option value="">
+                        Rol seçiniz
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="RequiredRoleId"
+                      class="text-danger">
+                </span>
             </div>
 
             <div class="col-md-6 mb-4">

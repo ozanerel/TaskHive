@@ -23,5 +23,9 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
         public List<Project> Projects { get; set; } = new();
 
         public List<TaskAssignmentSuggestionDto> AssignmentSuggestions { get; set; } = new();
+
+        public List<Role> Roles { get; set; } = new();
+
+        public int? RequiredRoleId { get; set; }
     }
 }

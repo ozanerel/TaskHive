@@ -21,8 +21,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         private readonly ITeamManager _teamManager;
         private readonly ITeamMemberManager _teamMemberManager;
         private readonly IUserContext _userContext;
+        private readonly IRoleManager _roleManager;
 
-        public TaskController(ITaskManager taskManager, IUserManager userManager, IProjectManager projectManager,ITeamManager teamManager,ITeamMemberManager teamMemberManager,IUserContext userContext)
+        public TaskController(ITaskManager taskManager, IUserManager userManager, IProjectManager projectManager,ITeamManager teamManager,ITeamMemberManager teamMemberManager,IUserContext userContext, IRoleManager roleManager)
         {
             _taskManager = taskManager;
             _userManager = userManager;
@@ -30,6 +31,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             _teamManager = teamManager;
             _teamMemberManager = teamMemberManager;
             _userContext = userContext;
+            _roleManager = roleManager;
         }
         public async Task<IActionResult> Index(string search,PriorityLevel? priority,bool? isCompleted)
         {
@@ -137,6 +139,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .Select(x => x.First())
                 .ToList();
 
+            var roles = _roleManager
+                .GetActives()
+                .OrderBy(x => x.Name)
+                .ToList();
+
             var assignmentSuggestions =
                 await _taskManager.GetTaskAssignmentSuggestionsAsync(teamIds);
 
@@ -144,7 +151,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             {
                 Users = users,
                 Projects = projects,
-                AssignmentSuggestions = assignmentSuggestions
+                AssignmentSuggestions = assignmentSuggestions,
+                Roles = roles
             };
 
             return View(vm);
@@ -187,7 +195,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 Priority = vm.Priority,
                 DueDate = vm.DueDate,
                 UserId = vm.UserId,
-                ProjectId = vm.ProjectId
+                ProjectId = vm.ProjectId,
+                RequiredRoleId = vm.RequiredRoleId
             };
 
             await _taskManager.CreateAsync(task);
@@ -513,6 +522,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
             vm.AssignmentSuggestions =
                 await _taskManager.GetTaskAssignmentSuggestionsAsync(teamIds);
+
+            vm.Roles = _roleManager
+                .GetActives()
+                .OrderBy(x => x.Name)
+                .ToList();
 
             return vm;
         }
