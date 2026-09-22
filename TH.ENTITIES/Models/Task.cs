@@ -22,10 +22,13 @@ namespace TH.ENTITIES.Models
         public int UserId { get; set; }
         public int ProjectId { get; set; }
 
+        public int? RequiredRoleId { get; set; }
+
 
         //Relational Properties
         public virtual User User { get; set; }
         public virtual Project Project { get; set; }
+        public virtual Role RequiredRole { get; set; }
         public virtual ICollection<TaskComment> TaskComments { get; set; }
     }
 }
