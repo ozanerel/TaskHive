@@ -132,14 +132,19 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             }
 
             var users = teamMemberUsers
+                .Where(x => x.Status != DataStatus.Deleted)
                 .GroupBy(x => x.Id)
                 .Select(x => x.First())
                 .ToList();
 
+            var assignmentSuggestions =
+                await _taskManager.GetTaskAssignmentSuggestionsAsync(teamIds);
+
             TaskCreateVm vm = new()
             {
                 Users = users,
-                Projects = projects
+                Projects = projects,
+                AssignmentSuggestions = assignmentSuggestions
             };
 
             return View(vm);
@@ -501,9 +506,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             }
 
             vm.Users = users
+                .Where(x => x.Status != DataStatus.Deleted)
                 .GroupBy(x => x.Id)
                 .Select(x => x.First())
                 .ToList();
+
+            vm.AssignmentSuggestions =
+                await _taskManager.GetTaskAssignmentSuggestionsAsync(teamIds);
 
             return vm;
         }

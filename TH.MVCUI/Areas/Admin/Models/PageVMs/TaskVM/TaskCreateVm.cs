@@ -1,5 +1,6 @@
 ﻿using TH.ENTITIES.Enums;
 using TH.ENTITIES.Models;
+using TH.BLL.DTOs.Task;
 
 namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 {
@@ -20,5 +21,7 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
         public List<User> Users { get; set; } = new();
 
         public List<Project> Projects { get; set; } = new();
+
+        public List<TaskAssignmentSuggestionDto> AssignmentSuggestions { get; set; } = new();
     }
 }
