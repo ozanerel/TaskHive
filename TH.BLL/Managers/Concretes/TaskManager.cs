@@ -425,17 +425,24 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsAsync(List<int> teamIds)
         {
-            //Görevleri filtreleme
+            // Görevleri filtreleme
             var tasks = await FilterTasksAsync(null,null,null,teamIds);
 
             var suggestions = tasks
                 .Where(x => x.User != null)
-                //Kullanıcı bazında gruplama
+
+                // Kullanıcı bazında gruplama
                 .GroupBy(x => new
                 {
                     x.UserId,
-                    UserName = $"{x.User.FirstName} {x.User.LastName}".Trim()
+
+                    UserName = $"{x.User.FirstName} {x.User.LastName}".Trim(),
+
+                    RoleName = x.User.Role != null
+                        ? x.User.Role.Name
+                        : "Rol bilgisi yok"
                 })
+
                 .Select(group =>
                 {
                     var totalTasks = group.Count();
@@ -455,7 +462,7 @@ namespace TH.BLL.Managers.Concretes
                         ? 0
                         : (double)completedTasks / totalTasks * 100;
 
-                    //İş yükü puanı
+                    // İş yükü puanı
                     var workloadScore =
                         (pendingTasks * 1) +
                         (overdueTasks * 3);
@@ -467,6 +474,10 @@ namespace TH.BLL.Managers.Concretes
                         UserName = string.IsNullOrWhiteSpace(group.Key.UserName)
                             ? "Unknown User"
                             : group.Key.UserName,
+
+                        RoleName = string.IsNullOrWhiteSpace(group.Key.RoleName)
+                            ? "Rol bilgisi yok"
+                            : group.Key.RoleName,
 
                         TotalTasks = totalTasks,
 
@@ -481,6 +492,7 @@ namespace TH.BLL.Managers.Concretes
                         WorkloadScore = workloadScore
                     };
                 })
+
                 .OrderBy(x => x.WorkloadScore)
                 .ThenByDescending(x => x.CompletionRate)
                 .ToList();

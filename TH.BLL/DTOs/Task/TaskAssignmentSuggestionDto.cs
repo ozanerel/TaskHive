@@ -14,6 +14,8 @@ namespace TH.BLL.DTOs.Task
 
         public string UserName { get; set; }
 
+        public string RoleName { get; set; }
+
         public int TotalTasks { get; set; }
 
         public int PendingTasks { get; set; }
