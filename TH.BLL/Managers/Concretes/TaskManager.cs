@@ -438,9 +438,10 @@ namespace TH.BLL.Managers.Concretes
 
                     UserName = $"{x.User.FirstName} {x.User.LastName}".Trim(),
 
+                    RoleId = x.User.RoleId,
+
                     RoleName = x.User.Role != null
-                        ? x.User.Role.Name
-                        : "Rol bilgisi yok"
+                    ? x.User.Role.Name: "Rol bilgisi yok"
                 })
 
                 .Select(group =>
@@ -472,12 +473,12 @@ namespace TH.BLL.Managers.Concretes
                         UserId = group.Key.UserId,
 
                         UserName = string.IsNullOrWhiteSpace(group.Key.UserName)
-                            ? "Unknown User"
-                            : group.Key.UserName,
+                        ? "Unknown User": group.Key.UserName,
+
+                        RoleId = group.Key.RoleId,
 
                         RoleName = string.IsNullOrWhiteSpace(group.Key.RoleName)
-                            ? "Rol bilgisi yok"
-                            : group.Key.RoleName,
+                        ? "Rol bilgisi yok": group.Key.RoleName,
 
                         TotalTasks = totalTasks,
 

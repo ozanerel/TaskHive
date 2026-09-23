@@ -25,5 +25,7 @@ namespace TH.BLL.DTOs.Task
         public double CompletionRate { get; set; }
 
         public int WorkloadScore { get; set; }
+
+        public int? RoleId { get; set; }
     }
 }

@@ -54,7 +54,8 @@
                        class="form-control-custom" />
 
                 <span asp-validation-for="Title"
-                      class="text-danger"></span>
+                      class="text-danger">
+                </span>
 
             </div>
 
@@ -68,7 +69,8 @@
 
                 <textarea asp-for="Description"
                           rows="5"
-                          class="form-control-custom"></textarea>
+                          class="form-control-custom">
+                </textarea>
 
             </div>
 
@@ -96,14 +98,31 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="DueDate" class="form-label">Due Date</label>
-                <input asp-for="DueDate" type="date" class="form-control" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
+
+                <label asp-for="DueDate"
+                       class="form-label">
+
+                    Due Date
+
+                </label>
+
+                <input asp-for="DueDate"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="DueDate"
+                      class="text-danger">
+                </span>
+
             </div>
 
             <div class="mb-3">
-                <label asp-for="RequiredRoleId" class="form-label">
+
+                <label asp-for="RequiredRoleId"
+                       class="form-label">
+
                     Gerekli Rol
+
                 </label>
 
                 <select asp-for="RequiredRoleId"
@@ -111,7 +130,9 @@
                         asp-items="@(new SelectList(Model.Roles, "Id", "Name"))">
 
                     <option value="">
+
                         Rol seçiniz
+
                     </option>
 
                 </select>
@@ -119,6 +140,7 @@
                 <span asp-validation-for="RequiredRoleId"
                       class="text-danger">
                 </span>
+
             </div>
 
             <div class="col-md-6 mb-4">
@@ -162,24 +184,34 @@
                     @if (assignmentSuggestions.Any())
                     {
                         <div class="d-flex justify-content-end mb-3">
+
                             <button type="button"
                                     id="auto-assign-user"
                                     class="btn btn-success">
+
                                 <i class="bi bi-magic"></i>
+
                                 En Uygun Kullanıcıyı Seç
+
                             </button>
+
                         </div>
                     }
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
 
                         <h4 class="mb-0">
+
                             <i class="fa-solid fa-lightbulb text-warning"></i>
+
                             Assignment Suggestions
+
                         </h4>
 
                         <span class="text-muted">
+
                             Lowest workload first
+
                         </span>
 
                     </div>
@@ -191,70 +223,108 @@
                             <table class="table align-middle">
 
                                 <thead>
+
                                     <tr>
+
                                         <th>Kullanıcı</th>
+
                                         <th>Bekleyen Görev</th>
+
                                         <th>Geciken Görev</th>
+
                                         <th>Tamamlanma Oranı</th>
+
                                         <th>İş Yükü Skoru</th>
+
                                         <th>Rol</th>
+
                                         <th>İşlem</th>
+
                                     </tr>
+
                                 </thead>
 
                                 <tbody>
+
                                     @foreach (var suggestion in assignmentSuggestions)
                                     {
-                                        <tr>
+                                        <tr data-role-id="@suggestion.RoleId">
+
                                             <td>
+
                                                 @suggestion.UserName
+
                                             </td>
 
                                             <td>
+
                                                 @suggestion.PendingTasks
+
                                             </td>
 
                                             <td>
+
                                                 @suggestion.OverdueTasks
+
                                             </td>
 
-                                            @* <td>
-                                                %@suggestion.CompletionRate
-                                            </td> *@
-
                                             <td>
+
                                                 @($"{suggestion.CompletionRate:0.##}%")
+
                                             </td>
 
                                             <td>
+
                                                 @suggestion.WorkloadScore
 
                                                 @if (suggestion == assignmentSuggestions.First())
                                                 {
                                                     <span class="badge bg-success ms-1">
+
                                                         En Düşük
+
                                                     </span>
                                                 }
+
                                             </td>
 
                                             <td>
+
                                                 <span class="badge bg-info text-dark">
+
                                                     @suggestion.RoleName
+
                                                 </span>
+
                                             </td>
 
                                             <td>
+
                                                 <button type="button"
                                                         class="btn btn-sm btn-primary select-assignment-user"
-                                                        data-user-id="@suggestion.UserId">
+                                                        data-user-id="@suggestion.UserId"
+                                                        data-role-id="@suggestion.RoleId">
+
                                                     Seç
+
                                                 </button>
+
                                             </td>
+
                                         </tr>
                                     }
+
                                 </tbody>
 
                             </table>
+
+                        </div>
+
+                        <div id="no-role-suggestion-message"
+                             class="alert alert-info mt-3 d-none">
+
+                            Seçilen role uygun bir kullanıcı bulunamadı.
 
                         </div>
                     }
@@ -265,7 +335,9 @@
                             <i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
 
                             <p class="text-muted mb-0">
+
                                 No assignment suggestions are available yet.
+
                             </p>
 
                         </div>
@@ -332,7 +404,9 @@
 </div>
 
 @section Scripts {
+
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
 
             const selectButtons = document.querySelectorAll(
@@ -343,14 +417,29 @@
                 'select[name="UserId"]'
             );
 
+            const requiredRoleSelect = document.querySelector(
+                'select[name="RequiredRoleId"]'
+            );
+
+            const suggestionRows = document.querySelectorAll(
+                "tbody tr[data-role-id]"
+            );
+
+            const noRoleSuggestionMessage = document.getElementById(
+                "no-role-suggestion-message"
+            );
+
+
             function selectUser(userId) {
 
                 if (!userSelect) {
+
                     console.error(
                         "UserId dropdown bulunamadı."
                     );
 
                     return;
+
                 }
 
                 const userOption = userSelect.querySelector(
@@ -358,11 +447,13 @@
                 );
 
                 if (!userOption) {
+
                     console.error(
                         "Seçilecek kullanıcı dropdown içerisinde bulunamadı."
                     );
 
                     return;
+
                 }
 
                 userSelect.value = userId;
@@ -374,10 +465,78 @@
                 );
 
                 userSelect.scrollIntoView({
+
                     behavior: "smooth",
+
                     block: "center"
+
                 });
+
             }
+
+
+            function filterSuggestionsByRole() {
+
+                if (!requiredRoleSelect) {
+
+                    return;
+
+                }
+
+                const selectedRoleId = requiredRoleSelect.value;
+
+                let visibleSuggestionCount = 0;
+
+
+                suggestionRows.forEach(row => {
+
+                    const rowRoleId = row.dataset.roleId;
+
+                    const shouldShow =
+                        !selectedRoleId ||
+                        rowRoleId === selectedRoleId;
+
+
+                    if (shouldShow) {
+
+                        row.style.display = "";
+
+                        visibleSuggestionCount++;
+
+                    }
+                    else {
+
+                        row.style.display = "none";
+
+                    }
+
+                });
+
+
+                if (noRoleSuggestionMessage) {
+
+                    if (
+                        selectedRoleId &&
+                        visibleSuggestionCount === 0
+                    ) {
+
+                        noRoleSuggestionMessage.classList.remove(
+                            "d-none"
+                        );
+
+                    }
+                    else {
+
+                        noRoleSuggestionMessage.classList.add(
+                            "d-none"
+                        );
+
+                    }
+
+                }
+
+            }
+
 
             selectButtons.forEach(button => {
 
@@ -391,36 +550,80 @@
 
             });
 
+
+            if (requiredRoleSelect) {
+
+                requiredRoleSelect.addEventListener(
+                    "change",
+                    function () {
+
+                        if (userSelect) {
+
+                            userSelect.value = "";
+
+                        }
+
+                        filterSuggestionsByRole();
+
+                    }
+                );
+
+            }
+
+
             const autoAssignButton = document.getElementById(
                 "auto-assign-user"
             );
 
+
             if (autoAssignButton) {
 
-                autoAssignButton.addEventListener("click", function () {
+                autoAssignButton.addEventListener(
+                    "click",
+                    function () {
 
-                    const firstSuggestionButton =
-                        document.querySelector(
-                            ".select-assignment-user"
-                        );
+                        const visibleSuggestionButton =
+                            Array.from(
+                                document.querySelectorAll(
+                                    ".select-assignment-user"
+                                )
+                            ).find(button => {
 
-                    if (!firstSuggestionButton) {
-                        alert(
-                            "Atama yapılabilecek bir kullanıcı bulunamadı."
-                        );
+                                const row = button.closest("tr");
 
-                        return;
+                                return row &&
+                                       row.style.display !== "none";
+
+                            });
+
+
+                        if (!visibleSuggestionButton) {
+
+                            alert(
+                                "Seçilen role uygun bir kullanıcı bulunamadı."
+                            );
+
+                            return;
+
+                        }
+
+
+                        const userId =
+                            visibleSuggestionButton.dataset.userId;
+
+
+                        selectUser(userId);
+
                     }
-
-                    const userId =
-                        firstSuggestionButton.dataset.userId;
-
-                    selectUser(userId);
-
-                });
+                );
 
             }
 
+
+            filterSuggestionsByRole();
+
         });
+
     </script>
+
 }
