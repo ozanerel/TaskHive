@@ -85,6 +85,7 @@ namespace TH.DAL.Repositories.Concretes
         {
             var query = _context.Tasks
         .Include(x => x.User)
+            .ThenInclude(x => x.Role)
         .Include(x => x.Project)
         .Where(x =>
             teamIds.Contains(x.Project.TeamId) &&

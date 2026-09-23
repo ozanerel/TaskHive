@@ -188,6 +188,24 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (teamMember == null)
                 return Forbid();
 
+            // Atanacak kullanıcının rolünü kontrol et.
+            var assignedUser = await _userManager.GetByIdAsync(vm.UserId);
+
+            if (assignedUser == null)
+            {
+                return NotFound();
+            }
+
+            if (vm.RequiredRoleId.HasValue &&
+                assignedUser.RoleId != vm.RequiredRoleId.Value)
+            {
+                ModelState.AddModelError(
+                    nameof(vm.UserId),
+                    "Seçilen kullanıcının rolü, görevin gerekli rolüyle uyuşmuyor.");
+
+                return View(await PrepareCreateVmAsync(vm));
+            }
+
             ENTITIES.Models.Task task = new()
             {
                 Title = vm.Title,
