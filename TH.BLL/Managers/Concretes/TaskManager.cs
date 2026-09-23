@@ -280,7 +280,7 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<TaskAnalyticsDto> GetTaskAnalyticsAsync(List<int> teamIds)
         {
-            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+            var tasks = await FilterTasksAsync(null, null, null, teamIds);
 
             var totalTasks = tasks.Count;
 
@@ -312,7 +312,7 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<ProjectTaskAnalyticsDto>> GetProjectTaskAnalyticsAsync(List<int> teamIds)
         {
-            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+            var tasks = await FilterTasksAsync(null, null, null, teamIds);
 
             var projectAnalytics = tasks
                 .GroupBy(x => new
@@ -367,7 +367,7 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<UserTaskAnalyticsDto>> GetUserTaskAnalyticsAsync(List<int> teamIds)
         {
-            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+            var tasks = await FilterTasksAsync(null, null, null, teamIds);
 
             var userAnalytics = tasks
                 .GroupBy(x => new
@@ -425,60 +425,92 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsAsync(List<int> teamIds)
         {
-            // Görevleri filtreleme
+            // 1. Görevleri filtrele
             var tasks = await FilterTasksAsync(null,null,null,teamIds);
 
-            var suggestions = tasks
+            // 2. Ekiplerdeki tüm üyeleri getir
+            var teamMembers = new List<TeamMember>();
+
+            foreach (var teamId in teamIds.Distinct())
+            {
+                var members = await _teamMemberManager
+                    .GetTeamMembersAsync(teamId);
+
+                teamMembers.AddRange(members);
+            }
+
+
+            // 3. Aynı kullanıcı birden fazla ekipte bulunuyorsa
+            // yalnızca bir kez değerlendirilmesini sağla
+            var users = teamMembers
                 .Where(x => x.User != null)
+                .GroupBy(x => x.UserId)
+                .Select(group => group.First())
+                .ToList();
 
-                // Kullanıcı bazında gruplama
-                .GroupBy(x => new
+
+            // 4. Her ekip üyesi için öneri oluştur
+            var suggestions = users
+                .Select(teamMember =>
                 {
-                    x.UserId,
+                    var user = teamMember.User;
 
-                    UserName = $"{x.User.FirstName} {x.User.LastName}".Trim(),
+                    // Kullanıcının mevcut görevlerini getir
+                    var userTasks = tasks
+                        .Where(x => x.UserId == teamMember.UserId)
+                        .ToList();
 
-                    RoleId = x.User.RoleId,
 
-                    RoleName = x.User.Role != null
-                    ? x.User.Role.Name: "Rol bilgisi yok"
-                })
+                    var totalTasks = userTasks.Count;
 
-                .Select(group =>
-                {
-                    var totalTasks = group.Count();
 
-                    var pendingTasks = group.Count(x =>
+                    var pendingTasks = userTasks.Count(x =>
                         !x.IsCompleted);
 
-                    var overdueTasks = group.Count(x =>
+
+                    var overdueTasks = userTasks.Count(x =>
                         !x.IsCompleted &&
                         x.DueDate.HasValue &&
                         x.DueDate.Value < DateTime.Now);
 
-                    var completedTasks = group.Count(x =>
+
+                    var completedTasks = userTasks.Count(x =>
                         x.IsCompleted);
+
 
                     var completionRate = totalTasks == 0
                         ? 0
                         : (double)completedTasks / totalTasks * 100;
+
 
                     // İş yükü puanı
                     var workloadScore =
                         (pendingTasks * 1) +
                         (overdueTasks * 3);
 
+
+                    var userName =
+                        $"{user.FirstName} {user.LastName}".Trim();
+
+
+                    var roleName = user.Role != null
+                        ? user.Role.Name
+                        : "Rol bilgisi yok";
+
+
                     return new TaskAssignmentSuggestionDto
                     {
-                        UserId = group.Key.UserId,
+                        UserId = user.Id,
 
-                        UserName = string.IsNullOrWhiteSpace(group.Key.UserName)
-                        ? "Unknown User": group.Key.UserName,
+                        UserName = string.IsNullOrWhiteSpace(userName)
+                            ? "Unknown User"
+                            : userName,
 
-                        RoleId = group.Key.RoleId,
+                        RoleId = user.RoleId,
 
-                        RoleName = string.IsNullOrWhiteSpace(group.Key.RoleName)
-                        ? "Rol bilgisi yok": group.Key.RoleName,
+                        RoleName = string.IsNullOrWhiteSpace(roleName)
+                            ? "Rol bilgisi yok"
+                            : roleName,
 
                         TotalTasks = totalTasks,
 
@@ -493,12 +525,13 @@ namespace TH.BLL.Managers.Concretes
                         WorkloadScore = workloadScore
                     };
                 })
-
                 .OrderBy(x => x.WorkloadScore)
                 .ThenByDescending(x => x.CompletionRate)
                 .ToList();
 
+
             return suggestions;
+
         }
     }
 }
