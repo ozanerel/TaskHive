@@ -52,6 +52,10 @@ namespace TH.BLL.Managers.Concretes
             if (teamMember == null)
                 return;
 
+            // Ortak rol kontrolü
+            if (!IsUserRoleValidForTask(task, teamMember))
+                return;
+
             await base.CreateAsync(task);
 
             if (task.UserId > 0)
@@ -88,14 +92,9 @@ namespace TH.BLL.Managers.Concretes
             if (teamMember == null)
                 return;
 
-            // Görev için gerekli bir rol belirtilmişse
-            // atanan kullanıcının rolünü kontrol et
-            if (task.RequiredRoleId.HasValue &&
-                (teamMember.User == null ||
-                 teamMember.User.RoleId != task.RequiredRoleId.Value))
-            {
+            // Ortak rol kontrolü
+            if (!IsUserRoleValidForTask(task, teamMember))
                 return;
-            }
 
             task.UserId = userId;
 
@@ -151,7 +150,7 @@ namespace TH.BLL.Managers.Concretes
         }
 
         public override async Task UpdateAsync(
-            ENTITIES.Models.Task task)
+    ENTITIES.Models.Task task)
         {
             var oldTask = await _repository
                 .GetTaskDetailsAsync(task.Id);
@@ -180,6 +179,15 @@ namespace TH.BLL.Managers.Concretes
 
             if (teamMember == null)
                 return;
+
+            // Görev için gerekli bir rol belirtilmişse
+            // atanan kullanıcının rolünü kontrol et
+            if (task.RequiredRoleId.HasValue &&
+                (teamMember.User == null ||
+                 teamMember.User.RoleId != task.RequiredRoleId.Value))
+            {
+                return;
+            }
 
             var oldUserId = oldTask.UserId;
 
@@ -541,6 +549,19 @@ namespace TH.BLL.Managers.Concretes
 
             return suggestions;
 
+        }
+
+        private bool IsUserRoleValidForTask(ENTITIES.Models.Task task,
+            TeamMember teamMember)
+        {
+            if (!task.RequiredRoleId.HasValue)
+                return true;
+
+            if (teamMember.User == null)
+                return false;
+
+            return teamMember.User.RoleId ==
+                   task.RequiredRoleId.Value;
         }
     }
 }
