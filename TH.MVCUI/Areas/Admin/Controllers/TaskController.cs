@@ -224,7 +224,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var task = await _taskManager.GetTaskDetailsAsync(id);
+            var task = await _taskManager
+                .GetTaskDetailsAsync(id);
 
             if (task == null)
                 return NotFound();
@@ -244,7 +245,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .Select(x => x.Id)
                 .ToList();
 
-            var projects = await _projectManager.GetAllAsync();
+            var projects = await _projectManager
+                .GetAllAsync();
 
             projects = projects
                 .Where(x =>
@@ -256,7 +258,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
             foreach (var team in adminTeams)
             {
-                var members = await _teamMemberManager.GetTeamMembersAsync(team.Id);
+                var members = await _teamMemberManager
+                    .GetTeamMembersAsync(team.Id);
 
                 users.AddRange(
                     members
@@ -270,6 +273,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .Select(x => x.First())
                 .ToList();
 
+            var roles = _roleManager
+                .GetActives()
+                .OrderBy(x => x.Name)
+                .ToList();
+
             TaskUpdateVm vm = new()
             {
                 Id = task.Id,
@@ -279,9 +287,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 DueDate = task.DueDate,
                 UserId = task.UserId,
                 ProjectId = task.ProjectId,
+                RequiredRoleId = task.RequiredRoleId,
                 IsCompleted = task.IsCompleted,
                 Users = users,
-                Projects = projects
+                Projects = projects,
+                Roles = roles
             };
 
             return View(vm);

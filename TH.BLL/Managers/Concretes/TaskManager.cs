@@ -180,14 +180,9 @@ namespace TH.BLL.Managers.Concretes
             if (teamMember == null)
                 return;
 
-            // Görev için gerekli bir rol belirtilmişse
-            // atanan kullanıcının rolünü kontrol et
-            if (task.RequiredRoleId.HasValue &&
-                (teamMember.User == null ||
-                 teamMember.User.RoleId != task.RequiredRoleId.Value))
-            {
+            // Ortak rol kontrolü
+            if (!IsUserRoleValidForTask(task, teamMember))
                 return;
-            }
 
             var oldUserId = oldTask.UserId;
 

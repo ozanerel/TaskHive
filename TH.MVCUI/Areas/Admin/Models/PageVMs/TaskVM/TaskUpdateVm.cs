@@ -19,10 +19,14 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 
         public int ProjectId { get; set; }
 
+        public int? RequiredRoleId { get; set; }
+
         public bool IsCompleted { get; set; }
 
         public List<User> Users { get; set; } = new();
 
         public List<Project> Projects { get; set; } = new();
+
+        public List<Role> Roles { get; set; } = new();
     }
 }
