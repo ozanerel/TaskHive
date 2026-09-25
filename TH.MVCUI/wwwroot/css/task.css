@@ -396,3 +396,13 @@
     .btn-danger-custom:hover {
         background: #cc3d42;
     }
+
+/* ==========================
+========================== */
+.task-required-role {
+    color: #6c757d;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}

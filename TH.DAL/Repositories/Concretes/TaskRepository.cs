@@ -84,13 +84,14 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<ENTITIES.Models.Task>> FilterTasksAsync(string search, PriorityLevel? priority, bool? isCompleted, List<int> teamIds)
         {
             var query = _context.Tasks
-        .Include(x => x.User)
-            .ThenInclude(x => x.Role)
-        .Include(x => x.Project)
-        .Where(x =>
-            teamIds.Contains(x.Project.TeamId) &&
-            x.Status != DataStatus.Deleted)
-        .AsQueryable();
+                .Include(x => x.User)
+                .ThenInclude(x => x.Role)
+                .Include(x => x.Project)
+                .Include(x => x.RequiredRole)
+                .Where(x => 
+                teamIds.Contains(x.Project.TeamId) &&
+                x.Status != DataStatus.Deleted)
+                .AsQueryable();
 
             // SEARCH
             if (!string.IsNullOrWhiteSpace(search))

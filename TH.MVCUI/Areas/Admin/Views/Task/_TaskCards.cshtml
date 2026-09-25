@@ -2,142 +2,152 @@
 
 <div class="task-grid">
 
-	@foreach (var item in Model.Tasks)
-	{
-		<div class="task-card">
+    @foreach (var item in Model.Tasks)
+    {
+        <div class="task-card">
 
-			<div class="task-card-top">
+            <div class="task-card-top">
 
-				@{
-					string priorityClass = item.Priority.ToString().ToLower() switch
-					{
-						"low" => "priority-low",
-						"medium" => "priority-medium",
-						"high" => "priority-high",
-						_ => "priority-critical"
-					};
-				}
+                @{
+                    string priorityClass = item.Priority.ToString().ToLower() switch
+                    {
+                        "low" => "priority-low",
+                        "medium" => "priority-medium",
+                        "high" => "priority-high",
+                        _ => "priority-critical"
+                    };
+                }
 
-				<span class="task-priority @priorityClass">
-					@item.Priority
-				</span>
+                <span class="task-priority @priorityClass">
+                    @item.Priority
+                </span>
 
-				@if (item.IsCompleted)
-				{
-					<span class="task-status status-completed"
-						  title="Completed"></span>
-				}
-				else if (item.DueDate.HasValue &&
-				item.DueDate.Value < DateTime.Now)
-				{
-					<span class="task-status status-overdue"
-						  title="Overdue"></span>
-				}
-				else
-				{
-					<span class="task-status status-progress"
-						  title="In Progress"></span>
-				}
+                @if (item.IsCompleted)
+                {
+                    <span class="task-status status-completed"
+                          title="Completed"></span>
+                }
+                else if (item.DueDate.HasValue &&
+                item.DueDate.Value < DateTime.Now)
+                {
+                    <span class="task-status status-overdue"
+                          title="Overdue"></span>
+                }
+                else
+                {
+                    <span class="task-status status-progress"
+                          title="In Progress"></span>
+                }
 
-			</div>
+            </div>
 
-			<div class="task-title-card">
+            <div class="task-title-card">
 
-				@item.Title
+                @item.Title
 
-			</div>
+            </div>
 
-			<div class="task-description">
+            <div class="task-description">
 
-				@if (!string.IsNullOrWhiteSpace(item.Description))
-				{
-					@(item.Description.Length > 110
-								? item.Description.Substring(0, 110) + "..."
-								: item.Description)
-				}
-				else
-				{
-					<span>No description.</span>
-				}
+                @if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    @(item.Description.Length > 110
+                        ? item.Description.Substring(0, 110) + "..."
+                        : item.Description)
+                }
+                else
+                {
+                    <span>No description.</span>
+                }
 
-			</div>
+            </div>
 
-			<div class="task-bottom">
+            <div class="task-bottom">
 
-				<div class="task-user">
+                <div class="task-user">
 
-					<div class="task-avatar">
+                    <div class="task-avatar">
 
-						@(item.User?.FirstName?.Substring(0, 1).ToUpper() ?? "?")
+                        @(item.User?.FirstName?.Substring(0, 1).ToUpper() ?? "?")
 
-					</div>
+                    </div>
 
-					<div>
+                    <div>
 
-						<strong>
+                        <strong>
 
-							@(item.User != null
-														? item.User.FirstName + " " + item.User.LastName
-														: "Unassigned")
+                            @(item.User != null
+                                ? item.User.FirstName + " " + item.User.LastName
+                                : "Unassigned")
 
-						</strong>
+                        </strong>
 
-						<br />
+                        <br />
 
-						<small>
+                        <small>
 
-							@(item.Project?.ProjectName ?? "No Project")
+                            @(item.Project?.ProjectName ?? "No Project")
 
-						</small>
+                        </small>
 
-						<br />
+                        <br />
 
-						<small class="task-due-date">
+                        <small class="task-required-role">
 
-							<i class="fa-regular fa-calendar"></i>
+                            <i class="fa-solid fa-user-shield"></i>
 
-							@(item.DueDate?.ToString("dd.MM.yyyy") ?? "No due date")
+                            @(item.RequiredRole?.Name ?? "No Required Role")
 
-						</small>
+                        </small>
 
-					</div>
+                        <br />
 
-				</div>
+                        <small class="task-due-date">
 
-				<div class="task-actions">
+                            <i class="fa-regular fa-calendar"></i>
 
-					<a asp-action="Details"
-					   asp-route-id="@item.Id"
-					   class="action-detail"
-					   title="Details">
+                            @(item.DueDate?.ToString("dd.MM.yyyy") ?? "No due date")
 
-						<i class="fa-solid fa-eye"></i>
+                        </small>
 
-					</a>
+                    </div>
 
-					<a asp-action="Edit"
-					   asp-route-id="@item.Id"
-					   class="action-edit"
-					   title="Edit">
+                </div>
 
-						<i class="fa-solid fa-pen"></i>
+                <div class="task-actions">
 
-					</a>
+                    <a asp-action="Details"
+                       asp-route-id="@item.Id"
+                       class="action-detail"
+                       title="Details">
 
-					<a asp-action="Delete"
-					   asp-route-id="@item.Id"
-					   class="action-delete"
-					   title="Delete">
+                        <i class="fa-solid fa-eye"></i>
 
-						<i class="fa-solid fa-trash"></i>
+                    </a>
 
-					</a>
+                    <a asp-action="Edit"
+                       asp-route-id="@item.Id"
+                       class="action-edit"
+                       title="Edit">
 
-				</div>
+                        <i class="fa-solid fa-pen"></i>
 
-			</div>
+                    </a>
 
-		</div>
-	}
+                    <a asp-action="Delete"
+                       asp-route-id="@item.Id"
+                       class="action-delete"
+                       title="Delete">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
 
 </div>
