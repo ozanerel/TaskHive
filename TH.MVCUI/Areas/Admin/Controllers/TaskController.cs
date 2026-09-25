@@ -91,9 +91,18 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 DueDate = task.DueDate,
                 CompletedDate = task.CompletedDate,
                 IsCompleted = task.IsCompleted,
-                UserName = task.User?.FirstName,
+
+                UserName = task.User != null
+                    ? task.User.FirstName + " " + task.User.LastName
+                    : null,
+
                 ProjectName = task.Project?.ProjectName,
-                Comments = task.TaskComments?.Where(x => x.Status != DataStatus.Deleted).ToList() ?? new()
+
+                RequiredRoleName = task.RequiredRole?.Name,
+
+                Comments = task.TaskComments?
+                    .Where(x => x.Status != DataStatus.Deleted)
+                    .ToList() ?? new()
             };
 
             return View(vm);

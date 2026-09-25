@@ -3,59 +3,40 @@
 <div class="dashboard-card">
 
     <h3>
-
         General Information
-
     </h3>
 
     <table class="table">
 
         <tr>
-
             <th>Title</th>
-
             <td>@Model.Title</td>
-
         </tr>
 
         <tr>
-
             <th>Project</th>
-
             <td>
-
                 @(Model.ProjectName ?? "-")
-
             </td>
-
         </tr>
 
         <tr>
-
             <th>Assigned User</th>
-
-          @*   <td>
-
-                @(Model.User != null
-                    ? Model.User.FirstName + " " + Model.User.LastName
-                    : "-")
-
-            </td> *@
-
             <td>
-
                 @(Model.UserName ?? "-")
-
             </td>
-
         </tr>
 
         <tr>
+            <th>Required Role</th>
+            <td>
+                @(Model.RequiredRoleName ?? "No Required Role")
+            </td>
+        </tr>
 
+        <tr>
             <th>Priority</th>
-
             <td>@Model.Priority</td>
-
         </tr>
 
     </table>

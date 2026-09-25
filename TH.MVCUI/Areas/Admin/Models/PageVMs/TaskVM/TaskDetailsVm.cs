@@ -23,6 +23,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 
         public string UserName { get; set; }
 
+        public string RequiredRoleName { get; set; }
+
         public List<TaskComment> Comments { get; set; }
             = new();
     }
