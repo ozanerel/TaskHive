@@ -79,31 +79,76 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="DueDate" class="form-label">Due Date</label>
-                <input asp-for="DueDate" type="date" class="form-control" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
+
+                <label asp-for="DueDate"
+                       class="form-label">
+
+                    Due Date
+
+                </label>
+
+                <input asp-for="DueDate"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="DueDate"
+                      class="text-danger"></span>
+
             </div>
 
             <div class="col-md-6 mb-4">
 
                 <label class="form-label">
-                    Assigned User
+                    Required Role
                 </label>
 
-                <select asp-for="UserId"
+                <select asp-for="RequiredRoleId"
                         class="form-control-custom">
 
-                    @foreach (var user in Model.Users)
-                    {
-                        <option value="@user.Id">
+                    <option value="">
+                        No Required Role
+                    </option>
 
-                            @user.FirstName @user.LastName
+                    @foreach (var role in Model.Roles)
+                    {
+                        <option value="@role.Id">
+
+                            @role.Name
 
                         </option>
                     }
 
                 </select>
 
+                <span asp-validation-for="RequiredRoleId"
+                      class="text-danger"></span>
+
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <label asp-for="UserId" class="form-label">
+                    Assigned User
+                </label>
+
+                <select asp-for="UserId"
+                        class="form-control-custom"
+                        id="userSelect">
+
+                    <option value="">
+                        Select User
+                    </option>
+
+                    @foreach (var user in Model.Users)
+                    {
+                        <option value="@user.Id"
+                                data-role-id="@user.RoleId">
+                            @user.FirstName @user.LastName
+                        </option>
+                    }
+                </select>
+
+                <span asp-validation-for="UserId"
+                      class="text-danger"></span>
             </div>
 
             <div class="col-md-6 mb-4">
@@ -179,7 +224,67 @@
 </div>
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
+            const requiredRoleSelect =
+                document.getElementById("requiredRoleSelect");
+
+            const userSelect =
+                document.getElementById("userSelect");
+
+            if (!requiredRoleSelect || !userSelect) {
+                return;
+            }
+
+            function filterUsersByRole() {
+
+                const selectedRoleId =
+                    requiredRoleSelect.value;
+
+                const options =
+                    userSelect.querySelectorAll("option");
+
+                let selectedUserIsVisible = false;
+
+                options.forEach(function (option) {
+
+                    if (!option.value) {
+                        option.hidden = false;
+                        return;
+                    }
+
+                    const userRoleId =
+                        option.getAttribute("data-role-id");
+
+                    const isVisible =
+                        selectedRoleId === "" ||
+                        userRoleId === selectedRoleId;
+
+                    option.hidden = !isVisible;
+
+                    if (isVisible &&
+                        option.value === userSelect.value) {
+
+                        selectedUserIsVisible = true;
+                    }
+                });
+
+                if (!selectedUserIsVisible) {
+                    userSelect.value = "";
+                }
+            }
+
+            requiredRoleSelect.addEventListener(
+                "change",
+                filterUsersByRole
+            );
+
+            filterUsersByRole();
+        });
+    </script>
 }

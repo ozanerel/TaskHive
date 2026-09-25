@@ -301,7 +301,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TaskUpdateVm vm)
         {
-            var task = await _taskManager.GetTaskDetailsAsync(vm.Id);
+            var task = await _taskManager
+                .GetTaskDetailsAsync(vm.Id);
 
             if (task == null)
                 return NotFound();
@@ -316,7 +317,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (!await IsTeamAdminAsync(task.Project.TeamId))
                 return Forbid();
 
-            var newProject = await _projectManager.GetByIdAsync(vm.ProjectId);
+            var newProject = await _projectManager
+                .GetByIdAsync(vm.ProjectId);
 
             if (newProject == null)
                 return NotFound();
@@ -329,12 +331,28 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 return Forbid();
 
             // Atanmak istenen kullanıcı yeni Team'in üyesi mi?
-            var teamMember = await _teamMemberManager.GetTeamMemberAsync(
-                newProject.TeamId,
-                vm.UserId);
+            var teamMember = await _teamMemberManager
+                .GetTeamMemberAsync(
+                    newProject.TeamId,
+                    vm.UserId);
 
             if (teamMember == null)
                 return BadRequest();
+
+            // Atanacak kullanıcının rolünü kontrol et
+            var assignedUser = await _userManager
+                .GetByIdAsync(vm.UserId);
+
+            if (assignedUser == null)
+                return NotFound();
+
+            if (vm.RequiredRoleId.HasValue &&
+                assignedUser.RoleId != vm.RequiredRoleId.Value)
+            {
+                ModelState.AddModelError(
+                    nameof(vm.UserId),
+                    "Seçilen kullanıcının rolü, görevin gerekli rolüyle uyuşmuyor.");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -344,7 +362,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     .Select(x => x.Id)
                     .ToList();
 
-                var projects = await _projectManager.GetAllAsync();
+                var projects = await _projectManager
+                    .GetAllAsync();
 
                 projects = projects
                     .Where(x =>
@@ -356,7 +375,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
                 foreach (var team in adminTeams)
                 {
-                    var members = await _teamMemberManager.GetTeamMembersAsync(team.Id);
+                    var members = await _teamMemberManager
+                        .GetTeamMembersAsync(team.Id);
 
                     users.AddRange(
                         members
@@ -372,6 +392,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
                 vm.Projects = projects;
 
+                vm.Roles = _roleManager
+                    .GetActives()
+                    .OrderBy(x => x.Name)
+                    .ToList();
+
                 return View(vm);
             }
 
@@ -381,6 +406,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             task.DueDate = vm.DueDate;
             task.UserId = vm.UserId;
             task.ProjectId = vm.ProjectId;
+            task.RequiredRoleId = vm.RequiredRoleId;
             task.IsCompleted = vm.IsCompleted;
 
             await _taskManager.UpdateAsync(task);
