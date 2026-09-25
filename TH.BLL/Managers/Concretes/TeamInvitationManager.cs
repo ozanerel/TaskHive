@@ -190,5 +190,15 @@ namespace TH.BLL.Managers.Concretes
 
             return true;
         }
+
+        public async Task<int> GetUnreadInviteCountAsync(int userId)
+        {
+            if (userId <= 0)
+            {
+                return 0;
+            }
+
+            return await _repository.GetUnreadInviteCountAsync(userId);
+        }
     }
 }

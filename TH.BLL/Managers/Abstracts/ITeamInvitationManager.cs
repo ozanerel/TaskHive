@@ -19,5 +19,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<bool> RejectInvitationAsync(int invitationId, int userId);
 
         Task<bool> SendInvitationAsync(int teamId,int invitedUserId,int invitedByUserId);
+
+        Task<int> GetUnreadInviteCountAsync(int userId);
     }
 }
