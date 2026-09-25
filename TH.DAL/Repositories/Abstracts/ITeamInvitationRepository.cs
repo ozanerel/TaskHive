@@ -12,5 +12,7 @@ namespace TH.DAL.Repositories.Abstracts
 
         Task<List<TeamInvitation>> GetUserInvitationsAsync(
             int userId);
+
+        Task<int> GetUnreadInviteCountAsync(int userId);
     }
 }

@@ -30,6 +30,23 @@ namespace TH.DAL.Repositories.Concretes
                     x.Status != DataStatus.Deleted);
         }
 
+        public async Task<int> GetUnreadInviteCountAsync(int userId)
+        {
+            if (userId <= 0)
+            {
+                return 0;
+            }
+
+            var unreadCount = await _context.TeamInvitations
+                .Where(x =>
+                    x.InvitedUserId == userId &&
+                    x.InvitationStatus == InvitationStatus.Pending &&
+                    x.Status != DataStatus.Deleted)
+                .CountAsync();
+
+            return unreadCount;
+        }
+
         public async Task<List<TeamInvitation>> GetUserInvitationsAsync(
             int userId)
         {
