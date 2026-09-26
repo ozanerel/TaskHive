@@ -63,6 +63,19 @@
 
         </div>
 
+        <div class="mb-4">
+
+            <label class="form-label">
+                Required Role
+            </label>
+
+            <input type="text"
+                   class="form-control"
+                   value="@(Model.RequiredRoleName ?? "No Required Role")"
+                   readonly />
+
+        </div>
+
         <div class="d-flex justify-content-end gap-3">
 
             <a asp-action="Index"

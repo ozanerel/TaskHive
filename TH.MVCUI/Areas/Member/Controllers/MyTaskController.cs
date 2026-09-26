@@ -77,7 +77,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
-                Priority = task.Priority
+                Priority = task.Priority,
+                RequiredRoleName = task.RequiredRole?.Name
             };
 
             return View(vm);
