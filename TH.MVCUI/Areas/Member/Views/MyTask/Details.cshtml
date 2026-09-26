@@ -121,15 +121,19 @@
     <hr />
 
     <p>
-
         <strong>Project</strong>
-
     </p>
 
     <p>
-
         @Model.Task.Project?.ProjectName
+    </p>
 
+    <p>
+        <strong>Required Role</strong>
+    </p>
+
+    <p>
+        @(Model.Task.RequiredRole?.Name ?? "No Required Role")
     </p>
 
     <div class="text-end">
