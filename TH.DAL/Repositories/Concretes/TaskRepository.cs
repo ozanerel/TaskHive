@@ -27,7 +27,12 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<ENTITIES.Models.Task>> GetTasksByProjectAsync(int projectId)
         {
             return await _context.Tasks
-                .Where(t => t.ProjectId == projectId && t.Status != DataStatus.Deleted)
+                .Include(x => x.User)
+                .Include(x => x.RequiredRole)
+                .Where(x =>
+                x.ProjectId == projectId &&
+                x.Status != DataStatus.Deleted)
+                .OrderBy(x => x.Title)
                 .ToListAsync();
         }
 
@@ -63,6 +68,7 @@ namespace TH.DAL.Repositories.Concretes
             return await _context.Tasks
                 .Include(x => x.Project)
                 .Include(x => x.User)
+                .Include(x => x.RequiredRole)
                 .Where(x =>
                     x.UserId == userId &&
                     x.Status != DataStatus.Deleted &&
