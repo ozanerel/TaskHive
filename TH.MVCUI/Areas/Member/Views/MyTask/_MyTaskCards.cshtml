@@ -46,31 +46,22 @@
 
                 <div class="row text-center">
 
-                    <div class="col-4">
-
-                        <small class="text-muted">
-                            Project
-                        </small>
-
-                        <h6>
-                            @(task.Project?.ProjectName ?? "-")
-                        </h6>
-
+                    <div class="col-3">
+                        <small class="text-muted">Project</small>
+                        <h6>@(task.Project?.ProjectName ?? "-")</h6>
                     </div>
 
-                    <div class="col-4">
-
-                        <small class="text-muted">
-                            Due Date
-                        </small>
-
-                        <h6>
-                            @(task.DueDate?.ToString("dd.MM.yyyy") ?? "-")
-                        </h6>
-
+                    <div class="col-3">
+                        <small class="text-muted">Required Role</small>
+                        <h6>@(task.RequiredRole?.Name ?? "No Required Role")</h6>
                     </div>
 
-                    <div class="col-4">
+                    <div class="col-3">
+                        <small class="text-muted">Due Date</small>
+                        <h6>@(task.DueDate?.ToString("dd.MM.yyyy") ?? "-")</h6>
+                    </div>
+
+                    <div class="col-3">
 
                         <small class="text-muted">
                             Status
