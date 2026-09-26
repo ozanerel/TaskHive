@@ -34,14 +34,15 @@ namespace TH.DAL.Repositories.Concretes
         public async Task<List<ENTITIES.Models.Task>> GetTasksByUserAsync(int userId)
         {
             return await _context.Tasks
-         .Include(x => x.Project)
-         .Include(x => x.User)
-         .Where(x =>
-             x.UserId == userId &&
-             x.Status != DataStatus.Deleted)
-         .OrderBy(x => x.Status)
-         .ThenBy(x => x.Title)
-         .ToListAsync();
+                .Include(x => x.Project)
+                .Include(x => x.User)
+                .Include(x => x.RequiredRole)
+                .Where(x =>
+                    x.UserId == userId &&
+                    x.Status != DataStatus.Deleted)
+                .OrderBy(x => x.Status)
+                .ThenBy(x => x.Title)
+                .ToListAsync();
         }
 
         public async Task<List<ENTITIES.Models.Task>> SearchTasksAsync(string keyword)
@@ -125,6 +126,7 @@ namespace TH.DAL.Repositories.Concretes
             return await _context.Tasks
                 .Include(x => x.Project)
                 .Include(x => x.User)
+                .Include(x => x.RequiredRole)
                 .Include(x => x.TaskComments)
                 .FirstOrDefaultAsync(x =>
                     x.Id == taskId &&
