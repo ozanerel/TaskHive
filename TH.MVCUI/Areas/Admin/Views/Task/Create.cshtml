@@ -2,1030 +2,1030 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    ViewData["Title"] = "Create Task";
-    Layout = "~/Views/Shared/_AreaLayout.cshtml";
+	ViewData["Title"] = "Create Task";
+	Layout = "~/Views/Shared/_AreaLayout.cshtml";
 
-    var assignmentSuggestions = Model.AssignmentSuggestions
-        .OrderBy(x => x.WorkloadScore)
-        .ThenByDescending(x => x.CompletionRate)
-        .ToList();
+	var assignmentSuggestions = Model.AssignmentSuggestions
+		.OrderBy(x => x.WorkloadScore)
+		.ThenByDescending(x => x.CompletionRate)
+		.ToList();
 }
 
 <div class="page-header">
 
-    <div>
+	<div>
 
-        <h1 class="page-title">
+		<h1 class="page-title">
 
-            Create Task
+			Create Task
 
-        </h1>
+		</h1>
 
-        <p class="page-subtitle">
+		<p class="page-subtitle">
 
-            Create a new task for your project.
+			Create a new task for your project.
 
-        </p>
+		</p>
 
-    </div>
+	</div>
 
 </div>
 
 <div class="form-card">
 
-    <form asp-action="Create"
-          method="post">
+	<form asp-action="Create"
+		  method="post">
 
-        @Html.AntiForgeryToken()
+		@Html.AntiForgeryToken()
 
-        <div asp-validation-summary="ModelOnly"
-             class="text-danger mb-3">
-        </div>
+		<div asp-validation-summary="ModelOnly"
+			 class="text-danger mb-3">
+		</div>
 
-        <div class="row">
+		<div class="row">
 
-            <div class="col-md-12 mb-4">
+			<div class="col-md-12 mb-4">
 
-                <label class="form-label">
+				<label class="form-label">
 
-                    Title
+					Title
 
-                </label>
+				</label>
 
-                <input asp-for="Title"
-                       class="form-control-custom" />
+				<input asp-for="Title"
+					   class="form-control-custom" />
 
-                <span asp-validation-for="Title"
-                      class="text-danger">
-                </span>
+				<span asp-validation-for="Title"
+					  class="text-danger">
+				</span>
 
-            </div>
+			</div>
 
-            <div class="col-md-12 mb-4">
+			<div class="col-md-12 mb-4">
 
-                <label class="form-label">
+				<label class="form-label">
 
-                    Description
+					Description
 
-                </label>
+				</label>
 
-                <textarea asp-for="Description"
-                          rows="5"
-                          class="form-control-custom">
-                </textarea>
+				<textarea asp-for="Description"
+						  rows="5"
+						  class="form-control-custom">
+				</textarea>
 
-            </div>
+			</div>
 
-            <div class="col-md-6 mb-4">
+			<div class="col-md-6 mb-4">
 
-                <label class="form-label">
+				<label class="form-label">
 
-                    Priority
+					Priority
 
-                </label>
+				</label>
 
-                <select asp-for="Priority"
-                        class="form-control-custom">
+				<select asp-for="Priority"
+						class="form-control-custom">
 
-                    <option value="Low">Low</option>
+					<option value="Low">Low</option>
 
-                    <option value="Medium">Medium</option>
+					<option value="Medium">Medium</option>
 
-                    <option value="High">High</option>
+					<option value="High">High</option>
 
-                    <option value="Critical">Critical</option>
+					<option value="Critical">Critical</option>
 
-                </select>
+				</select>
 
-            </div>
+			</div>
 
-            <div class="mb-3">
+			<div class="mb-3">
 
-                <label asp-for="DueDate"
-                       class="form-label">
+				<label asp-for="DueDate"
+					   class="form-label">
 
-                    Due Date
+					Due Date
 
-                </label>
+				</label>
 
-                <input asp-for="DueDate"
-                       type="date"
-                       class="form-control" />
+				<input asp-for="DueDate"
+					   type="date"
+					   class="form-control" />
 
-                <span asp-validation-for="DueDate"
-                      class="text-danger">
-                </span>
+				<span asp-validation-for="DueDate"
+					  class="text-danger">
+				</span>
 
-            </div>
+			</div>
 
-            <div class="mb-3">
+			<div class="mb-3">
 
-                <label asp-for="RequiredRoleId"
-                       class="form-label">
+				<label asp-for="RequiredRoleId"
+					   class="form-label">
 
-                    Gerekli Rol
+					Gerekli Rol
 
-                </label>
+				</label>
 
-                <select asp-for="RequiredRoleId"
-                        class="form-select"
-                        asp-items="@(new SelectList(Model.Roles, "Id", "Name"))">
+				<select asp-for="RequiredRoleId"
+						class="form-select"
+						asp-items="@(new SelectList(Model.Roles, "Id", "Name"))">
 
-                    <option value="">
+					<option value="">
 
-                        Rol seçiniz
+						Rol seçiniz
 
-                    </option>
+					</option>
 
-                </select>
+				</select>
 
-                <span asp-validation-for="RequiredRoleId"
-                      class="text-danger">
-                </span>
+				<span asp-validation-for="RequiredRoleId"
+					  class="text-danger">
+				</span>
 
-            </div>
+			</div>
 
-            <div class="col-md-6 mb-4">
+			<div class="col-md-6 mb-4">
 
-                <label class="form-label">
+				<label class="form-label">
 
-                    Assigned User
+					Assigned User
 
-                </label>
+				</label>
 
-                <select asp-for="UserId"
-                        id="userSelect"
-                        class="form-control-custom">
+				<select asp-for="UserId"
+						id="userSelect"
+						class="form-control-custom">
 
-                    <option value="">
+					<option value="">
 
-                        Önce proje seçiniz
+						Önce proje seçiniz
 
-                    </option>
+					</option>
 
-                    @foreach (var user in Model.Users)
-                    {
-                        <option value="@user.Id">
+					@foreach (var user in Model.Users)
+					{
+						<option value="@user.Id" data-role-id="@user.RoleId">
 
-                            @user.FirstName @user.LastName
+							@user.FirstName @user.LastName
 
-                        </option>
-                    }
+						</option>
+					}
 
-                </select>
+				</select>
 
-                <span asp-validation-for="UserId"
-                      class="text-danger">
-                </span>
+				<span asp-validation-for="UserId"
+					  class="text-danger">
+				</span>
 
-            </div>
+			</div>
 
-            <div class="col-md-12 mb-4">
+			<div class="col-md-12 mb-4">
 
-                <div class="dashboard-card">
+				<div class="dashboard-card">
 
-                    <div class="d-flex justify-content-end mb-3">
+					<div class="d-flex justify-content-end mb-3">
 
-                        <button type="button"
-                                id="auto-assign-user"
-                                class="btn btn-success">
+						<button type="button"
+								id="auto-assign-user"
+								class="btn btn-success">
 
-                            <i class="bi bi-magic"></i>
+							<i class="bi bi-magic"></i>
 
-                            En Uygun Kullanıcıyı Seç
+							En Uygun Kullanıcıyı Seç
 
-                        </button>
+						</button>
 
-                    </div>
+					</div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-3">
+					<div class="d-flex justify-content-between align-items-center mb-3">
 
-                        <h4 class="mb-0">
+						<h4 class="mb-0">
 
-                            <i class="fa-solid fa-lightbulb text-warning"></i>
+							<i class="fa-solid fa-lightbulb text-warning"></i>
 
-                            Assignment Suggestions
+							Assignment Suggestions
 
-                        </h4>
+						</h4>
 
-                        <span class="text-muted">
+						<span class="text-muted">
 
-                            Lowest workload first
+							Lowest workload first
 
-                        </span>
+						</span>
 
-                    </div>
+					</div>
 
-                    <div class="table-responsive">
+					<div class="table-responsive">
 
-                        <table class="table align-middle">
+						<table class="table align-middle">
 
-                            <thead>
+							<thead>
 
-                                <tr>
+								<tr>
 
-                                    <th>Kullanıcı</th>
+									<th>Kullanıcı</th>
 
-                                    <th>Bekleyen Görev</th>
+									<th>Bekleyen Görev</th>
 
-                                    <th>Geciken Görev</th>
+									<th>Geciken Görev</th>
 
-                                    <th>Tamamlanma Oranı</th>
+									<th>Tamamlanma Oranı</th>
 
-                                    <th>İş Yükü Skoru</th>
+									<th>İş Yükü Skoru</th>
 
-                                    <th>Rol</th>
+									<th>Rol</th>
 
-                                    <th>İşlem</th>
+									<th>İşlem</th>
 
-                                </tr>
+								</tr>
 
-                            </thead>
+							</thead>
 
-                            <tbody id="assignmentSuggestionsBody">
+							<tbody id="assignmentSuggestionsBody">
 
-                                @if (assignmentSuggestions.Any())
-                                {
-                                    @foreach (var suggestion in assignmentSuggestions)
-                                    {
-                                        <tr data-role-id="@suggestion.RoleId">
+								@if (assignmentSuggestions.Any())
+								{
+									@foreach (var suggestion in assignmentSuggestions)
+									{
+										<tr data-role-id="@suggestion.RoleId">
 
-                                            <td>
+											<td>
 
-                                                @suggestion.UserName
+												@suggestion.UserName
 
-                                            </td>
+											</td>
 
-                                            <td>
+											<td>
 
-                                                @suggestion.PendingTasks
+												@suggestion.PendingTasks
 
-                                            </td>
+											</td>
 
-                                            <td>
+											<td>
 
-                                                @suggestion.OverdueTasks
+												@suggestion.OverdueTasks
 
-                                            </td>
+											</td>
 
-                                            <td>
+											<td>
 
-                                                @($"{suggestion.CompletionRate:0.##}%")
+												@($"{suggestion.CompletionRate:0.##}%")
 
-                                            </td>
+											</td>
 
-                                            <td>
+											<td>
 
-                                                @suggestion.WorkloadScore
+												@suggestion.WorkloadScore
 
-                                                @if (suggestion == assignmentSuggestions.First())
-                                                {
-                                                    <span class="badge bg-success ms-1">
+												@if (suggestion == assignmentSuggestions.First())
+												{
+													<span class="badge bg-success ms-1">
 
-                                                        En Düşük
+														En Düşük
 
-                                                    </span>
-                                                }
+													</span>
+												}
 
-                                            </td>
+											</td>
 
-                                            <td>
+											<td>
 
-                                                <span class="badge bg-info text-dark">
+												<span class="badge bg-info text-dark">
 
-                                                    @suggestion.RoleName
+													@suggestion.RoleName
 
-                                                </span>
+												</span>
 
-                                            </td>
+											</td>
 
-                                            <td>
+											<td>
 
-                                                <button type="button"
-                                                        class="btn btn-sm btn-primary select-assignment-user"
-                                                        data-user-id="@suggestion.UserId"
-                                                        data-role-id="@suggestion.RoleId">
+												<button type="button"
+														class="btn btn-sm btn-primary select-assignment-user"
+														data-user-id="@suggestion.UserId"
+														data-role-id="@suggestion.RoleId">
 
-                                                    Seç
+													Seç
 
-                                                </button>
+												</button>
 
-                                            </td>
+											</td>
 
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr id="no-assignment-suggestion-row">
+										</tr>
+									}
+								}
+								else
+								{
+									<tr id="no-assignment-suggestion-row">
 
-                                        <td colspan="7"
-                                            class="text-center py-4">
+										<td colspan="7"
+											class="text-center py-4">
 
-                                            <i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
+											<i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
 
-                                            <p class="text-muted mb-0">
+											<p class="text-muted mb-0">
 
-                                                Önce bir proje seçiniz.
+												Önce bir proje seçiniz.
 
-                                            </p>
+											</p>
 
-                                        </td>
+										</td>
 
-                                    </tr>
-                                }
+									</tr>
+								}
 
-                            </tbody>
+							</tbody>
 
-                        </table>
+						</table>
 
-                    </div>
+					</div>
 
-                    <div id="no-role-suggestion-message"
-                         class="alert alert-info mt-3 d-none">
+					<div id="no-role-suggestion-message"
+						 class="alert alert-info mt-3 d-none">
 
-                        Seçilen role uygun bir kullanıcı bulunamadı.
+						Seçilen role uygun bir kullanıcı bulunamadı.
 
-                    </div>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-            <div class="col-md-12 mb-4">
+			<div class="col-md-12 mb-4">
 
-                <label class="form-label">
+				<label class="form-label">
 
-                    Project
+					Project
 
-                </label>
+				</label>
 
-                <select asp-for="ProjectId"
-                        id="projectSelect"
-                        class="form-control-custom">
+				<select asp-for="ProjectId"
+						id="projectSelect"
+						class="form-control-custom">
 
-                    <option value="">
+					<option value="">
 
-                        Select Project
+						Select Project
 
-                    </option>
+					</option>
 
-                    @foreach (var project in Model.Projects)
-                    {
-                        <option value="@project.Id">
+					@foreach (var project in Model.Projects)
+					{
+						<option value="@project.Id">
 
-                            @project.ProjectName
+							@project.ProjectName
 
-                        </option>
-                    }
+						</option>
+					}
 
-                </select>
+				</select>
 
-            </div>
+			</div>
 
-        </div>
+		</div>
 
-        <div class="form-buttons">
+		<div class="form-buttons">
 
-            <button class="btn-primary-custom"
-                    type="submit">
+			<button class="btn-primary-custom"
+					type="submit">
 
-                <i class="fa-solid fa-plus"></i>
+				<i class="fa-solid fa-plus"></i>
 
-                Create Task
+				Create Task
 
-            </button>
+			</button>
 
-            <a asp-action="Index"
-               class="btn-outline-custom">
+			<a asp-action="Index"
+			   class="btn-outline-custom">
 
-                Cancel
+				Cancel
 
-            </a>
+			</a>
 
-        </div>
+		</div>
 
-    </form>
+	</form>
 
 </div>
 
 @section Scripts {
 
-    <script>
+	<script>
 
-        document.addEventListener("DOMContentLoaded", function () {
+		document.addEventListener("DOMContentLoaded", function () {
 
-            const projectSelect = document.getElementById(
-                "projectSelect"
-            );
+			const projectSelect = document.getElementById(
+				"projectSelect"
+			);
 
-            const userSelect = document.getElementById(
-                "userSelect"
-            );
+			const userSelect = document.getElementById(
+				"userSelect"
+			);
 
-            const requiredRoleSelect = document.querySelector(
-                'select[name="RequiredRoleId"]'
-            );
+			const requiredRoleSelect = document.querySelector(
+				'select[name="RequiredRoleId"]'
+			);
 
-            const suggestionsBody = document.getElementById(
-                "assignmentSuggestionsBody"
-            );
+			const suggestionsBody = document.getElementById(
+				"assignmentSuggestionsBody"
+			);
 
-            const noRoleSuggestionMessage = document.getElementById(
-                "no-role-suggestion-message"
-            );
+			const noRoleSuggestionMessage = document.getElementById(
+				"no-role-suggestion-message"
+			);
 
-            const autoAssignButton = document.getElementById(
-                "auto-assign-user"
-            );
+			const autoAssignButton = document.getElementById(
+				"auto-assign-user"
+			);
 
+			let currentUser = [];
 
-            function selectUser(userId) {
+			function selectUser(userId) {
 
-                if (!userSelect) {
+				if (!userSelect) {
 
-                    console.error(
-                        "UserId dropdown bulunamadı."
-                    );
+					console.error(
+						"UserId dropdown bulunamadı."
+					);
 
-                    return;
+					return;
 
-                }
+				}
 
-                const userOption = userSelect.querySelector(
-                    `option[value="${userId}"]`
-                );
+				const userOption = userSelect.querySelector(
+					`option[value="${userId}"]`
+				);
 
-                if (!userOption) {
+				if (!userOption) {
 
-                    console.error(
-                        "Seçilecek kullanıcı dropdown içerisinde bulunamadı."
-                    );
+					console.error(
+						"Seçilecek kullanıcı dropdown içerisinde bulunamadı."
+					);
 
-                    return;
+					return;
 
-                }
+				}
 
-                userSelect.value = userId;
+				userSelect.value = userId;
 
-                userSelect.dispatchEvent(
-                    new Event("change", {
-                        bubbles: true
-                    })
-                );
+				userSelect.dispatchEvent(
+					new Event("change", {
+						bubbles: true
+					})
+				);
 
-                userSelect.scrollIntoView({
+				userSelect.scrollIntoView({
 
-                    behavior: "smooth",
+					behavior: "smooth",
 
-                    block: "center"
+					block: "center"
 
-                });
+				});
 
-            }
+			}
 
 
-            function filterSuggestionsByRole() {
+			function filterSuggestionsByRole() {
 
-                if (!requiredRoleSelect) {
+				if (!requiredRoleSelect) {
 
-                    return;
+					return;
 
-                }
+				}
 
-                const selectedRoleId =
-                    requiredRoleSelect.value;
+				const selectedRoleId =
+					requiredRoleSelect.value;
 
-                const suggestionRows =
-                    document.querySelectorAll(
-                        "#assignmentSuggestionsBody tr[data-role-id]"
-                    );
+				const suggestionRows =
+					document.querySelectorAll(
+						"#assignmentSuggestionsBody tr[data-role-id]"
+					);
 
-                let visibleSuggestionCount = 0;
+				let visibleSuggestionCount = 0;
 
 
-                suggestionRows.forEach(row => {
+				suggestionRows.forEach(row => {
 
-                    const rowRoleId =
-                        row.dataset.roleId;
+					const rowRoleId =
+						row.dataset.roleId;
 
-                    const shouldShow =
-                        !selectedRoleId ||
-                        rowRoleId === selectedRoleId;
+					const shouldShow =
+						!selectedRoleId ||
+						rowRoleId === selectedRoleId;
 
 
-                    if (shouldShow) {
+					if (shouldShow) {
 
-                        row.style.display = "";
+						row.style.display = "";
 
-                        visibleSuggestionCount++;
+						visibleSuggestionCount++;
 
-                    }
-                    else {
+					}
+					else {
 
-                        row.style.display = "none";
+						row.style.display = "none";
 
-                    }
+					}
 
-                });
+				});
 
 
-                if (noRoleSuggestionMessage) {
+				if (noRoleSuggestionMessage) {
 
-                    if (
-                        selectedRoleId &&
-                        visibleSuggestionCount === 0
-                    ) {
+					if (
+						selectedRoleId &&
+						visibleSuggestionCount === 0
+					) {
 
-                        noRoleSuggestionMessage.classList.remove(
-                            "d-none"
-                        );
+						noRoleSuggestionMessage.classList.remove(
+							"d-none"
+						);
 
-                    }
-                    else {
+					}
+					else {
 
-                        noRoleSuggestionMessage.classList.add(
-                            "d-none"
-                        );
+						noRoleSuggestionMessage.classList.add(
+							"d-none"
+						);
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
 
-            function bindSuggestionButtons() {
+			function bindSuggestionButtons() {
 
-                const selectButtons =
-                    document.querySelectorAll(
-                        ".select-assignment-user"
-                    );
+				const selectButtons =
+					document.querySelectorAll(
+						".select-assignment-user"
+					);
 
-                selectButtons.forEach(button => {
+				selectButtons.forEach(button => {
 
-                    button.addEventListener(
-                        "click",
-                        function () {
+					button.addEventListener(
+						"click",
+						function () {
 
-                            const userId =
-                                this.dataset.userId;
+							const userId =
+								this.dataset.userId;
 
-                            selectUser(userId);
+							selectUser(userId);
 
-                        }
-                    );
+						}
+					);
 
-                });
+				});
 
-            }
+			}
 
 
-            function updateUserSelect(users) {
+			function updateUserSelect(users) {
+					currentUsers = users;
+					userSelect.innerHTML =
+					'<option value="">Kullanıcı seçiniz</option>';
 
-                if (!userSelect) {
+					users.forEach(user => {
+						const option = document.createElement("option");
+						option.value = user.id;
+						option.textContent = user.name;
+						option.dataset.roleId = user.roleId ?? "";
 
-                    return;
+						userSelect.appendChild(option);
+					});
 
-                }
+					filterUserSelectByRole();
+			}
 
-                userSelect.innerHTML =
-                    '<option value="">Kullanıcı seçiniz</option>';
+					function filterUserSelectByRole() {
+			const selectedRoleId = requiredRoleSelect.value;
 
+			Array.from(userSelect.options).forEach(option => {
 
-                if (!users || users.length === 0) {
+				if (option.value === "") {
+					option.hidden = false;
+					return;
+				}
 
-                    userSelect.innerHTML =
-                        '<option value="">Bu takımda kullanıcı bulunamadı</option>';
+				if (!selectedRoleId) {
+					option.hidden = false;
+					return;
+				}
 
-                    return;
+				option.hidden =
+					option.dataset.roleId !== selectedRoleId;
+			});
 
-                }
+			userSelect.value = "";
+		}
 
 
-                users.forEach(user => {
+			function updateAssignmentSuggestions(
+				suggestions
+			) {
 
-                    const option =
-                        document.createElement("option");
+				if (!suggestionsBody) {
 
-                    option.value = user.id;
+					return;
 
-                    option.textContent = user.name;
+				}
 
-                    option.dataset.roleId =
-                        user.roleId ?? "";
+				suggestionsBody.innerHTML = "";
 
-                    userSelect.appendChild(option);
 
-                });
+				if (
+					!suggestions ||
+					suggestions.length === 0
+				) {
 
-            }
+					suggestionsBody.innerHTML = `
+						<tr id="no-assignment-suggestion-row">
 
+							<td colspan="7"
+								class="text-center py-4">
 
-            function updateAssignmentSuggestions(
-                suggestions
-            ) {
+								<i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
 
-                if (!suggestionsBody) {
+								<p class="text-muted mb-0">
 
-                    return;
+									Bu takımda önerilebilecek kullanıcı bulunamadı.
 
-                }
+								</p>
 
-                suggestionsBody.innerHTML = "";
+							</td>
 
+						</tr>
+					`;
 
-                if (
-                    !suggestions ||
-                    suggestions.length === 0
-                ) {
+					if (autoAssignButton) {
 
-                    suggestionsBody.innerHTML = `
-                        <tr id="no-assignment-suggestion-row">
+						autoAssignButton.disabled = true;
 
-                            <td colspan="7"
-                                class="text-center py-4">
+					}
 
-                                <i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
+					return;
 
-                                <p class="text-muted mb-0">
+				}
 
-                                    Bu takımda önerilebilecek kullanıcı bulunamadı.
 
-                                </p>
+				suggestions.forEach(
+					(suggestion, index) => {
 
-                            </td>
+						const row =
+							document.createElement("tr");
 
-                        </tr>
-                    `;
+						row.dataset.roleId =
+							suggestion.roleId ?? "";
 
-                    if (autoAssignButton) {
 
-                        autoAssignButton.disabled = true;
+						const lowestBadge =
+							index === 0
+								? `
+									<span class="badge bg-success ms-1">
+										En Düşük
+									</span>
+								  `
+								: "";
 
-                    }
 
-                    return;
+						row.innerHTML = `
 
-                }
+							<td>
 
+								${suggestion.userName}
 
-                suggestions.forEach(
-                    (suggestion, index) => {
+							</td>
 
-                        const row =
-                            document.createElement("tr");
+							<td>
 
-                        row.dataset.roleId =
-                            suggestion.roleId ?? "";
+								${suggestion.pendingTasks}
 
+							</td>
 
-                        const lowestBadge =
-                            index === 0
-                                ? `
-                                    <span class="badge bg-success ms-1">
-                                        En Düşük
-                                    </span>
-                                  `
-                                : "";
+							<td>
 
+								${suggestion.overdueTasks}
 
-                        row.innerHTML = `
+							</td>
 
-                            <td>
+							<td>
 
-                                ${suggestion.userName}
+								${suggestion.completionRate}%
 
-                            </td>
+							</td>
 
-                            <td>
+							<td>
 
-                                ${suggestion.pendingTasks}
+								${suggestion.workloadScore}
 
-                            </td>
+								${lowestBadge}
 
-                            <td>
+							</td>
 
-                                ${suggestion.overdueTasks}
+							<td>
 
-                            </td>
+								<span class="badge bg-info text-dark">
 
-                            <td>
+									${suggestion.roleName}
 
-                                ${suggestion.completionRate}%
+								</span>
 
-                            </td>
+							</td>
 
-                            <td>
+							<td>
 
-                                ${suggestion.workloadScore}
+								<button type="button"
+										class="btn btn-sm btn-primary select-assignment-user"
+										data-user-id="${suggestion.userId}"
+										data-role-id="${suggestion.roleId ?? ""}">
 
-                                ${lowestBadge}
+									Seç
 
-                            </td>
+								</button>
 
-                            <td>
+							</td>
 
-                                <span class="badge bg-info text-dark">
+						`;
 
-                                    ${suggestion.roleName}
 
-                                </span>
+						suggestionsBody.appendChild(row);
 
-                            </td>
+					}
+				);
 
-                            <td>
 
-                                <button type="button"
-                                        class="btn btn-sm btn-primary select-assignment-user"
-                                        data-user-id="${suggestion.userId}"
-                                        data-role-id="${suggestion.roleId ?? ""}">
+				bindSuggestionButtons();
 
-                                    Seç
 
-                                </button>
+				if (autoAssignButton) {
 
-                            </td>
+					autoAssignButton.disabled = false;
 
-                        `;
+				}
 
+			}
 
-                        suggestionsBody.appendChild(row);
 
-                    }
-                );
+			async function loadAssignmentSuggestions(
+				projectId
+			) {
 
+				if (!projectId) {
 
-                bindSuggestionButtons();
+					if (userSelect) {
 
+						userSelect.innerHTML =
+							'<option value="">Önce proje seçiniz</option>';
 
-                if (autoAssignButton) {
+					}
 
-                    autoAssignButton.disabled = false;
 
-                }
+					if (suggestionsBody) {
 
-            }
+						suggestionsBody.innerHTML = `
+							<tr id="no-assignment-suggestion-row">
 
+								<td colspan="7"
+									class="text-center py-4">
 
-            async function loadAssignmentSuggestions(
-                projectId
-            ) {
+									<i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
 
-                if (!projectId) {
+									<p class="text-muted mb-0">
 
-                    if (userSelect) {
+										Önce bir proje seçiniz.
 
-                        userSelect.innerHTML =
-                            '<option value="">Önce proje seçiniz</option>';
+									</p>
 
-                    }
+								</td>
 
+							</tr>
+						`;
 
-                    if (suggestionsBody) {
+					}
 
-                        suggestionsBody.innerHTML = `
-                            <tr id="no-assignment-suggestion-row">
 
-                                <td colspan="7"
-                                    class="text-center py-4">
+					if (autoAssignButton) {
 
-                                    <i class="fa-solid fa-users-slash fa-2x text-secondary mb-3"></i>
+						autoAssignButton.disabled = true;
 
-                                    <p class="text-muted mb-0">
+					}
 
-                                        Önce bir proje seçiniz.
+					return;
 
-                                    </p>
+				}
 
-                                </td>
 
-                            </tr>
-                        `;
+				try {
 
-                    }
+					if (autoAssignButton) {
 
+						autoAssignButton.disabled = true;
 
-                    if (autoAssignButton) {
+					}
 
-                        autoAssignButton.disabled = true;
 
-                    }
+					if (userSelect) {
 
-                    return;
+						userSelect.innerHTML =
+							'<option value="">Kullanıcılar yükleniyor...</option>';
+					}
 
-                }
 
+					const response = await fetch(
+						'@Url.Action("GetAssignmentSuggestions", "Task", new { area = "Admin" })?projectId=' + projectId
+					);
 
-                try {
 
-                    if (autoAssignButton) {
+					if (!response.ok) {
 
-                        autoAssignButton.disabled = true;
+						throw new Error(
+							"Assignment suggestions alınamadı."
+						);
 
-                    }
+					}
 
 
-                    if (userSelect) {
+					const data =
+						await response.json();
 
-                        userSelect.innerHTML =
-                            '<option value="">Kullanıcılar yükleniyor...</option>';
-                    }
 
+					updateUserSelect(
+						data.users
+					);
 
-                    const response = await fetch(
-                        '@Url.Action("GetAssignmentSuggestions", "Task", new { area = "Admin" })?projectId=' + projectId
-                    );
 
+					updateAssignmentSuggestions(
+						data.suggestions
+					);
 
-                    if (!response.ok) {
 
-                        throw new Error(
-                            "Assignment suggestions alınamadı."
-                        );
+					filterSuggestionsByRole();
 
-                    }
+				}
+				catch (error) {
 
+					console.error(
+						error
+					);
 
-                    const data =
-                        await response.json();
 
+					if (userSelect) {
 
-                    updateUserSelect(
-                        data.users
-                    );
+						userSelect.innerHTML =
+							'<option value="">Kullanıcılar yüklenemedi</option>';
 
+					}
 
-                    updateAssignmentSuggestions(
-                        data.suggestions
-                    );
 
+					if (suggestionsBody) {
 
-                    filterSuggestionsByRole();
+						suggestionsBody.innerHTML = `
+							<tr>
 
-                }
-                catch (error) {
+								<td colspan="7"
+									class="text-center text-danger py-4">
 
-                    console.error(
-                        error
-                    );
+									Kullanıcı önerileri yüklenirken bir hata oluştu.
 
+								</td>
 
-                    if (userSelect) {
+							</tr>
+						`;
 
-                        userSelect.innerHTML =
-                            '<option value="">Kullanıcılar yüklenemedi</option>';
+					}
 
-                    }
 
+					if (autoAssignButton) {
 
-                    if (suggestionsBody) {
+						autoAssignButton.disabled = true;
 
-                        suggestionsBody.innerHTML = `
-                            <tr>
+					}
 
-                                <td colspan="7"
-                                    class="text-center text-danger py-4">
+				}
 
-                                    Kullanıcı önerileri yüklenirken bir hata oluştu.
+			}
 
-                                </td>
 
-                            </tr>
-                        `;
+			if (projectSelect) {
 
-                    }
+				projectSelect.addEventListener(
+					"change",
+					function () {
 
+						const projectId =
+							this.value;
 
-                    if (autoAssignButton) {
 
-                        autoAssignButton.disabled = true;
+						if (userSelect) {
 
-                    }
+							userSelect.value = "";
 
-                }
+						}
 
-            }
 
+						loadAssignmentSuggestions(
+							projectId
+						);
 
-            if (projectSelect) {
+					}
+				);
 
-                projectSelect.addEventListener(
-                    "change",
-                    function () {
+			}
 
-                        const projectId =
-                            this.value;
 
+			if (requiredRoleSelect) {
 
-                        if (userSelect) {
+				requiredRoleSelect.addEventListener(
+					"change",
+					function () {
 
-                            userSelect.value = "";
+						if (userSelect) {
 
-                        }
+							userSelect.value = "";
 
+						}
 
-                        loadAssignmentSuggestions(
-                            projectId
-                        );
+						filterSuggestionsByRole();
 
-                    }
-                );
+					}
+				);
 
-            }
+			}
 
 
-            if (requiredRoleSelect) {
+			if (autoAssignButton) {
 
-                requiredRoleSelect.addEventListener(
-                    "change",
-                    function () {
+				autoAssignButton.addEventListener(
+					"click",
+					function () {
 
-                        if (userSelect) {
+						const visibleSuggestionButton =
+							Array.from(
+								document.querySelectorAll(
+									".select-assignment-user"
+								)
+							).find(button => {
 
-                            userSelect.value = "";
+								const row =
+									button.closest("tr");
 
-                        }
 
-                        filterSuggestionsByRole();
+								return row &&
+									   row.style.display !== "none";
 
-                    }
-                );
+							});
 
-            }
 
+						if (!visibleSuggestionButton) {
 
-            if (autoAssignButton) {
+							alert(
+								"Seçilen role uygun bir kullanıcı bulunamadı."
+							);
 
-                autoAssignButton.addEventListener(
-                    "click",
-                    function () {
+							return;
 
-                        const visibleSuggestionButton =
-                            Array.from(
-                                document.querySelectorAll(
-                                    ".select-assignment-user"
-                                )
-                            ).find(button => {
+						}
 
-                                const row =
-                                    button.closest("tr");
 
+						const userId =
+							visibleSuggestionButton.dataset.userId;
 
-                                return row &&
-                                       row.style.display !== "none";
 
-                            });
+						selectUser(userId);
 
+					}
+				);
 
-                        if (!visibleSuggestionButton) {
+			}
 
-                            alert(
-                                "Seçilen role uygun bir kullanıcı bulunamadı."
-                            );
 
-                            return;
+			bindSuggestionButtons();
 
-                        }
 
+			if (projectSelect && projectSelect.value) {
 
-                        const userId =
-                            visibleSuggestionButton.dataset.userId;
+				loadAssignmentSuggestions(
+					projectSelect.value
+				);
 
+			}
+			else {
 
-                        selectUser(userId);
+				if (autoAssignButton) {
 
-                    }
-                );
+					autoAssignButton.disabled = true;
 
-            }
+				}
 
+			}
 
-            bindSuggestionButtons();
 
+			filterSuggestionsByRole();
 
-            if (projectSelect && projectSelect.value) {
+		});
 
-                loadAssignmentSuggestions(
-                    projectSelect.value
-                );
-
-            }
-            else {
-
-                if (autoAssignButton) {
-
-                    autoAssignButton.disabled = true;
-
-                }
-
-            }
-
-
-            filterSuggestionsByRole();
-
-        });
-
-    </script>
+	</script>
 
 }
