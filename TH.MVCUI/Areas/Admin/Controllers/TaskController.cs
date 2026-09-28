@@ -231,6 +231,47 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAssignmentSuggestions(int projectId)
+        {
+            var project = await _projectManager.GetByIdAsync(projectId);
+
+            if (project == null)
+                return NotFound();
+
+            if (project.Status == DataStatus.Deleted)
+                return NotFound();
+
+            if (!await IsTeamAdminAsync(project.TeamId))
+                return Forbid();
+
+            var teamMembers = await _teamMemberManager
+                .GetTeamMembersAsync(project.TeamId);
+
+            var users = teamMembers
+                .Where(x =>
+                    x.User != null &&
+                    x.User.Status != DataStatus.Deleted)
+                .Select(x => new
+                {
+                    id = x.User.Id,
+                    name = $"{x.User.FirstName} {x.User.LastName}".Trim(),
+                    roleId = x.User.RoleId
+                })
+                .ToList();
+
+            var suggestions =
+                await _taskManager
+                    .GetTaskAssignmentSuggestionsByTeamAsync(
+                        project.TeamId);
+
+            return Json(new
+            {
+                users,
+                suggestions
+            });
+        }
+
         public async Task<IActionResult> Edit(int id)
         {
             var task = await _taskManager
