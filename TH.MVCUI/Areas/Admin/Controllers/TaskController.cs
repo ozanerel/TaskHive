@@ -232,7 +232,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAssignmentSuggestions(int projectId)
+        public async Task<IActionResult> GetAssignmentSuggestions(int projectId,int? requiredRoleId)
         {
             var project = await _projectManager.GetByIdAsync(projectId);
 
@@ -252,6 +252,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .Where(x =>
                     x.User != null &&
                     x.User.Status != DataStatus.Deleted)
+                .Where(x =>
+                    !requiredRoleId.HasValue ||
+                    x.User.RoleId == requiredRoleId.Value)
                 .Select(x => new
                 {
                     id = x.User.Id,
@@ -264,6 +267,13 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 await _taskManager
                     .GetTaskAssignmentSuggestionsByTeamAsync(
                         project.TeamId);
+
+            if (requiredRoleId.HasValue)
+            {
+                suggestions = suggestions
+                    .Where(x => x.RoleId == requiredRoleId.Value)
+                    .ToList();
+            }
 
             return Json(new
             {
@@ -588,8 +598,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         }
 
         //Create Vm'i tekrar doldurmak için kullanılan yardımcı metod
-        private async Task<TaskCreateVm> PrepareCreateVmAsync(
-    TaskCreateVm vm)
+        private async Task<TaskCreateVm> PrepareCreateVmAsync(TaskCreateVm vm)
         {
             var adminTeams = await GetAdminTeamsAsync();
 
@@ -597,40 +606,82 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .Select(x => x.Id)
                 .ToList();
 
-            var projects = await _projectManager.GetAllAsync();
+            var allProjects = await _projectManager.GetAllAsync();
 
-            vm.Projects = projects
+            vm.Projects = allProjects
                 .Where(x =>
                     teamIds.Contains(x.TeamId) &&
                     x.Status != DataStatus.Deleted)
                 .ToList();
 
-            var users = new List<ENTITIES.Models.User>();
+            vm.Roles = _roleManager
+                .GetActives()
+                .OrderBy(x => x.Name)
+                .ToList();
+
+
+            // Project seçilmişse sadece o Project'in
+            // bağlı olduğu Team üzerinden kullanıcıları getir.
+            if (vm.ProjectId > 0)
+            {
+                var project = allProjects
+                    .FirstOrDefault(x =>
+                        x.Id == vm.ProjectId &&
+                        x.Status != DataStatus.Deleted);
+
+                if (project != null &&
+                    teamIds.Contains(project.TeamId))
+                {
+                    var teamMembers =
+                        await _teamMemberManager
+                            .GetTeamMembersAsync(project.TeamId);
+
+                    vm.Users = teamMembers
+                        .Where(x =>
+                            x.User != null &&
+                            x.User.Status != DataStatus.Deleted)
+                        .Select(x => x.User)
+                        .GroupBy(x => x.Id)
+                        .Select(x => x.First())
+                        .ToList();
+
+                    vm.AssignmentSuggestions =
+                        await _taskManager
+                            .GetTaskAssignmentSuggestionsByTeamAsync(
+                                project.TeamId);
+
+                    return vm;
+                }
+            }
+
+
+            // Henüz Project seçilmemişse Admin'in yönettiği
+            // takımların üyelerini getir.
+            var teamMemberUsers =
+                new List<ENTITIES.Models.User>();
 
             foreach (var team in adminTeams)
             {
-                var members = await _teamMemberManager
-                    .GetTeamMembersAsync(team.Id);
+                var members =
+                    await _teamMemberManager
+                        .GetTeamMembersAsync(team.Id);
 
-                users.AddRange(
+                teamMemberUsers.AddRange(
                     members
-                        .Where(x => x.User != null)
+                        .Where(x =>
+                            x.User != null &&
+                            x.User.Status != DataStatus.Deleted)
                         .Select(x => x.User));
             }
 
-            vm.Users = users
-                .Where(x => x.Status != DataStatus.Deleted)
+            vm.Users = teamMemberUsers
                 .GroupBy(x => x.Id)
                 .Select(x => x.First())
                 .ToList();
 
             vm.AssignmentSuggestions =
-                await _taskManager.GetTaskAssignmentSuggestionsAsync(teamIds);
-
-            vm.Roles = _roleManager
-                .GetActives()
-                .OrderBy(x => x.Name)
-                .ToList();
+                await _taskManager
+                    .GetTaskAssignmentSuggestionsAsync(teamIds);
 
             return vm;
         }
