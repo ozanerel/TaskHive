@@ -33,5 +33,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<List<UserTaskAnalyticsDto>> GetUserTaskAnalyticsAsync(List<int> teamIds);
 
         Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsAsync(List<int> teamIds);
+
+        Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsByTeamAsync(int teamId);
     }
 }

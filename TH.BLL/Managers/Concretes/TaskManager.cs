@@ -437,10 +437,12 @@ namespace TH.BLL.Managers.Concretes
 
         public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsAsync(List<int> teamIds)
         {
-            // 1. Görevleri filtrele
-            var tasks = await FilterTasksAsync(null,null,null,teamIds);
+            var tasks = await FilterTasksAsync(
+                null,
+                null,
+                null,
+                teamIds);
 
-            // 2. Ekiplerdeki tüm üyeleri getir
             var teamMembers = new List<TeamMember>();
 
             foreach (var teamId in teamIds.Distinct())
@@ -451,64 +453,88 @@ namespace TH.BLL.Managers.Concretes
                 teamMembers.AddRange(members);
             }
 
-
-            // 3. Aynı kullanıcı birden fazla ekipte bulunuyorsa
-            // yalnızca bir kez değerlendirilmesini sağla
             var users = teamMembers
                 .Where(x => x.User != null)
                 .GroupBy(x => x.UserId)
                 .Select(group => group.First())
                 .ToList();
 
+            return BuildAssignmentSuggestions(
+                tasks,
+                users);
+        }
 
-            // 4. Her ekip üyesi için öneri oluştur
-            var suggestions = users
+        private bool IsUserRoleValidForTask(ENTITIES.Models.Task task,
+            TeamMember teamMember)
+        {
+            if (!task.RequiredRoleId.HasValue)
+                return true;
+
+            if (teamMember.User == null)
+                return false;
+
+            return teamMember.User.RoleId ==
+                   task.RequiredRoleId.Value;
+        }
+
+        public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsByTeamAsync(int teamId)
+        {
+            var tasks = await FilterTasksAsync(
+                null,
+                null,
+                null,
+                new List<int> { teamId });
+
+            var teamMembers = await _teamMemberManager
+                .GetTeamMembersAsync(teamId);
+
+            var users = teamMembers
+                .Where(x => x.User != null)
+                .ToList();
+
+            return BuildAssignmentSuggestions(
+                tasks,
+                users);
+        }
+
+        private List<TaskAssignmentSuggestionDto> BuildAssignmentSuggestions(List<ENTITIES.Models.Task> tasks,List<TeamMember> teamMembers)
+        {
+            var suggestions = teamMembers
                 .Select(teamMember =>
                 {
                     var user = teamMember.User;
 
-                    // Kullanıcının mevcut görevlerini getir
                     var userTasks = tasks
                         .Where(x => x.UserId == teamMember.UserId)
                         .ToList();
 
-
                     var totalTasks = userTasks.Count;
-
 
                     var pendingTasks = userTasks.Count(x =>
                         !x.IsCompleted);
-
 
                     var overdueTasks = userTasks.Count(x =>
                         !x.IsCompleted &&
                         x.DueDate.HasValue &&
                         x.DueDate.Value < DateTime.Now);
 
-
                     var completedTasks = userTasks.Count(x =>
                         x.IsCompleted);
-
 
                     var completionRate = totalTasks == 0
                         ? 0
                         : (double)completedTasks / totalTasks * 100;
 
-
-                    // İş yükü puanı
                     var workloadScore =
                         (pendingTasks * 1) +
                         (overdueTasks * 3);
 
-
                     var userName =
                         $"{user.FirstName} {user.LastName}".Trim();
-
 
                     var roleName = user.Role != null
                         ? user.Role.Name
                         : "Rol bilgisi yok";
-
 
                     return new TaskAssignmentSuggestionDto
                     {
@@ -541,22 +567,8 @@ namespace TH.BLL.Managers.Concretes
                 .ThenByDescending(x => x.CompletionRate)
                 .ToList();
 
-
             return suggestions;
-
         }
 
-        private bool IsUserRoleValidForTask(ENTITIES.Models.Task task,
-            TeamMember teamMember)
-        {
-            if (!task.RequiredRoleId.HasValue)
-                return true;
-
-            if (teamMember.User == null)
-                return false;
-
-            return teamMember.User.RoleId ==
-                   task.RequiredRoleId.Value;
-        }
     }
 }
