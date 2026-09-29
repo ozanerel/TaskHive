@@ -22,8 +22,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
         private readonly ITeamMemberManager _teamMemberManager;
         private readonly IUserContext _userContext;
         private readonly IRoleManager _roleManager;
+        private readonly ITaskMemberManager _taskMemberManager;
 
-        public TaskController(ITaskManager taskManager, IUserManager userManager, IProjectManager projectManager,ITeamManager teamManager,ITeamMemberManager teamMemberManager,IUserContext userContext, IRoleManager roleManager)
+        public TaskController(ITaskManager taskManager, IUserManager userManager, IProjectManager projectManager,ITeamManager teamManager,ITeamMemberManager teamMemberManager,IUserContext userContext, IRoleManager roleManager,ITaskMemberManager taskMemberManager)
         {
             _taskManager = taskManager;
             _userManager = userManager;
@@ -32,6 +33,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             _teamMemberManager = teamMemberManager;
             _userContext = userContext;
             _roleManager = roleManager;
+            _taskMemberManager = taskMemberManager;
         }
         public async Task<IActionResult> Index(string search,PriorityLevel? priority,bool? isCompleted)
         {
@@ -197,7 +199,6 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (teamMember == null)
                 return Forbid();
 
-            // Atanacak kullanıcının rolünü kontrol et.
             var assignedUser = await _userManager.GetByIdAsync(vm.UserId);
 
             if (assignedUser == null)
@@ -215,6 +216,27 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 return View(await PrepareCreateVmAsync(vm));
             }
 
+            var participantUserIds = vm.ParticipantUserIds
+                .Where(x => x != vm.UserId)
+                .Distinct()
+                .ToList();
+
+            foreach (var participantUserId in participantUserIds)
+            {
+                var participant = await _teamMemberManager.GetTeamMemberAsync(
+                    project.TeamId,
+                    participantUserId);
+
+                if (participant == null)
+                {
+                    ModelState.AddModelError(
+                        nameof(vm.ParticipantUserIds),
+                        "Seçilen katılımcılardan biri takım üyesi değil.");
+
+                    return View(await PrepareCreateVmAsync(vm));
+                }
+            }
+
             ENTITIES.Models.Task task = new()
             {
                 Title = vm.Title,
@@ -227,6 +249,17 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             };
 
             await _taskManager.CreateAsync(task);
+
+            foreach (var participantUserId in participantUserIds)
+            {
+                TaskMember taskMember = new()
+                {
+                    TaskId = task.Id,
+                    UserId = participantUserId
+                };
+
+                await _taskMemberManager.CreateAsync(taskMember);
+            }
 
             return RedirectToAction(nameof(Index));
         }
