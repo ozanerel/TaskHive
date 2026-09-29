@@ -477,7 +477,7 @@ namespace TH.BLL.Managers.Concretes
                    task.RequiredRoleId.Value;
         }
 
-        public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsByTeamAsync(int teamId)
+        public async Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsByTeamAsync(int teamId,int? requiredRoleId)
         {
             var tasks = await FilterTasksAsync(
                 null,
@@ -489,7 +489,10 @@ namespace TH.BLL.Managers.Concretes
                 .GetTeamMembersAsync(teamId);
 
             var users = teamMembers
-                .Where(x => x.User != null)
+                .Where(x =>
+                    x.User != null &&
+                    (!requiredRoleId.HasValue ||
+                     x.User.RoleId == requiredRoleId.Value))
                 .ToList();
 
             return BuildAssignmentSuggestions(

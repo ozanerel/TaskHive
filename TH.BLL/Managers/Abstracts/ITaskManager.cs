@@ -34,6 +34,6 @@ namespace TH.BLL.Managers.Abstracts
 
         Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsAsync(List<int> teamIds);
 
-        Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsByTeamAsync(int teamId);
+        Task<List<TaskAssignmentSuggestionDto>> GetTaskAssignmentSuggestionsByTeamAsync(int teamId,int? requiredRoleId);
     }
 }
