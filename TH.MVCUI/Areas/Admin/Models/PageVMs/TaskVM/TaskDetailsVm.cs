@@ -27,5 +27,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 
         public List<TaskComment> Comments { get; set; }
             = new();
+
+        public List<TaskMember> Participants { get; set; }
+            = new List<TaskMember>();
     }
 }
