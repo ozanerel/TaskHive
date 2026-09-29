@@ -263,17 +263,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 })
                 .ToList();
 
-            var suggestions =
-                await _taskManager
-                    .GetTaskAssignmentSuggestionsByTeamAsync(
-                        project.TeamId);
-
-            if (requiredRoleId.HasValue)
-            {
-                suggestions = suggestions
-                    .Where(x => x.RoleId == requiredRoleId.Value)
-                    .ToList();
-            }
+            var suggestions = await _taskManager.GetTaskAssignmentSuggestionsByTeamAsync(project.TeamId,requiredRoleId);
 
             return Json(new
             {
@@ -648,7 +638,7 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     vm.AssignmentSuggestions =
                         await _taskManager
                             .GetTaskAssignmentSuggestionsByTeamAsync(
-                                project.TeamId);
+                                project.TeamId,vm.RequiredRoleId);
 
                     return vm;
                 }
