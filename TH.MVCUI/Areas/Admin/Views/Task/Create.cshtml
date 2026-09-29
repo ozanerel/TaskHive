@@ -165,7 +165,8 @@
 
 					@foreach (var user in Model.Users)
 					{
-						<option value="@user.Id" data-role-id="@user.RoleId">
+						<option value="@user.Id"
+								data-role-id="@user.RoleId">
 
 							@user.FirstName @user.LastName
 
@@ -175,6 +176,46 @@
 				</select>
 
 				<span asp-validation-for="UserId"
+					  class="text-danger">
+				</span>
+
+			</div>
+
+			<!-- Task Participants -->
+
+			<div class="col-md-12 mb-4">
+
+				<label asp-for="ParticipantUserIds"
+					   class="form-label">
+
+					Katılımcılar
+
+				</label>
+
+				<select asp-for="ParticipantUserIds"
+						id="participantUserSelect"
+						class="form-control-custom"
+						multiple>
+
+					@foreach (var user in Model.Users)
+					{
+						<option value="@user.Id">
+
+							@user.FirstName @user.LastName
+
+						</option>
+					}
+
+				</select>
+
+				<div class="form-text">
+
+					Göreve katılacak kullanıcıları seçebilirsiniz.
+					Ana sorumlu katılımcı olarak eklenemez.
+
+				</div>
+
+				<span asp-validation-for="ParticipantUserIds"
 					  class="text-danger">
 				</span>
 
@@ -423,6 +464,11 @@
 				"userSelect"
 			);
 
+			const participantUserSelect =
+				document.getElementById(
+					"participantUserSelect"
+				);
+
 			const requiredRoleSelect = document.querySelector(
 				'select[name="RequiredRoleId"]'
 			);
@@ -439,7 +485,8 @@
 				"auto-assign-user"
 			);
 
-			let currentUser = [];
+			let currentUsers = [];
+
 
 			function selectUser(userId) {
 
@@ -469,6 +516,8 @@
 
 				userSelect.value = userId;
 
+				updateParticipantUserSelection();
+
 				userSelect.dispatchEvent(
 					new Event("change", {
 						bubbles: true
@@ -480,6 +529,65 @@
 					behavior: "smooth",
 
 					block: "center"
+
+				});
+
+			}
+
+
+			function updateParticipantUserSelect(users) {
+
+				if (!participantUserSelect) {
+
+					return;
+
+				}
+
+				participantUserSelect.innerHTML = "";
+
+				users.forEach(user => {
+
+					const option =
+						document.createElement("option");
+
+					option.value = user.id;
+
+					option.textContent = user.name;
+
+					participantUserSelect.appendChild(
+						option
+					);
+
+				});
+
+				updateParticipantUserSelection();
+
+			}
+
+
+			function updateParticipantUserSelection() {
+
+				if (!participantUserSelect || !userSelect) {
+
+					return;
+
+				}
+
+				const selectedUserId =
+					userSelect.value;
+
+				Array.from(
+					participantUserSelect.options
+				).forEach(option => {
+
+					option.disabled =
+						option.value === selectedUserId;
+
+					if (option.value === selectedUserId) {
+
+						option.selected = false;
+
+					}
 
 				});
 
@@ -583,43 +691,74 @@
 
 
 			function updateUserSelect(users) {
-					currentUsers = users;
-					userSelect.innerHTML =
+
+				currentUsers = users;
+
+				userSelect.innerHTML =
 					'<option value="">Kullanıcı seçiniz</option>';
 
-					users.forEach(user => {
-						const option = document.createElement("option");
-						option.value = user.id;
-						option.textContent = user.name;
-						option.dataset.roleId = user.roleId ?? "";
 
-						userSelect.appendChild(option);
-					});
+				users.forEach(user => {
 
-					filterUserSelectByRole();
+					const option =
+						document.createElement("option");
+
+					option.value = user.id;
+
+					option.textContent = user.name;
+
+					option.dataset.roleId =
+						user.roleId ?? "";
+
+					userSelect.appendChild(
+						option
+					);
+
+				});
+
+
+				updateParticipantUserSelect(users);
+
+				filterUserSelectByRole();
+
 			}
 
-					function filterUserSelectByRole() {
-			const selectedRoleId = requiredRoleSelect.value;
 
-			Array.from(userSelect.options).forEach(option => {
+			function filterUserSelectByRole() {
 
-				if (option.value === "") {
-					option.hidden = false;
-					return;
-				}
+				const selectedRoleId =
+					requiredRoleSelect.value;
 
-				if (!selectedRoleId) {
-					option.hidden = false;
-					return;
-				}
+				Array.from(
+					userSelect.options
+				).forEach(option => {
 
-				option.hidden =
-					option.dataset.roleId !== selectedRoleId;
-			});
+					if (option.value === "") {
 
-			userSelect.value = "";
-		}
+						option.hidden = false;
+
+						return;
+
+					}
+
+					if (!selectedRoleId) {
+
+						option.hidden = false;
+
+						return;
+
+					}
+
+					option.hidden =
+						option.dataset.roleId !== selectedRoleId;
+
+				});
+
+				userSelect.value = "";
+
+				updateParticipantUserSelection();
+
+			}
 
 
 			function updateAssignmentSuggestions(
@@ -781,6 +920,12 @@
 
 					}
 
+					if (participantUserSelect) {
+
+						participantUserSelect.innerHTML = "";
+
+					}
+
 
 					if (suggestionsBody) {
 
@@ -830,11 +975,38 @@
 
 						userSelect.innerHTML =
 							'<option value="">Kullanıcılar yükleniyor...</option>';
+
+					}
+
+					if (participantUserSelect) {
+
+						participantUserSelect.innerHTML = "";
+
+					}
+
+
+					const requiredRoleId =
+						requiredRoleSelect
+							? requiredRoleSelect.value
+							: "";
+
+
+					let requestUrl =
+						'@Url.Action("GetAssignmentSuggestions", "Task", new { area = "Admin" })?projectId='
+						+ encodeURIComponent(projectId);
+
+
+					if (requiredRoleId) {
+
+						requestUrl +=
+							'&requiredRoleId='
+							+ encodeURIComponent(requiredRoleId);
+
 					}
 
 
 					const response = await fetch(
-						'@Url.Action("GetAssignmentSuggestions", "Task", new { area = "Admin" })?projectId=' + projectId
+						requestUrl
 					);
 
 
@@ -875,6 +1047,12 @@
 
 						userSelect.innerHTML =
 							'<option value="">Kullanıcılar yüklenemedi</option>';
+
+					}
+
+					if (participantUserSelect) {
+
+						participantUserSelect.innerHTML = "";
 
 					}
 
@@ -924,10 +1102,30 @@
 
 						}
 
+						if (participantUserSelect) {
+
+							participantUserSelect.innerHTML = "";
+
+						}
+
 
 						loadAssignmentSuggestions(
 							projectId
 						);
+
+					}
+				);
+
+			}
+
+
+			if (userSelect) {
+
+				userSelect.addEventListener(
+					"change",
+					function () {
+
+						updateParticipantUserSelection();
 
 					}
 				);
@@ -947,7 +1145,21 @@
 
 						}
 
+						updateParticipantUserSelection();
+
 						filterSuggestionsByRole();
+
+
+						if (
+							projectSelect &&
+							projectSelect.value
+						) {
+
+							loadAssignmentSuggestions(
+								projectSelect.value
+							);
+
+						}
 
 					}
 				);
@@ -994,6 +1206,20 @@
 
 
 						selectUser(userId);
+
+					}
+				);
+
+			}
+
+
+			if (participantUserSelect) {
+
+				participantUserSelect.addEventListener(
+					"change",
+					function () {
+
+						updateParticipantUserSelection();
 
 					}
 				);
