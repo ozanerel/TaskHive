@@ -23,7 +23,7 @@ namespace TH.CONF.Options
             builder.HasOne(x => x.User)
                 .WithMany(x => x.TaskMembers)
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
