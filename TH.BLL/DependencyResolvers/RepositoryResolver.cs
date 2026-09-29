@@ -29,6 +29,8 @@ namespace TH.BLL.DependencyResolvers
             services.AddScoped<IConversationRepository, ConversationRepository>();
             services.AddScoped<IConversationParticipantRepository, ConversationParticipantRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+
+            services.AddScoped<ITaskMemberRepository, TaskMemberRepository>();
         }
     }
 }

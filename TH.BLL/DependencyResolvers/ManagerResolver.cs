@@ -31,6 +31,8 @@ namespace TH.BLL.DependencyResolvers
             services.AddScoped<IConversationParticipantManager, ConversationParticipantManager>();
             services.AddScoped<IMessageManager, MessageManager>();
 
+            services.AddScoped<ITaskMemberManager, TaskMemberManager>();
+
         }
     }
 }
