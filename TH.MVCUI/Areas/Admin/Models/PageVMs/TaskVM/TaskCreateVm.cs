@@ -27,5 +27,8 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
         public List<Role> Roles { get; set; } = new();
 
         public int? RequiredRoleId { get; set; }
+
+        public List<int> ParticipantUserIds { get; set; } = new List<int>();
+
     }
 }
