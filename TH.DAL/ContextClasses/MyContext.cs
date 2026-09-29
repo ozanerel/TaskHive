@@ -38,6 +38,7 @@ namespace TH.DAL.ContextClasses
             modelBuilder.ApplyConfiguration(new ConversationConfiguration());
             modelBuilder.ApplyConfiguration(new MessageConfiguration());
             modelBuilder.ApplyConfiguration(new ConversationParticipantConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskMemberConfiguration());
 
             UserAndRoleSeed.SeedUsersAndRoles(modelBuilder);
             NotificationSeed.SeedNotifications(modelBuilder);
@@ -64,5 +65,6 @@ namespace TH.DAL.ContextClasses
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<ConversationParticipant> ConversationParticipants { get; set; }
+        public DbSet<TaskMember> TaskMembers { get; set; }
     }
 }

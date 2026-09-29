@@ -25,5 +25,6 @@ namespace TH.ENTITIES.Models
         public virtual ICollection<TaskComment> TaskComments { get; set; }
         public virtual Role Role { get; set; }
         public virtual AppUser AppUser { get; set; }
+        public virtual ICollection<TaskMember> TaskMembers { get; set; }
     }
 }

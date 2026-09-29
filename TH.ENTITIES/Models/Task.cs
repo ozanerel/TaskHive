@@ -29,6 +29,7 @@ namespace TH.ENTITIES.Models
         public virtual User User { get; set; }
         public virtual Project Project { get; set; }
         public virtual Role RequiredRole { get; set; }
+        public virtual ICollection<TaskMember> TaskMembers { get; set; }
         public virtual ICollection<TaskComment> TaskComments { get; set; }
     }
 }
