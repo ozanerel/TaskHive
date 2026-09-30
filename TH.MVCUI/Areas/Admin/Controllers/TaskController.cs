@@ -84,6 +84,10 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             if (!isTeamAdmin)
                 return Forbid();
 
+            var participants =
+                await _taskMemberManager
+                    .GetByTaskIdAsync(task.Id);
+
             TaskDetailsVm vm = new()
             {
                 Id = task.Id,
@@ -104,7 +108,9 @@ namespace TH.MVCUI.Areas.Admin.Controllers
 
                 Comments = task.TaskComments?
                     .Where(x => x.Status != DataStatus.Deleted)
-                    .ToList() ?? new()
+                    .ToList() ?? new(),
+
+                Participants = participants
             };
 
             return View(vm);
@@ -361,6 +367,10 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 .OrderBy(x => x.Name)
                 .ToList();
 
+            var participants =
+                await _taskMemberManager
+                    .GetByTaskIdAsync(task.Id);
+
             TaskUpdateVm vm = new()
             {
                 Id = task.Id,
@@ -372,6 +382,11 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                 ProjectId = task.ProjectId,
                 RequiredRoleId = task.RequiredRoleId,
                 IsCompleted = task.IsCompleted,
+
+                ParticipantUserIds = participants
+                    .Select(x => x.UserId)
+                    .ToList(),
+
                 Users = users,
                 Projects = projects,
                 Roles = roles
@@ -437,6 +452,30 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     "Seçilen kullanıcının rolü, görevin gerekli rolüyle uyuşmuyor.");
             }
 
+            // Katılımcı listesini temizle
+            var participantUserIds = vm.ParticipantUserIds
+                .Where(x => x != vm.UserId)
+                .Distinct()
+                .ToList();
+
+            // Seçilen katılımcıların yeni Team'in üyesi olduğunu kontrol et
+            foreach (var participantUserId in participantUserIds)
+            {
+                var participant = await _teamMemberManager
+                    .GetTeamMemberAsync(
+                        newProject.TeamId,
+                        participantUserId);
+
+                if (participant == null)
+                {
+                    ModelState.AddModelError(
+                        nameof(vm.ParticipantUserIds),
+                        "Seçilen katılımcılardan biri takım üyesi değil.");
+
+                    break;
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 var adminTeams = await GetAdminTeamsAsync();
@@ -480,6 +519,8 @@ namespace TH.MVCUI.Areas.Admin.Controllers
                     .OrderBy(x => x.Name)
                     .ToList();
 
+                vm.ParticipantUserIds = participantUserIds;
+
                 return View(vm);
             }
 
@@ -493,6 +534,30 @@ namespace TH.MVCUI.Areas.Admin.Controllers
             task.IsCompleted = vm.IsCompleted;
 
             await _taskManager.UpdateAsync(task);
+
+            // Mevcut TaskMember kayıtlarını sil
+            var existingParticipants =
+                await _taskMemberManager
+                    .GetByTaskIdAsync(task.Id);
+
+            foreach (var participant in existingParticipants)
+            {
+                await _taskMemberManager
+                    .DeleteAsync(participant);
+            }
+
+            // Yeni TaskMember kayıtlarını oluştur
+            foreach (var participantUserId in participantUserIds)
+            {
+                TaskMember taskMember = new()
+                {
+                    TaskId = task.Id,
+                    UserId = participantUserId
+                };
+
+                await _taskMemberManager
+                    .CreateAsync(taskMember);
+            }
 
             return RedirectToAction(nameof(Index));
         }
