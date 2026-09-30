@@ -573,5 +573,14 @@ namespace TH.BLL.Managers.Concretes
             return suggestions;
         }
 
+        public async Task<List<ENTITIES.Models.Task>> GetTasksByUserOrParticipantAsync(int userId)
+        {
+            return await _repository.GetTasksByUserOrParticipantAsync(userId);
+        }
+
+        public async Task<ENTITIES.Models.Task> GetTaskDetailsByUserOrParticipantAsync(int taskId, int userId)
+        {
+            return await _repository.GetTaskDetailsByUserOrParticipantAsync(taskId,userId);
+        }
     }
 }
