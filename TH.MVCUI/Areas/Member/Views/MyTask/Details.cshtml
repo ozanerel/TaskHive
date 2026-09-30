@@ -71,7 +71,8 @@
 
             </p>
 
-            @if (Model.Task.Status == TH.ENTITIES.Enums.DataStatus.Deleted)
+            @if (Model.Task.Status ==
+            TH.ENTITIES.Enums.DataStatus.Deleted)
             {
                 <span class="badge bg-danger">
 
@@ -99,19 +100,31 @@
             <br /><br />
 
             <p>
+
                 <strong>Due Date</strong>
+
             </p>
 
             <p>
-                @(Model.Task.DueDate?.ToString("dd.MM.yyyy") ?? "No due date")
+
+                @(Model.Task.DueDate?
+                    .ToString("dd.MM.yyyy")
+                    ?? "No due date")
+
             </p>
 
             <p>
+
                 <strong>Completed Date</strong>
+
             </p>
 
             <p>
-                @(Model.Task.CompletedDate?.ToString("dd.MM.yyyy HH:mm") ?? "Not completed")
+
+                @(Model.Task.CompletedDate?
+                    .ToString("dd.MM.yyyy HH:mm")
+                    ?? "Not completed")
+
             </p>
 
         </div>
@@ -121,19 +134,28 @@
     <hr />
 
     <p>
+
         <strong>Project</strong>
+
     </p>
 
     <p>
+
         @Model.Task.Project?.ProjectName
+
     </p>
 
     <p>
+
         <strong>Required Role</strong>
+
     </p>
 
     <p>
-        @(Model.Task.RequiredRole?.Name ?? "No Required Role")
+
+        @(Model.Task.RequiredRole?.Name
+            ?? "No Required Role")
+
     </p>
 
     <div class="text-end">
@@ -145,7 +167,8 @@
 
         </a>
 
-        @if (Model.Task.Status != TH.ENTITIES.Enums.DataStatus.Deleted)
+        @if (Model.Task.Status !=
+        TH.ENTITIES.Enums.DataStatus.Deleted)
         {
             <a asp-action="Edit"
                asp-route-id="@Model.Task.Id"
