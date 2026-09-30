@@ -23,6 +23,9 @@ namespace TH.MVCUI.Areas.Admin.Models.PageVMs.TaskVM
 
         public bool IsCompleted { get; set; }
 
+        public List<int> ParticipantUserIds { get; set; }
+            = new List<int>();
+
         public List<User> Users { get; set; } = new();
 
         public List<Project> Projects { get; set; } = new();
