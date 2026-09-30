@@ -23,14 +23,18 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            var user =
+                await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
             MyTaskPageVm vm = new()
             {
-                Tasks = await _taskManager.GetTasksByUserAsync(user.Id)
+                Tasks =
+                    await _taskManager
+                        .GetTasksByUserOrParticipantAsync(
+                            user.Id)
             };
 
             return View(vm);
@@ -38,14 +42,17 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            var user =
+                await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(
-                id,
-                user.Id);
+            var task =
+                await _taskManager
+                    .GetTaskDetailsByUserOrParticipantAsync(
+                        id,
+                        user.Id);
 
             if (task == null)
                 return NotFound();
@@ -60,14 +67,18 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            var user =
+                await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(
-                id,
-                user.Id);
+            // Edit yalnızca ana sorumluya açık.
+            var task =
+                await _taskManager
+                    .GetTaskDetailsByUserAsync(
+                        id,
+                        user.Id);
 
             if (task == null)
                 return NotFound();
@@ -78,7 +89,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 Title = task.Title,
                 Description = task.Description,
                 Priority = task.Priority,
-                RequiredRoleName = task.RequiredRole?.Name
+                RequiredRoleName =
+                    task.RequiredRole?.Name
             };
 
             return View(vm);
@@ -86,22 +98,37 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(MyTaskUpdateVm vm)
+        public async Task<IActionResult> Edit(
+            MyTaskUpdateVm vm)
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            var user =
+                await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(
-                vm.Id,
-                user.Id);
+            // Edit yalnızca ana sorumluya açık.
+            var task =
+                await _taskManager
+                    .GetTaskDetailsByUserAsync(
+                        vm.Id,
+                        user.Id);
 
             if (task == null)
                 return NotFound();
 
+            //if (!ModelState.IsValid)
+            //    return View(vm);
+
             if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState.Values.SelectMany(x => x.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+
                 return View(vm);
+            }
 
             task.Title = vm.Title;
             task.Description = vm.Description;
@@ -116,14 +143,18 @@ namespace TH.MVCUI.Areas.Member.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Complete(int id)
         {
-            var user = await _userContext.GetCurrentUserAsync();
+            var user =
+                await _userContext.GetCurrentUserAsync();
 
             if (user == null)
                 return NotFound();
 
-            var task = await _taskManager.GetTaskDetailsByUserAsync(
-                id,
-                user.Id);
+            // Complete yalnızca ana sorumluya açık.
+            var task =
+                await _taskManager
+                    .GetTaskDetailsByUserAsync(
+                        id,
+                        user.Id);
 
             if (task == null)
                 return NotFound();
