@@ -139,5 +139,40 @@ namespace TH.DAL.Repositories.Concretes
                     x.UserId == userId &&
                     x.Status != DataStatus.Deleted);
         }
+
+        public async Task<List<ENTITIES.Models.Task>> GetTasksByUserOrParticipantAsync(int userId)
+        {
+            return await _context.Tasks
+                .Include(x => x.Project)
+                .Include(x => x.User)
+                .Include(x => x.RequiredRole)
+                .Where(x =>
+                    x.Status != DataStatus.Deleted &&
+                    (
+                        x.UserId == userId ||
+                        x.TaskMembers.Any(tm =>
+                            tm.UserId == userId)
+                    ))
+                .OrderBy(x => x.Status)
+                .ThenBy(x => x.Title)
+                .ToListAsync();
+        }
+
+        public async Task<ENTITIES.Models.Task> GetTaskDetailsByUserOrParticipantAsync(int taskId, int userId)
+        {
+            return await _context.Tasks
+                .Include(x => x.Project)
+                .Include(x => x.User)
+                .Include(x => x.RequiredRole)
+                .Include(x => x.TaskComments)
+                .FirstOrDefaultAsync(x =>
+                    x.Id == taskId &&
+                    x.Status != DataStatus.Deleted &&
+                    (
+                        x.UserId == userId ||
+                        x.TaskMembers.Any(tm =>
+                            tm.UserId == userId)
+                    ));
+        }
     }
 }
