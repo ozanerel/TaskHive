@@ -30,49 +30,76 @@
     <form asp-action="Edit"
           method="post">
 
-        <input asp-for="Id" type="hidden" />
+        <input asp-for="Id"
+               type="hidden" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
 
         <div class="row">
 
             <div class="col-md-12 mb-4">
 
                 <label class="form-label">
+
                     Title
+
                 </label>
 
                 <input asp-for="Title"
                        class="form-control-custom" />
 
                 <span asp-validation-for="Title"
-                      class="text-danger"></span>
+                      class="text-danger">
+                </span>
 
             </div>
 
             <div class="col-md-12 mb-4">
 
                 <label class="form-label">
+
                     Description
+
                 </label>
 
                 <textarea asp-for="Description"
                           rows="5"
                           class="form-control-custom"></textarea>
 
+                <span asp-validation-for="Description"
+                      class="text-danger">
+                </span>
+
             </div>
 
             <div class="col-md-6 mb-4">
 
                 <label class="form-label">
+
                     Priority
+
                 </label>
 
                 <select asp-for="Priority"
                         class="form-control-custom">
 
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                    <option value="Critical">Critical</option>
+                    <option value="Low">
+                        Low
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                    <option value="Critical">
+                        Critical
+                    </option>
 
                 </select>
 
@@ -92,21 +119,28 @@
                        class="form-control" />
 
                 <span asp-validation-for="DueDate"
-                      class="text-danger"></span>
+                      class="text-danger">
+                </span>
 
             </div>
 
             <div class="col-md-6 mb-4">
 
-                <label class="form-label">
+                <label asp-for="RequiredRoleId"
+                       class="form-label">
+
                     Required Role
+
                 </label>
 
                 <select asp-for="RequiredRoleId"
+                        id="requiredRoleSelect"
                         class="form-control-custom">
 
                     <option value="">
+
                         No Required Role
+
                     </option>
 
                     @foreach (var role in Model.Roles)
@@ -121,13 +155,18 @@
                 </select>
 
                 <span asp-validation-for="RequiredRoleId"
-                      class="text-danger"></span>
+                      class="text-danger">
+                </span>
 
             </div>
 
             <div class="col-md-6 mb-4">
-                <label asp-for="UserId" class="form-label">
+
+                <label asp-for="UserId"
+                       class="form-label">
+
                     Assigned User
+
                 </label>
 
                 <select asp-for="UserId"
@@ -135,30 +174,42 @@
                         id="userSelect">
 
                     <option value="">
+
                         Select User
+
                     </option>
 
                     @foreach (var user in Model.Users)
                     {
                         <option value="@user.Id"
                                 data-role-id="@user.RoleId">
-                            @user.FirstName @user.LastName
+
+                            @user.FirstName
+                            @user.LastName
+
                         </option>
                     }
+
                 </select>
 
                 <span asp-validation-for="UserId"
-                      class="text-danger"></span>
+                      class="text-danger">
+                </span>
+
             </div>
 
             <div class="col-md-6 mb-4">
 
-                <label class="form-label">
+                <label asp-for="ProjectId"
+                       class="form-label">
+
                     Project
+
                 </label>
 
                 <select asp-for="ProjectId"
-                        class="form-control-custom">
+                        class="form-control-custom"
+                        id="projectSelect">
 
                     @foreach (var project in Model.Projects)
                     {
@@ -170,6 +221,54 @@
                     }
 
                 </select>
+
+                <span asp-validation-for="ProjectId"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            <div class="col-md-12 mb-4">
+
+                <label asp-for="ParticipantUserIds"
+                       class="form-label">
+
+                    Participants
+
+                </label>
+
+                <select asp-for="ParticipantUserIds"
+                        id="participantUserSelect"
+                        class="form-control-custom"
+                        multiple>
+
+                    @foreach (var user in Model.Users)
+                    {
+                        var isSelected =
+                        Model.ParticipantUserIds
+                        .Contains(user.Id);
+
+                        <option value="@user.Id"
+                                selected="@isSelected">
+
+                            @user.FirstName
+                            @user.LastName
+
+                        </option>
+                    }
+
+                </select>
+
+                <div class="form-text">
+
+                    Göreve katılacak kullanıcıları seçebilirsiniz.
+                    Ana sorumlu katılımcı olarak eklenemez.
+
+                </div>
+
+                <span asp-validation-for="ParticipantUserIds"
+                      class="text-danger">
+                </span>
 
             </div>
 
@@ -224,67 +323,143 @@
 </div>
 
 @section Scripts {
+
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
     }
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
 
-            const requiredRoleSelect =
-                document.getElementById("requiredRoleSelect");
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
 
-            const userSelect =
-                document.getElementById("userSelect");
+                const requiredRoleSelect =
+                    document.getElementById(
+                        "requiredRoleSelect");
 
-            if (!requiredRoleSelect || !userSelect) {
-                return;
-            }
+                const userSelect =
+                    document.getElementById(
+                        "userSelect");
 
-            function filterUsersByRole() {
+                const participantUserSelect =
+                    document.getElementById(
+                        "participantUserSelect");
 
-                const selectedRoleId =
-                    requiredRoleSelect.value;
+                if (!requiredRoleSelect ||
+                    !userSelect ||
+                    !participantUserSelect) {
 
-                const options =
-                    userSelect.querySelectorAll("option");
-
-                let selectedUserIsVisible = false;
-
-                options.forEach(function (option) {
-
-                    if (!option.value) {
-                        option.hidden = false;
-                        return;
-                    }
-
-                    const userRoleId =
-                        option.getAttribute("data-role-id");
-
-                    const isVisible =
-                        selectedRoleId === "" ||
-                        userRoleId === selectedRoleId;
-
-                    option.hidden = !isVisible;
-
-                    if (isVisible &&
-                        option.value === userSelect.value) {
-
-                        selectedUserIsVisible = true;
-                    }
-                });
-
-                if (!selectedUserIsVisible) {
-                    userSelect.value = "";
+                    return;
                 }
-            }
 
-            requiredRoleSelect.addEventListener(
-                "change",
-                filterUsersByRole
-            );
+                function filterUsersByRole() {
 
-            filterUsersByRole();
-        });
+                    const selectedRoleId =
+                        requiredRoleSelect.value;
+
+                    const options =
+                        userSelect.querySelectorAll(
+                            "option");
+
+                    let selectedUserIsVisible = false;
+
+                    options.forEach(function (option) {
+
+                        if (!option.value) {
+
+                            option.hidden = false;
+
+                            return;
+                        }
+
+                        const userRoleId =
+                            option.getAttribute(
+                                "data-role-id");
+
+                        const isVisible =
+                            selectedRoleId === "" ||
+                            userRoleId === selectedRoleId;
+
+                        option.hidden = !isVisible;
+
+                        if (isVisible &&
+                            option.value ===
+                            userSelect.value) {
+
+                            selectedUserIsVisible = true;
+                        }
+
+                    });
+
+                    if (!selectedUserIsVisible) {
+
+                        userSelect.value = "";
+
+                    }
+
+                    updateParticipantUserSelection();
+
+                }
+
+                function updateParticipantUserSelection() {
+
+                    const selectedUserId =
+                        userSelect.value;
+
+                    const options =
+                        participantUserSelect
+                            .querySelectorAll("option");
+
+                    options.forEach(function (option) {
+
+                        const isMainResponsible =
+                            option.value ===
+                            selectedUserId;
+
+                        option.disabled =
+                            isMainResponsible;
+
+                        if (isMainResponsible) {
+
+                            option.selected = false;
+
+                        }
+
+                    });
+
+                }
+
+                userSelect.addEventListener(
+                    "change",
+                    function () {
+
+                        updateParticipantUserSelection();
+
+                    });
+
+                requiredRoleSelect.addEventListener(
+                    "change",
+                    function () {
+
+                        filterUsersByRole();
+
+                    });
+
+                participantUserSelect.addEventListener(
+                    "change",
+                    function () {
+
+                        updateParticipantUserSelection();
+
+                    });
+
+                filterUsersByRole();
+
+                updateParticipantUserSelection();
+
+            });
+
     </script>
 }
