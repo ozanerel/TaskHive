@@ -133,14 +133,31 @@
                     }
                     else if (!task.IsCompleted)
                     {
-                        <a asp-action="Complete"
+                       @*  <a asp-action="Complete"
                            asp-route-id="@task.Id"
                            class="btn-primary-custom"
                            title="Complete">
 
                             <i class="fa-solid fa-check"></i>
 
-                        </a>
+                        </a> *@
+
+                        <form asp-action="Complete"
+                              asp-route-id="@task.Id"
+                              method="post"
+                              class="d-inline">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn-primary-custom"
+                                    title="Complete">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </button>
+
+                        </form>
                     }
                     else
                     {
