@@ -23,7 +23,7 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.LogoutPath = "/Account/Logout"; //Bu yoldan baþarýlý geçiþ yapan kullanýcýya ait bilgileri verdiðimiz cookie nin altýnda sakla 
     x.AccessDeniedPath = new PathString("/Home/AccessDenied");//Rolü uygun deðilse gönderilecek alan
     x.SlidingExpiration = true;//Cookie nin ömrü dolmak üzereyken yenilenmesini saðlar
-    x.ExpireTimeSpan = TimeSpan.FromMinutes(1);//Cookie nin ömrü 1 dk. Bu cookie browserdan silinecek tekrar giriþ yapýlmasý gerekecek
+    x.ExpireTimeSpan = TimeSpan.FromMinutes(30);//Cookie nin ömrü 1 dk. Bu cookie browserdan silinecek tekrar giriþ yapýlmasý gerekecek
     //x.ReturnUrlParameter = "returnUrl";
 });
 
