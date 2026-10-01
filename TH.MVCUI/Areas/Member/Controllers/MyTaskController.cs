@@ -117,18 +117,8 @@ namespace TH.MVCUI.Areas.Member.Controllers
             if (task == null)
                 return NotFound();
 
-            //if (!ModelState.IsValid)
-            //    return View(vm);
-
             if (!ModelState.IsValid)
-            {
-                foreach (var error in ModelState.Values.SelectMany(x => x.Errors))
-                {
-                    Console.WriteLine(error.ErrorMessage);
-                }
-
                 return View(vm);
-            }
 
             task.Title = vm.Title;
             task.Description = vm.Description;

@@ -12,6 +12,6 @@ namespace TH.MVCUI.Areas.Member.Models.PageVMs.TaskVM
 
         public PriorityLevel Priority { get; set; }
 
-        public string RequiredRoleName { get; set; }
+        public string? RequiredRoleName { get; set; }
     }
 }
