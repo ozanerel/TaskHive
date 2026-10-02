@@ -14,5 +14,7 @@ namespace TH.BLL.Managers.Abstracts
         Task<Message> GetLastMessageAsync(int conversationId);
 
         Task<int> GetUnreadMessageCountAsync(int userId);
+
+        Task<Message>GetLastMessageBeforeAsync(int conversationId,DateTime beforeDate);
     }
 }

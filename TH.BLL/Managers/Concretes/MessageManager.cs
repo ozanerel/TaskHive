@@ -105,5 +105,18 @@ namespace TH.BLL.Managers.Concretes
 
             return await _repository.GetUnreadMessageCountAsync(userId);
         }
+
+        public async Task<Message> GetLastMessageBeforeAsync(int conversationId, DateTime beforeDate)
+        {
+            if (conversationId <= 0)
+            {
+                return null;
+            }
+
+            return await _repository
+                .GetLastMessageBeforeAsync(
+                    conversationId,
+                    beforeDate);
+        }
     }
 }
