@@ -13,7 +13,7 @@ using TH.MVCUI.Areas.Member.Models.PageVMs.ChatVM;
 namespace TH.MVCUI.Areas.Member.Controllers
 {
     [Area("Member")]
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Member,Admin")]
     public class ChatController : Controller
     {
         private readonly IConversationManager _conversationManager;
