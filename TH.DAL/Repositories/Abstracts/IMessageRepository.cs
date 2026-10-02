@@ -17,5 +17,7 @@ namespace TH.DAL.Repositories.Abstracts
            int userId);
 
         Task<int?> GetLastMessageIdAsync(int conversationId);
+
+        Task<Message> GetLastMessageBeforeAsync(int conversationId,DateTime beforeDate);
     }
 }

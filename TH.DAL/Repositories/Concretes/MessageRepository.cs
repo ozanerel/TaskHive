@@ -98,5 +98,17 @@ namespace TH.DAL.Repositories.Concretes
                 .Select(x => (int?)x.Id)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Message> GetLastMessageBeforeAsync(int conversationId, DateTime beforeDate)
+        {
+            return await _context.Messages
+                .Include(x => x.User)
+                .Where(x => 
+                x.ConversationId == conversationId &&
+                x.Status != DataStatus.Deleted &&
+                x.CreatedDate <= beforeDate)
+                .OrderByDescending(x => x.CreatedDate)
+                .FirstOrDefaultAsync();
+        }
     }
 }
