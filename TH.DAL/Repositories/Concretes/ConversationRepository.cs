@@ -53,11 +53,10 @@ namespace TH.DAL.Repositories.Concretes
             return await _context.Conversations
                 .Include(x => x.Team)
                 .Include(x => x.Participants)
-                    .ThenInclude(x => x.User)
-                .Include(x => x.Messages)
+                .ThenInclude(x => x.User)
                 .Where(x =>
-                    x.Status != DataStatus.Deleted &&
-                    x.Participants.Any(p => p.UserId == userId))
+                x.Status != DataStatus.Deleted &&
+                x.Participants.Any(p => p.UserId == userId))
                 .ToListAsync();
         }
     }
