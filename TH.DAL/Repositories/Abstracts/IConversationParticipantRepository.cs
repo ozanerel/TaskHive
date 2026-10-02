@@ -17,5 +17,9 @@ namespace TH.DAL.Repositories.Abstracts
         Task<ConversationParticipant> GetParticipantAsync(
             int conversationId,
             int userId);
+
+        Task<ConversationParticipant> GetParticipantIncludingDeletedAsync(
+            int conversationId,
+            int userId);
     }
 }

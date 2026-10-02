@@ -55,5 +55,13 @@ namespace TH.DAL.Repositories.Concretes
                     x.UserId == userId &&
                     x.Status != DataStatus.Deleted);
         }
+
+        public async Task<ConversationParticipant> GetParticipantIncludingDeletedAsync(int conversationId, int userId)
+        {
+            return await _context.ConversationParticipants
+                .Include(x => x.User)
+                .Include(x => x.Conversation)
+                .FirstOrDefaultAsync(x => x.ConversationId == conversationId && x.UserId == userId);
+        }
     }
 }
