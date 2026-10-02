@@ -13,6 +13,7 @@
 
             <div class="card shadow-sm">
 
+                <!-- Header -->
                 <div class="card-header d-flex justify-content-between align-items-center">
 
                     <div>
@@ -27,11 +28,24 @@
 
                 </div>
 
+
+                <!-- Conversations -->
                 <div class="card-body p-0">
 
                     @if (Model == null || !Model.Any())
                     {
-                        <div class="text-center py-5">
+                        <div class="text-center py-5 px-3">
+
+                            <div class="mb-3">
+
+                                <div class="rounded-circle bg-light text-muted d-inline-flex align-items-center justify-content-center"
+                                     style="width:65px;height:65px;">
+
+                                    <i class="bi bi-chat-dots fs-3"></i>
+
+                                </div>
+
+                            </div>
 
                             <h6 class="text-muted">
                                 Henüz bir konuşmanız bulunmuyor.
@@ -54,72 +68,95 @@
                                    asp-controller="Chat"
                                    asp-action="Details"
                                    asp-route-id="@conversation.Id"
-                                   class="list-group-item list-group-item-action">
+                                   class="list-group-item list-group-item-action py-3">
 
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
 
-                                        <div class="d-flex align-items-center">
+                                        <!-- Conversation Icon -->
+                                        <div class="me-3 flex-shrink-0">
 
-                                            <div class="me-3">
+                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                                 style="width:50px;height:50px;">
 
-                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
-                                                     style="width:45px;height:45px;">
-
-                                                    @if (conversation.IsTeamConversation)
-                                                    {
-                                                        <i class="bi bi-people-fill"></i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="bi bi-person-fill"></i>
-                                                    }
-
-                                                </div>
-
-                                            </div>
-
-                                            <div>
-
-                                                <h6 class="mb-1">
-                                                    @conversation.Title
-                                                </h6>
-
-                                                @if (!string.IsNullOrWhiteSpace(
-                                               conversation.LastMessageContent))
+                                                @if (conversation.IsTeamConversation)
                                                 {
-                                                    <p class="mb-0 text-muted text-truncate"
-                                                       style="max-width:500px;">
-                                                        @conversation.LastMessageContent
-                                                    </p>
+                                                    <i class="bi bi-people-fill fs-5"></i>
                                                 }
                                                 else
                                                 {
-                                                    <p class="mb-0 text-muted">
-                                                        Henüz mesaj yok.
-                                                    </p>
+                                                    <i class="bi bi-person-fill fs-5"></i>
                                                 }
 
                                             </div>
 
                                         </div>
 
-                                        <div class="text-end">
 
-                                            @if (conversation.LastMessageDate.HasValue)
+                                        <!-- Conversation Content -->
+                                        <div class="flex-grow-1 overflow-hidden">
+
+                                            <div class="d-flex justify-content-between align-items-center">
+
+                                                <h6 class="mb-1 fw-semibold text-dark text-truncate">
+
+                                                    @conversation.Title
+
+                                                </h6>
+
+                                                @if (conversation.LastMessageDate.HasValue)
+                                                {
+                                                    <small class="text-muted ms-3 flex-shrink-0">
+
+                                                        @conversation.LastMessageDate.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+
+                                                    </small>
+                                                }
+
+                                            </div>
+
+
+                                            <!-- Last Message -->
+                                            @if (!string.IsNullOrWhiteSpace(
+                                           conversation.LastMessageContent))
                                             {
-                                                <small class="text-muted">
-                                                    @conversation.LastMessageDate.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                                                </small>
+                                                <div class="d-flex align-items-center">
+
+                                                    <p class="mb-0 text-muted text-truncate"
+                                                       style="max-width: 700px;">
+
+                                                        @conversation.LastMessageContent
+
+                                                    </p>
+
+                                                </div>
                                             }
-
-                                            @if (conversation.UnreadMessageCount > 0)
+                                            else
                                             {
-                                                <span class="badge bg-primary rounded-pill ms-2">
-                                                    @conversation.UnreadMessageCount
-                                                </span>
+                                                <p class="mb-0 text-muted">
+
+                                                    Henüz mesaj yok.
+
+                                                </p>
                                             }
 
                                         </div>
+
+
+                                        <!-- Unread Count -->
+                                        @if (conversation.UnreadMessageCount > 0)
+                                        {
+                                            <div class="ms-3 flex-shrink-0">
+
+                                                <span class="badge bg-primary rounded-pill">
+
+                                                    @(conversation.UnreadMessageCount >= 10
+                                                        ? "10+"
+                                                        : conversation.UnreadMessageCount.ToString())
+
+                                                </span>
+
+                                            </div>
+                                        }
 
                                     </div>
 

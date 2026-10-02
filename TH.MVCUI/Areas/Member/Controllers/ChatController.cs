@@ -87,24 +87,24 @@ namespace TH.MVCUI.Areas.Member.Controllers
                     lastMessage = await _messageManager.GetLastMessageAsync(conversation.Id);
                 }
 
+                var isTeamConversation = conversation.Type == ConversationType.Team;
+
+                var title = isTeamConversation
+                    ? conversation.Team?.Name ?? "Takım Sohbeti"
+                    : conversation.Participants
+                        .FirstOrDefault(x => x.UserId != currentUser.Id)?
+                        .User is User otherUser
+                            ? $"{otherUser.FirstName} {otherUser.LastName}"
+                            : "Özel Sohbet";
+
                 model.Add(new ConversationListVm
                 {
                     Id = conversation.Id,
-
-                    Title =
-                        $"Conversation #{conversation.Id}",
-
-                    LastMessageContent =
-                        lastMessage?.Content,
-
-                    LastMessageDate =
-                        lastMessage?.CreatedDate,
-
+                    Title = title,
+                    LastMessageContent = lastMessage?.Content,
+                    LastMessageDate = lastMessage?.CreatedDate,
                     UnreadMessageCount = 0,
-
-                    IsTeamConversation =
-                        conversation.Type ==
-                        ConversationType.Team
+                    IsTeamConversation = isTeamConversation
                 });
             }
 
