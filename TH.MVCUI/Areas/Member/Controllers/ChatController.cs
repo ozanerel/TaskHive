@@ -72,10 +72,20 @@ namespace TH.MVCUI.Areas.Member.Controllers
 
             foreach (var conversation in conversations)
             {
-                var lastMessage =
-                    await _messageManager
-                        .GetLastMessageAsync(
-                            conversation.Id);
+                var participant = conversation.Participants
+                    .FirstOrDefault(x => x.UserId == currentUser.Id);
+
+                Message lastMessage;
+
+                if (participant?.Status == DataStatus.Deleted &&
+                    participant.DeletedDate.HasValue)
+                {
+                    lastMessage = await _messageManager.GetLastMessageBeforeAsync(conversation.Id,participant.DeletedDate.Value);
+                }
+                else
+                {
+                    lastMessage = await _messageManager.GetLastMessageAsync(conversation.Id);
+                }
 
                 model.Add(new ConversationListVm
                 {
