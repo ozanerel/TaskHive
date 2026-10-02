@@ -158,5 +158,18 @@ namespace TH.BLL.Managers.Concretes
             await base.UpdateAsync(
                 participant);
         }
+
+        public async Task<ConversationParticipant> GetParticipantIncludingDeletedAsync(int conversationId, int userId)
+        {
+            if (conversationId <= 0 || userId <= 0)
+            {
+                return null;
+            }
+
+            return await((IConversationParticipantRepository)_repository)
+                .GetParticipantIncludingDeletedAsync(
+                    conversationId,
+                    userId);
+        }
     }
 }

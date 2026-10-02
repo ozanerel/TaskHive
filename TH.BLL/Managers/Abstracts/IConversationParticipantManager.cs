@@ -30,5 +30,11 @@ namespace TH.BLL.Managers.Abstracts
         System.Threading.Tasks.Task MarkConversationAsReadAsync(
             int conversationId,
             int userId);
+
+
+        Task<ConversationParticipant>
+             GetParticipantIncludingDeletedAsync(
+             int conversationId,
+             int userId);
     }
 }
