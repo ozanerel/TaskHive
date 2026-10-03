@@ -110,5 +110,38 @@ namespace TH.DAL.Repositories.Concretes
                 .OrderByDescending(x => x.CreatedDate)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetUnreadConversationMessageCountAsync(int conversationId, int userId)
+        {
+            if (conversationId <= 0 || userId <= 0)
+            {
+                return 0;
+            }
+
+            var participant = await _context.ConversationParticipants
+                .Where(x =>
+                    x.ConversationId == conversationId &&
+                    x.UserId == userId &&
+                    x.Status != DataStatus.Deleted)
+                .FirstOrDefaultAsync();
+
+            if (participant == null)
+            {
+                return 0;
+            }
+
+            var unreadCount = await _context.Messages
+                .Where(x =>
+                    x.ConversationId == conversationId &&
+                    x.Status != DataStatus.Deleted &&
+                    x.UserId != userId &&
+                    (
+                        participant.LastReadMessageId == null ||
+                        x.Id > participant.LastReadMessageId
+                    ))
+                .CountAsync();
+
+            return unreadCount;
+        }
     }
 }
