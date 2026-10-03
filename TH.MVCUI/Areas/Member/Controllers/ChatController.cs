@@ -80,14 +80,20 @@ namespace TH.MVCUI.Areas.Member.Controllers
                 if (participant?.Status == DataStatus.Deleted &&
                     participant.DeletedDate.HasValue)
                 {
-                    lastMessage = await _messageManager.GetLastMessageBeforeAsync(conversation.Id,participant.DeletedDate.Value);
+                    lastMessage =
+                        await _messageManager.GetLastMessageBeforeAsync(
+                            conversation.Id,
+                            participant.DeletedDate.Value);
                 }
                 else
                 {
-                    lastMessage = await _messageManager.GetLastMessageAsync(conversation.Id);
+                    lastMessage =
+                        await _messageManager.GetLastMessageAsync(
+                            conversation.Id);
                 }
 
-                var isTeamConversation = conversation.Type == ConversationType.Team;
+                var isTeamConversation =
+                    conversation.Type == ConversationType.Team;
 
                 var title = isTeamConversation
                     ? conversation.Team?.Name ?? "Takım Sohbeti"
@@ -97,13 +103,18 @@ namespace TH.MVCUI.Areas.Member.Controllers
                             ? $"{otherUser.FirstName} {otherUser.LastName}"
                             : "Özel Sohbet";
 
+                var unreadMessageCount =
+                    await _messageManager.GetUnreadConversationMessageCountAsync(
+                        conversation.Id,
+                        currentUser.Id);
+
                 model.Add(new ConversationListVm
                 {
                     Id = conversation.Id,
                     Title = title,
                     LastMessageContent = lastMessage?.Content,
                     LastMessageDate = lastMessage?.CreatedDate,
-                    UnreadMessageCount = 0,
+                    UnreadMessageCount = unreadMessageCount,
                     IsTeamConversation = isTeamConversation
                 });
             }
