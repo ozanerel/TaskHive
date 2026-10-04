@@ -394,6 +394,30 @@ dotnet run
 
 komutunu kullanabilirsiniz.
 
+### 👤 Demo Hesapları
+
+Uygulamanın ilk testleri ve demo kullanımı için seed işlemleri sırasında örnek Admin ve Member hesapları oluşturulmaktadır.
+
+| Rol    | Kullanıcı Adı | Şifre        |
+| ------ | ------------- | ------------ |
+| Admin  | `Admin`       | `Admin1234`  |
+| Member | `Member`      | `Member1234` |
+
+> ⚠️ Bu hesaplar uygulamanın demo ve test amacıyla kullanılabilmesi için seed data içerisinde oluşturulmuştur.
+
+### 📝 Yeni Kullanıcı Kaydı
+
+Uygulama içerisindeki kayıt ekranı üzerinden yeni bir Member hesabı oluşturulabilir.
+
+Yeni kayıt olan kullanıcılar giriş yaparken:
+
+* **Kullanıcı Adı:** Kayıt sırasında kullanılan e-posta adresi
+* **Şifre:** Kayıt sırasında belirlenen şifre
+
+bilgilerini kullanır.
+
+Seed ile oluşturulan `Admin` ve `Member` hesapları ise demo/test amacıyla kullanılan başlangıç hesaplarıdır.
+
 ---
 
 ## 🎯 Proje ile Kazanılan Deneyimler
